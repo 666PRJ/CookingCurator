@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="prj666_191a03Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ALLERGY">
+    <Key>
+      <PropertyRef Name="allergy_ID" />
+    </Key>
+    <Property Name="allergy_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="allergyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="allergyDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BMK">
+    <Key>
+      <PropertyRef Name="bookmark_ID" />
+    </Key>
+    <Property Name="bookmark_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="recipeTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="URL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DIET">
+    <Key>
+      <PropertyRef Name="diet_ID" />
+    </Key>
+    <Property Name="diet_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="dietName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="dietDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="INGRED">
+    <Key>
+      <PropertyRef Name="ingred_ID" />
+    </Key>
+    <Property Name="ingred_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ingred_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="dietType" Type="Int32" Nullable="false" />
+    <Property Name="allergenType" Type="Int32" />
+    <Property Name="measurement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RECIPE">
+    <Key>
+      <PropertyRef Name="recipe_ID" />
+    </Key>
+    <Property Name="recipe_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="rating" Type="Int32" Nullable="false" />
+    <Property Name="instructions" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="lastUpdated" Type="DateTime" Nullable="false" />
+    <Property Name="author" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="verified" Type="Boolean" Nullable="false" />
+    <Property Name="source_ID" Type="Int32" />
+    <Property Name="source_Link" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="mealTimeType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="USER">
+    <Key>
+      <PropertyRef Name="userEmail" />
+    </Key>
+    <Property Name="user_ID" Type="Int32" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="acceptWaiver" Type="Boolean" Nullable="false" />
+    <Property Name="banUser" Type="Boolean" Nullable="false" />
+    <Property Name="admin_ID" Type="Int32" />
+    <Property Name="userEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="salt" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WARN">
+    <Key>
+      <PropertyRef Name="warning_ID" />
+    </Key>
+    <Property Name="warning_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="warningName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="warningDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="prj666_191a03Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ALLERGies" EntityType="Self.ALLERGY" />
+    <EntitySet Name="BMKs" EntityType="Self.BMK" />
+    <EntitySet Name="DIETS" EntityType="Self.DIET" />
+    <EntitySet Name="INGREDs" EntityType="Self.INGRED" />
+    <EntitySet Name="RECIPES" EntityType="Self.RECIPE" />
+    <EntitySet Name="USERS" EntityType="Self.USER" />
+    <EntitySet Name="WARNs" EntityType="Self.WARN" />
+  </EntityContainer>
+</Schema>

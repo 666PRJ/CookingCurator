@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="prj666_191a03ModelStoreContainer" CdmEntityContainer="prj666_191a03Entities">
+    <EntitySetMapping Name="ALLERGies">
+      <EntityTypeMapping TypeName="prj666_191a03Model.ALLERGY">
+        <MappingFragment StoreEntitySet="ALLERGY">
+          <ScalarProperty Name="allergy_ID" ColumnName="allergy_ID" />
+          <ScalarProperty Name="allergyName" ColumnName="allergyName" />
+          <ScalarProperty Name="allergyDesc" ColumnName="allergyDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BMKs">
+      <EntityTypeMapping TypeName="prj666_191a03Model.BMK">
+        <MappingFragment StoreEntitySet="BMK">
+          <ScalarProperty Name="bookmark_ID" ColumnName="bookmark_ID" />
+          <ScalarProperty Name="recipeTitle" ColumnName="recipeTitle" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DIETS">
+      <EntityTypeMapping TypeName="prj666_191a03Model.DIET">
+        <MappingFragment StoreEntitySet="DIETS">
+          <ScalarProperty Name="diet_ID" ColumnName="diet_ID" />
+          <ScalarProperty Name="dietName" ColumnName="dietName" />
+          <ScalarProperty Name="dietDesc" ColumnName="dietDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="INGREDs">
+      <EntityTypeMapping TypeName="prj666_191a03Model.INGRED">
+        <MappingFragment StoreEntitySet="INGRED">
+          <ScalarProperty Name="ingred_ID" ColumnName="ingred_ID" />
+          <ScalarProperty Name="ingred_Name" ColumnName="ingred_Name" />
+          <ScalarProperty Name="dietType" ColumnName="dietType" />
+          <ScalarProperty Name="allergenType" ColumnName="allergenType" />
+          <ScalarProperty Name="measurement" ColumnName="measurement" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RECIPES">
+      <EntityTypeMapping TypeName="prj666_191a03Model.RECIPE">
+        <MappingFragment StoreEntitySet="RECIPES">
+          <ScalarProperty Name="recipe_ID" ColumnName="recipe_ID" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="instructions" ColumnName="instructions" />
+          <ScalarProperty Name="lastUpdated" ColumnName="lastUpdated" />
+          <ScalarProperty Name="author" ColumnName="author" />
+          <ScalarProperty Name="verified" ColumnName="verified" />
+          <ScalarProperty Name="source_ID" ColumnName="source_ID" />
+          <ScalarProperty Name="source_Link" ColumnName="source_Link" />
+          <ScalarProperty Name="country" ColumnName="country" />
+          <ScalarProperty Name="mealTimeType" ColumnName="mealTimeType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USERS">
+      <EntityTypeMapping TypeName="prj666_191a03Model.USER">
+        <MappingFragment StoreEntitySet="USERS">
+          <ScalarProperty Name="user_ID" ColumnName="user_ID" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="acceptWaiver" ColumnName="acceptWaiver" />
+          <ScalarProperty Name="banUser" ColumnName="banUser" />
+          <ScalarProperty Name="admin_ID" ColumnName="admin_ID" />
+          <ScalarProperty Name="userEmail" ColumnName="userEmail" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="salt" ColumnName="salt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WARNs">
+      <EntityTypeMapping TypeName="prj666_191a03Model.WARN">
+        <MappingFragment StoreEntitySet="WARN">
+          <ScalarProperty Name="warning_ID" ColumnName="warning_ID" />
+          <ScalarProperty Name="warningName" ColumnName="warningName" />
+          <ScalarProperty Name="warningDesc" ColumnName="warningDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

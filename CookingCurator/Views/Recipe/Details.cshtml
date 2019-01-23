@@ -1,0 +1,57 @@
+﻿@model CookingCurator.EntityModels.RecipeBaseViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Details";
+}
+
+
+<h2>Details</h2>
+
+<div>
+    <h4>RecipeBaseViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+       
+        <dd>
+            @Html.DisplayFor(model => model.title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rating)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.instructions)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lastUpdated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.author)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.source_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.source_Link)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.country)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mealTimeType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
