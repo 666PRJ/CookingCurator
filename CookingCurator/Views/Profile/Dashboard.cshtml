@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "AdminDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Admin Dashboard</h2>
+
+<!-- <h4>Logged in as @ViewBag.Username</h4> -->
+
+<hr />
+
+
+<div class="dropdown">
+    <button type="button" data-toggle="dropdown">
+        User Options
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="#">View Profiles</a></li>
+        <li><a href="#">View Author Recipe Lists</a></li>
+        <li><a href="#">Ban users</a></li>
+    </ul>
+</div>
+
+<hr />
+
+<div class="dropdown">
+    <button type="button" data-toggle="dropdown">
+        Recipe Options
+    </button>
+    <ul class="dropdown-menu">
+        <li><a>@Html.ActionLink("Add Verified Recipe", "Create", "Recipe")</a></li>
+        <li><a>@Html.ActionLink("View Verified Recipes", "Details/1", "Recipe")</a></li>
+        <li><a href="#">Edit Existing Recipe</a></li>
+        <li><a href="#">Delete Existing Recipe</a></li>
+    </ul>
+</div>
+
+<!-- <hr />
+
+Last Login: @ViewBag.Date
+
+-->
