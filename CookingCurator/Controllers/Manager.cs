@@ -31,7 +31,11 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<USER, UserBaseViewModel>();
+
                 cfg.CreateMap<RecipeAddViewModel, RECIPE>();
+
+                cfg.CreateMap<UserFindViewModel, USER>();
             });
 
             mapper = config.CreateMapper();
@@ -86,6 +90,17 @@ namespace CookingCurator.Controllers
 
             // If successful, return the added item (mapped to a view model class).
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public IEnumerable<UserBaseViewModel> UserFindAll()
+        {
+            return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+        }
+
+        public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find) {
+            var findItem = ds.Users.Where(t => t.userName.Contains(find.userName));
+
+            return findItem == null ? null : mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(findItem);
         }
     }
 }
