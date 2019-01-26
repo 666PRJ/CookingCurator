@@ -30,7 +30,7 @@ namespace CookingCurator.Controllers
         {
             var u = m.UserFind(newItem);
 
-            return View("Index", u.Where(e => e.userName == newItem.userName));
+            return View("Index", u);
         }
     }
 }

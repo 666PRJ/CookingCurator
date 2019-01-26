@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CookingCurator.EntityModels.UserBaseViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "User Index";
 }
 
 <h2>User Index</h2>
@@ -20,9 +20,6 @@
         <th>
             @Html.DisplayNameFor(model => model.userEmail)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.admin_ID)
-        </th>
         <th></th>
     </tr>
 
@@ -36,9 +33,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.userEmail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.admin_ID)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

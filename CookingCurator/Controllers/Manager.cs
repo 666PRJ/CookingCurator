@@ -98,7 +98,7 @@ namespace CookingCurator.Controllers
         }
 
         public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find) {
-            var findItem = ds.Users.Where(s => s.userName == find.userName);
+            var findItem = ds.Users.Where(t => t.userName.Contains(find.userName));
 
             return findItem == null ? null : mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(findItem);
         }
