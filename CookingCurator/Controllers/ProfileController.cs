@@ -16,5 +16,10 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        //For Non-Admins 
+        public ActionResult UserDashboard()
+        {
+            return View();
+        }
     }
 }
