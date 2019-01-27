@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Cooking Curator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>Logged in as: @ViewBag.Username</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Profile", "Profile", "Home")</li>
+                    <li>@Html.ActionLink("Search", "Test", "Home")</li>
+                    <li>@Html.ActionLink("Log Out", "Test", "Home")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <h1 class="panel-heading text-center">Recipe Title</h1>
+        <img class="media-left">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>
+                    Recipe Name: <br />
+                    Recipe Owner:<br />
+                    Last Updated: @DateTime.Now.Date<br />
+                </h4>
+            </div>
+            <div class="col-md-8"><h4>Warnings:</h4></div>
+        </div>
+        <h3 class="panel-body">
+            Recipe Rating: <br />
+            <br />
+            Bookmark: @Html.ActionLink("Bookmark", "Index", "Home")
+        </h3>
+        <div class="row">
+            <div class="col-md-4 table-bordered">
+                <h4>Ingredients:</h4>
+                <ul>
+                    <li>Test1</li>
+                    <li>Test2</li>
+                    <li>Test3</li>
+                </ul>
+            </div>
+            <div class="col-md-8 table-bordered">
+                <h4>Instructions:</h4>
+                <br />
+                Recipe steps from table go here.
+                <br />
+                Steps will be in paragraph form.
+                <br />
+                Need to set padding space on bottom if using border.
+            </div>
+        </div>
+
+
+
+        @RenderBody()
+        <br />
+        <div class="text-center"><input type="button" value="Return to Searching" /></div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                Click here to @Html.ActionLink("report this Recipe", "Index", "Home")
+            </div>
+            <div class="col-md-8 table-bordered top">
+                <h4>Waiver clause:</h4>We at cooking curator are not responsbile for any harm that may result of the user following or modifying this recipe.
+            </div>
+        </div>
+
+        <footer class="panel-footer">
+            <p>&copy; @DateTime.Now.Year - Cooking Curator -- @Html.ActionLink("Contact Us", "Contact", "Home")</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

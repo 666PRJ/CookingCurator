@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="prj666_191a03Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ALLERGY">
+          <Key>
+            <PropertyRef Name="allergy_ID" />
+          </Key>
+          <Property Name="allergy_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="allergyName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="allergyDesc" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BMK">
+          <Key>
+            <PropertyRef Name="bookmark_ID" />
+          </Key>
+          <Property Name="bookmark_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="recipeTitle" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="URL" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DIETS">
+          <Key>
+            <PropertyRef Name="diet_ID" />
+          </Key>
+          <Property Name="diet_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dietName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dietDesc" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="INGRED">
+          <Key>
+            <PropertyRef Name="ingred_ID" />
+          </Key>
+          <Property Name="ingred_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ingred_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dietType" Type="int" Nullable="false" />
+          <Property Name="allergenType" Type="int" />
+          <Property Name="measurement" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RECIPES">
+          <Key>
+            <PropertyRef Name="recipe_ID" />
+          </Key>
+          <Property Name="recipe_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="rating" Type="int" Nullable="false" />
+          <Property Name="instructions" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="lastUpdated" Type="date" Nullable="false" />
+          <Property Name="author" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="verified" Type="bool" Nullable="false" />
+          <Property Name="source_ID" Type="int" />
+          <Property Name="source_Link" Type="varchar" MaxLength="200" />
+          <Property Name="country" Type="varchar" MaxLength="20" />
+          <Property Name="mealTimeType" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="USERS">
+          <Key>
+            <PropertyRef Name="userEmail" />
+          </Key>
+          <Property Name="user_ID" Type="int" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="acceptWaiver" Type="bool" Nullable="false" />
+          <Property Name="banUser" Type="bool" Nullable="false" />
+          <Property Name="admin_ID" Type="int" />
+          <Property Name="userEmail" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="salt" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WARN">
+          <Key>
+            <PropertyRef Name="warning_ID" />
+          </Key>
+          <Property Name="warning_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="warningName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="warningDesc" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="prj666_191a03ModelStoreContainer">
+          <EntitySet Name="ALLERGY" EntityType="Self.ALLERGY" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="BMK" EntityType="Self.BMK" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="DIETS" EntityType="Self.DIETS" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="INGRED" EntityType="Self.INGRED" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="RECIPES" EntityType="Self.RECIPES" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="USERS" EntityType="Self.USERS" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="WARN" EntityType="Self.WARN" Schema="prj666_191a03" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="prj666_191a03Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ALLERGY">
+          <Key>
+            <PropertyRef Name="allergy_ID" />
+          </Key>
+          <Property Name="allergy_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="allergyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="allergyDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BMK">
+          <Key>
+            <PropertyRef Name="bookmark_ID" />
+          </Key>
+          <Property Name="bookmark_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="recipeTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="URL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DIET">
+          <Key>
+            <PropertyRef Name="diet_ID" />
+          </Key>
+          <Property Name="diet_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dietName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dietDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="INGRED">
+          <Key>
+            <PropertyRef Name="ingred_ID" />
+          </Key>
+          <Property Name="ingred_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ingred_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dietType" Type="Int32" Nullable="false" />
+          <Property Name="allergenType" Type="Int32" />
+          <Property Name="measurement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RECIPE">
+          <Key>
+            <PropertyRef Name="recipe_ID" />
+          </Key>
+          <Property Name="recipe_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rating" Type="Int32" Nullable="false" />
+          <Property Name="instructions" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdated" Type="DateTime" Nullable="false" />
+          <Property Name="author" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="verified" Type="Boolean" Nullable="false" />
+          <Property Name="source_ID" Type="Int32" />
+          <Property Name="source_Link" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="mealTimeType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="USER">
+          <Key>
+            <PropertyRef Name="userEmail" />
+          </Key>
+          <Property Name="user_ID" Type="Int32" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="acceptWaiver" Type="Boolean" Nullable="false" />
+          <Property Name="banUser" Type="Boolean" Nullable="false" />
+          <Property Name="admin_ID" Type="Int32" />
+          <Property Name="userEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="salt" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WARN">
+          <Key>
+            <PropertyRef Name="warning_ID" />
+          </Key>
+          <Property Name="warning_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="warningName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="warningDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="prj666_191a03Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ALLERGies" EntityType="Self.ALLERGY" />
+          <EntitySet Name="BMKs" EntityType="Self.BMK" />
+          <EntitySet Name="DIETS" EntityType="Self.DIET" />
+          <EntitySet Name="INGREDs" EntityType="Self.INGRED" />
+          <EntitySet Name="RECIPES" EntityType="Self.RECIPE" />
+          <EntitySet Name="USERS" EntityType="Self.USER" />
+          <EntitySet Name="WARNs" EntityType="Self.WARN" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="prj666_191a03ModelStoreContainer" CdmEntityContainer="prj666_191a03Entities">
+          <EntitySetMapping Name="ALLERGies">
+            <EntityTypeMapping TypeName="prj666_191a03Model.ALLERGY">
+              <MappingFragment StoreEntitySet="ALLERGY">
+                <ScalarProperty Name="allergy_ID" ColumnName="allergy_ID" />
+                <ScalarProperty Name="allergyName" ColumnName="allergyName" />
+                <ScalarProperty Name="allergyDesc" ColumnName="allergyDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BMKs">
+            <EntityTypeMapping TypeName="prj666_191a03Model.BMK">
+              <MappingFragment StoreEntitySet="BMK">
+                <ScalarProperty Name="bookmark_ID" ColumnName="bookmark_ID" />
+                <ScalarProperty Name="recipeTitle" ColumnName="recipeTitle" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DIETS">
+            <EntityTypeMapping TypeName="prj666_191a03Model.DIET">
+              <MappingFragment StoreEntitySet="DIETS">
+                <ScalarProperty Name="diet_ID" ColumnName="diet_ID" />
+                <ScalarProperty Name="dietName" ColumnName="dietName" />
+                <ScalarProperty Name="dietDesc" ColumnName="dietDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INGREDs">
+            <EntityTypeMapping TypeName="prj666_191a03Model.INGRED">
+              <MappingFragment StoreEntitySet="INGRED">
+                <ScalarProperty Name="ingred_ID" ColumnName="ingred_ID" />
+                <ScalarProperty Name="ingred_Name" ColumnName="ingred_Name" />
+                <ScalarProperty Name="dietType" ColumnName="dietType" />
+                <ScalarProperty Name="allergenType" ColumnName="allergenType" />
+                <ScalarProperty Name="measurement" ColumnName="measurement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RECIPES">
+            <EntityTypeMapping TypeName="prj666_191a03Model.RECIPE">
+              <MappingFragment StoreEntitySet="RECIPES">
+                <ScalarProperty Name="recipe_ID" ColumnName="recipe_ID" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="instructions" ColumnName="instructions" />
+                <ScalarProperty Name="lastUpdated" ColumnName="lastUpdated" />
+                <ScalarProperty Name="author" ColumnName="author" />
+                <ScalarProperty Name="verified" ColumnName="verified" />
+                <ScalarProperty Name="source_ID" ColumnName="source_ID" />
+                <ScalarProperty Name="source_Link" ColumnName="source_Link" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="mealTimeType" ColumnName="mealTimeType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USERS">
+            <EntityTypeMapping TypeName="prj666_191a03Model.USER">
+              <MappingFragment StoreEntitySet="USERS">
+                <ScalarProperty Name="user_ID" ColumnName="user_ID" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="acceptWaiver" ColumnName="acceptWaiver" />
+                <ScalarProperty Name="banUser" ColumnName="banUser" />
+                <ScalarProperty Name="admin_ID" ColumnName="admin_ID" />
+                <ScalarProperty Name="userEmail" ColumnName="userEmail" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="salt" ColumnName="salt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WARNs">
+            <EntityTypeMapping TypeName="prj666_191a03Model.WARN">
+              <MappingFragment StoreEntitySet="WARN">
+                <ScalarProperty Name="warning_ID" ColumnName="warning_ID" />
+                <ScalarProperty Name="warningName" ColumnName="warningName" />
+                <ScalarProperty Name="warningDesc" ColumnName="warningDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
