@@ -29,6 +29,48 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        // GET: Recipe/CreateVerified
+        public ActionResult CreateVerified()
+        {
+            var form = new RecipeAddForm();
+
+            form.ingredList = new MultiSelectList(items: m.IngredGetAll(),
+                dataValueField: "ingred_ID",
+                dataTextField: "ingred_Name"
+                );
+
+            return View(form);
+        }
+
+        // POST: Recipe/CreateVerified
+        [HttpPost]
+        public ActionResult CreateVerified(RecipeAddForm newItem)
+        {
+            // Validate the input
+            if (!ModelState.IsValid)
+                return View(newItem);
+
+            try
+            {
+                // Process the input
+
+                newItem.verified = true;
+
+                var addedItem = m.RecipeVerifiedAdd(newItem);
+
+                // If the item was not added, return the user to the Create page
+                // otherwise redirect them to the Details page.
+                if (addedItem == null)
+                    return View(newItem);
+                else
+                    return RedirectToAction("Details", new { id = addedItem.recipe_Id });
+            }
+            catch
+            {
+                return View(newItem);
+            }
+        }
+
         // POST: Recipe/Create
         [HttpPost]
         public ActionResult Create(RecipeAddViewModel newItem)

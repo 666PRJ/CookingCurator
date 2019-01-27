@@ -339,8 +339,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
+    <Compile Include="EntityModels\IngredAddForm.cs" />
+    <Compile Include="EntityModels\RecipeAddForm.cs" />
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
+    <Compile Include="EntityModels\RecipeVerifiedAddViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -438,6 +441,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Recipe\Create.cshtml" />
     <Content Include="Views\Recipe\Details.cshtml" />
+    <Content Include="Views\Recipe\CreateVerified.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

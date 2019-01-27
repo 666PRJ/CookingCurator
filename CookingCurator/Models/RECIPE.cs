@@ -14,6 +14,10 @@ namespace CookingCurator.Models
     
     public partial class RECIPE
     {
+        public RECIPE() {
+            INGREDs = new HashSet<INGRED>();
+        }
+
         public int recipe_ID { get; set; }
         public string title { get; set; }
         public int rating { get; set; }
@@ -25,5 +29,7 @@ namespace CookingCurator.Models
         public string source_Link { get; set; }
         public string country { get; set; }
         public string mealTimeType { get; set; }
+
+        public virtual ICollection<INGRED> INGREDs { get; set; }
     }
 }

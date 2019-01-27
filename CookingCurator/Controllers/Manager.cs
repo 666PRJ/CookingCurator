@@ -31,7 +31,13 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeWithIngred>();
+
+                cfg.CreateMap<INGRED, IngredBase>();
+
                 cfg.CreateMap<RecipeAddViewModel, RECIPE>();
+
+                cfg.CreateMap<RecipeAddForm, RECIPE>();
             });
 
             mapper = config.CreateMapper();
@@ -77,6 +83,16 @@ namespace CookingCurator.Controllers
             return obj == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(obj);
         }
 
+        public RecipeWithIngred RecipeWithIngred(int id) {
+            var obj = ds.Recipes.Include("INGREDs").SingleOrDefault();
+
+            return (obj == null) ? null : mapper.Map<RecipeWithIngred>(obj);
+        }
+
+        public IEnumerable<IngredBase> IngredGetAll() {
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ds.Ingreds);
+        }
+
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewModel newCustomer)
         {
             // Attempt to add the new item.
@@ -86,6 +102,22 @@ namespace CookingCurator.Controllers
 
             // If successful, return the added item (mapped to a view model class).
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public RecipeBaseViewModel RecipeVerifiedAdd(RecipeAddForm newItem)
+        {
+            var newingredList = newItem.ingredList;
+
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddForm, RECIPE>(newItem));
+
+            foreach (var item in newingredList) {
+                var a = ds.Ingreds.Find(item);
+                addedItem.INGREDs.Add(a);
+            }
+
+            ds.SaveChanges();
+
+            return mapper.Map<RecipeBaseViewModel>(addedItem);
         }
     }
 }
