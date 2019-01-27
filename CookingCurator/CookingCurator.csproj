@@ -341,6 +341,7 @@
     <Compile Include="App_Start\RouteConfig2.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Manager.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
@@ -446,6 +447,8 @@
     <Content Include="Views\Recipe\Details.cshtml" />
     <Content Include="Views\User\Search.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Profile\Dashboard.cshtml" />
+    <Content Include="Views\Profile\UserDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

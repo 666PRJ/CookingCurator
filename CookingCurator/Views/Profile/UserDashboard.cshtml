@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "UserDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>User Dashboard</h2>
+<!-- <h4>Logged in as @ViewBag.Username</h4> -->
+<hr />
+
+<div style="font-size:xx-large" class="dropdown">
+    <button type="button" data-toggle="dropdown" style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
+        Settings >
+    </button>
+    <ul class="dropdown-menu" style="font-size:x-large">
+        <li style="border:solid; padding:5px; background-color:pink">Change Username</li>
+        <li style="border:solid; padding:5px; background-color:pink">Change Password</li>
+        <li style="border:solid; padding:5px; background-color:pink">Set Allergies</li>
+        <li style="border:solid; padding:5px; background-color:pink">Set Diets</li>
+        <li style="border:solid; padding:5px; background-color:pink">Set Sorting Preference</li>
+    </ul>
+</div>
+<hr />
+<div style="font-size:xx-large" class="dropdown">
+    <button type="button" data-toggle="dropdown" style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
+        Recipes >
+    </button>
+    <ul style="font-size:x-large" class="dropdown-menu">
+        <li style="border:solid; padding:5px; background-color:pink">View Recipes</a></li>
+        <li style="border:solid; padding:5px; background-color:pink">Create New Recipe</li>
+        <li style="border:solid; padding:5px; background-color:pink">View Bookmarks</li>
+        <li style="border:solid; padding:5px; background-color:pink">Search For Recipes</li>
+    </ul>
+</div>
+<hr />
+
+Have a concern?
+@Html.ActionLink("Contact Us", "Contact", "Home")
+<!-- <hr />
+
+Last Login: @ViewBag.Date
+
+-->
