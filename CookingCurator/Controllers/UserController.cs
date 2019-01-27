@@ -32,5 +32,14 @@ namespace CookingCurator.Controllers
 
             return View("Index", u);
         }
+
+        
+        
+        public ActionResult BanUser(int? id)
+        {
+            var u = m.BanUserById(id.GetValueOrDefault());
+
+            return View("Index", u);
+        }
     }
 }
