@@ -75,6 +75,7 @@ namespace CookingCurator.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Title = recipe.title;
             return View(recipe);
         }
 
