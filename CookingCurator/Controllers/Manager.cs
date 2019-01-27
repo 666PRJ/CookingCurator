@@ -3,6 +3,7 @@ using CookingCurator.EntityModels;
 using CookingCurator.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -72,24 +73,46 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);
         }
 
-        public RecipeBaseViewModel CustomerGetById(int id)
+        public RecipeBaseViewModel RecipeGetById(int? id)
         {
             // Attempt to fetch the object.
-            var obj = ds.Recipes.Find(id);
+            var recipe = ds.Recipes.Find(id);
 
             // Return the result (or null if not found).
-            return obj == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(obj);
+            return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
-        public RecipeBaseViewModel RecipeAdd(RecipeAddViewModel newCustomer)
+        public RecipeBaseViewModel RecipeAdd(RecipeAddViewModel recipe)
         {
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
-            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewModel, RECIPE>(newCustomer));
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewModel, RECIPE>(recipe));
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public RecipeBaseViewModel RecipeEdit(int id, RecipeAddViewModel recipe)
+        {
+            var recipeUpdate = ds.Recipes.Find(id);
+            if (recipeUpdate == null)
+            {
+                return null;
+            }
+            recipeUpdate.title = recipe.title;
+            recipeUpdate.instructions = recipe.instructions;
+            recipeUpdate.lastUpdated = DateTime.Now;
+            recipeUpdate.author = recipe.author;
+            recipeUpdate.source_Link = recipe.source_Link;
+            recipeUpdate.country = recipe.country;
+            recipeUpdate.mealTimeType = recipe.mealTimeType;
+            ds.Entry(recipeUpdate).State = EntityState.Modified;
+            // Attempt to save the edited recipe.
+            ds.SaveChanges();
+
+            // If successful, return the edited recipe (mapped to a view model class).
+            return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
 
         public IEnumerable<UserBaseViewModel> UserFindAll()

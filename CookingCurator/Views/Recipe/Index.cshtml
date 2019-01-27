@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CookingCurator.EntityModels.RecipeBaseViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rating)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.instructions)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastUpdated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.verified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.source_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.source_Link)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mealTimeType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rating)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.instructions)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastUpdated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.author)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.verified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.source_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.source_Link)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mealTimeType)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.recipe_Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.recipe_Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.recipe_Id })
+        </td>
+    </tr>
+}
+
+</table>
