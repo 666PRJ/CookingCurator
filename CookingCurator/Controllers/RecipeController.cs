@@ -1,7 +1,9 @@
 ﻿using CookingCurator.EntityModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,17 +12,22 @@ namespace CookingCurator.Controllers
     public class RecipeController : Controller
     {
         private Manager m = new Manager();
-        
 
+
+        public ActionResult Index()
+        {
+            var recipes = m.RecipeGetAll();
+            return View(recipes);
+        }
         // GET: Recipe/Details/5
         public ActionResult Details(int? id)
         {
-            var obj = m.CustomerGetById(id.GetValueOrDefault());
+            var recipe = m.RecipeGetById(id.GetValueOrDefault());
 
-            if (obj == null)
+            if (recipe == null)
                 return HttpNotFound();
             else
-                return View(obj);
+                return View(recipe);
         }
 
         // GET: Recipe/Create
@@ -40,7 +47,7 @@ namespace CookingCurator.Controllers
             try
             {
                 // Process the input
-               
+
                 var addedItem = m.RecipeAdd(newItem);
 
                 // If the item was not added, return the user to the Create page
@@ -57,24 +64,48 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Title = recipe.title;
+            return View(recipe);
         }
 
         // POST: Recipe/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, RecipeAddViewModel recipe)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(recipe);
+            }
+
             try
             {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
+                var editedRecipe = m.RecipeEdit(id, recipe);
+
+                if (editedRecipe == null)
+                {
+                    return View(recipe);
+                }
+                else
+                {
+                    return RedirectToAction("Details", new { id = editedRecipe.recipe_Id });
+                }
             }
             catch
             {
-                return View();
+                return View(recipe);
             }
         }
 

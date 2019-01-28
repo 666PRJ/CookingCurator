@@ -334,11 +334,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\BundleConfig2.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\FilterConfig2.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\RouteConfig2.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -447,6 +444,8 @@
     <Content Include="Views\Recipe\Details.cshtml" />
     <Content Include="Views\User\Search.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Recipe\Index.cshtml" />
+    <Content Include="Views\Recipe\Edit.cshtml" />
     <Content Include="Views\Profile\Dashboard.cshtml" />
     <Content Include="Views\Profile\UserDashboard.cshtml" />
   </ItemGroup>

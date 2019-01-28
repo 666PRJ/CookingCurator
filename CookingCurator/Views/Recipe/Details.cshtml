@@ -1,24 +1,20 @@
 ﻿@model CookingCurator.EntityModels.RecipeBaseViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.title)</h2>
 
 <div>
-    <h4>RecipeBaseViewModel</h4>
+    <h5>
+        by @Html.DisplayFor(model => model.author)
+    </h5>
     <hr />
     <dl class="dl-horizontal">
-       
-        <dd>
-            @Html.DisplayFor(model => model.title)
-        </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.rating)
+            @Html.DisplayNameFor(model => model.instructions)
         </dt>
 
         <dd>
@@ -26,15 +22,39 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.rating)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rating)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.lastUpdated)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.author)
+            @Html.DisplayFor(model => model.lastUpdated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.verified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.verified)
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.source_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.source_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.source_Link)
         </dt>
 
         <dd>
@@ -43,6 +63,14 @@
 
         <dt>
             @Html.DisplayNameFor(model => model.country)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.country)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mealTimeType)
         </dt>
 
         <dd>
