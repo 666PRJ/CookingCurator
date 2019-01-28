@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "AdminDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Admin Dashboard</h2>
+<!-- <h4>Logged in as @ViewBag.Username</h4> -->
+<hr />
+
+<div style="font-size:xx-large" class="dropdown">
+    <button type="button" data-toggle="dropdown" style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
+        User Options >
+    </button>
+    <ul class="dropdown-menu" style="font-size:x-large">
+        <li style="border:solid; padding:5px; background-color:lightcyan"><a>@Html.ActionLink("View All Users", "Index", "User")</a></li>
+        <li style="border:solid; padding:5px; background-color:lightcyan"><a>@Html.ActionLink("Search Users", "Search", "User")</a></li>
+    </ul>
+</div>
+<hr />
+<div style="font-size:xx-large" class="dropdown">
+    <button type="button" data-toggle="dropdown" style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
+        Recipe Options >
+    </button>
+    <ul style="font-size:x-large" class="dropdown-menu">
+        <li style="border:solid; padding:5px; background-color:lightgreen"><a>@Html.ActionLink("Add Verified Recipe", "Create", "Recipe")</a></li>
+        <li style="border:solid; padding:5px; background-color:lightgreen"><a>@Html.ActionLink("View Verified Recipes", "Index", "Recipe")</a></li>
+        <li style="border:solid; padding:5px; background-color:pink"><a>@Html.ActionLink("Edit Verified Recipes", "", "")</a></li>
+        <li style="border:solid; padding:5px; background-color:pink"><a>@Html.ActionLink("Delete Verified Recipes", "", "")</a></li>
+    </ul>
+</div>
+<!-- <hr />
+
+Last Login: @ViewBag.Date
+
+-->
