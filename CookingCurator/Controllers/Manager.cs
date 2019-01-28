@@ -125,5 +125,22 @@ namespace CookingCurator.Controllers
 
             return findItem == null ? null : mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(findItem);
         }
+
+
+        public IEnumerable<UserBaseViewModel> BanUserById(int id)
+        {
+            // Attempt to fetch the object.
+            var obj = ds.Users.SingleOrDefault(e => e.user_ID == id);
+
+            obj.banUser = !obj.banUser;
+
+            ds.SaveChanges();
+
+
+
+            // Return the result (or null if not found).
+            return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+        }
+
     }
 }
