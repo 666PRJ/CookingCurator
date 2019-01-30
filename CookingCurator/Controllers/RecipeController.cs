@@ -36,6 +36,42 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        // GET: Recipe/Create
+        public ActionResult CreateVerified()
+        {
+            return View();
+        }
+
+        //CreateVerified will be only avilable to admin
+        // POST: Recipe/Create
+        [HttpPost]
+        public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem)
+        {
+            // Validate the input
+            if (!ModelState.IsValid)
+                return View(newItem);
+
+            try
+            {
+                // Process the input
+                newItem.verified = true;
+                newItem.rating = 0;
+                newItem.lastUpdated = DateTime.Now;
+                var addedItem = m.RecipeVerifiedAdd(newItem);
+
+                // If the item was not added, return the user to the Create page
+                // otherwise redirect them to the Details page.
+                if (addedItem == null)
+                    return View(newItem);
+                else
+                    return RedirectToAction("Details", new { id = addedItem.recipe_Id });
+            }
+            catch
+            {
+                return View(newItem);
+            }
+        }
+
         // POST: Recipe/Create
         [HttpPost]
         public ActionResult Create(RecipeAddViewModel newItem)
@@ -47,7 +83,9 @@ namespace CookingCurator.Controllers
             try
             {
                 // Process the input
-
+                newItem.verified = false;
+                newItem.rating = 0;
+                newItem.lastUpdated = DateTime.Now;
                 var addedItem = m.RecipeAdd(newItem);
 
                 // If the item was not added, return the user to the Create page

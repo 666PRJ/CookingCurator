@@ -36,6 +36,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RecipeAddViewModel, RECIPE>();
 
+                cfg.CreateMap<RecipeVerifiedAddViewModel, RECIPE>();
+
                 cfg.CreateMap<UserFindViewModel, USER>();
             });
 
@@ -87,6 +89,22 @@ namespace CookingCurator.Controllers
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewModel, RECIPE>(recipe));
+            //addedItem.source_ID = addedItem.recipe_ID;
+            //ds.Entry(addedItem).CurrentValues.SetValues(addedItem);
+            ds.SaveChanges();
+
+            // If successful, return the added item (mapped to a view model class).
+            return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)
+        {
+            // Attempt to add the new item.
+            // Notice how we map the incoming data to the Customer design model class.
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
+
+            //addedItem.source_ID = addedItem.recipe_ID;
+            //ds.Entry(addedItem).CurrentValues.SetValues(addedItem);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
