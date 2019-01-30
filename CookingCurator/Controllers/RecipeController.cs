@@ -59,6 +59,7 @@ namespace CookingCurator.Controllers
                 newItem.lastUpdated = DateTime.Now;
                 var addedItem = m.RecipeVerifiedAdd(newItem);
 
+                addedItem = m.RecipeIDUpdate(addedItem);
                 // If the item was not added, return the user to the Create page
                 // otherwise redirect them to the Details page.
                 if (addedItem == null)
@@ -88,6 +89,7 @@ namespace CookingCurator.Controllers
                 newItem.lastUpdated = DateTime.Now;
                 var addedItem = m.RecipeAdd(newItem);
 
+                addedItem = m.RecipeIDUpdate(addedItem);
                 // If the item was not added, return the user to the Create page
                 // otherwise redirect them to the Details page.
                 if (addedItem == null)
