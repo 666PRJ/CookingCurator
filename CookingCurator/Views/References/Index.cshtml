@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CookingCurator.EntityModels.RecipeSourceViewModel>
+
+@{
+    ViewBag.Title = "References Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>References Index</h2>
+
+<h3>Software Used</h3>
+
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Link</th>
+    </tr>
+    <tr>
+        <td>Git</td>
+        <td>https://git-scm.com/</td>
+    </tr>
+    <tr>
+        <td>Visual Studio 2017</td>
+        <td>https://visualstudio.microsoft.com/downloads/</td>
+    </tr>
+    <tr>
+        <td>MySql Connector</td>
+        <td>https://dev.mysql.com/downloads/connector/net/</td>
+    </tr>
+</table>
+
+<h3>Recipes Source</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.source_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.source_Link)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.source_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.source_Link)
+        </td>
+    </tr>
+}
+
+</table>
