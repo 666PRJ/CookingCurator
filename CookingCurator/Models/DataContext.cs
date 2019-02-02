@@ -14,6 +14,7 @@ namespace CookingCurator.Models
         {
         }
 
+        public virtual DbSet<RECIPE_INGREDS> Recipe_Ingreds { get; set; }
         public virtual DbSet<RECIPE> Recipes { get; set; }
         public virtual DbSet<ALLERGY> Allergies { get; set; }
         public virtual DbSet<BMK> BMKs { get; set; }
