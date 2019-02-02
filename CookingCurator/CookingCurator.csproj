@@ -342,6 +342,7 @@
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
+    <Compile Include="EntityModels\LoginViewModel.cs" />
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeIngredViewModel.cs" />
@@ -456,6 +457,7 @@
     <Content Include="Views\Profile\Dashboard.cshtml" />
     <Content Include="Views\Profile\UserDashboard.cshtml" />
     <Content Include="Views\Profile\ContactUs.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

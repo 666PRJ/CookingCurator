@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Web;
+using System.Web.Security;
 
 namespace CookingCurator.Controllers
 {
@@ -186,6 +187,23 @@ namespace CookingCurator.Controllers
                 return false;
             }
             
+        }
+
+        public bool LoginUser(LoginViewModel loginModel)
+        {
+            var loggedInUserName = ds.Users.Where(x => x.userName == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            if(loggedInUserName != null)
+            {
+                FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
+                return false;
+            }
+            var loggedInEmail = ds.Users.Where(x => x.userEmail == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            if (loggedInEmail != null)
+            {
+                FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
+                return false;
+            }
+            return true;
         }
 
     }

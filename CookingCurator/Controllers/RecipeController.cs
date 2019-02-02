@@ -14,7 +14,7 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
 
-
+        [Authorize]
         public ActionResult Index()
         {
             var recipes = m.RecipeGetAll();
