@@ -45,5 +45,19 @@ namespace CookingCurator.Controllers
            
         }
 
+        public ActionResult LogOut()
+        {
+            bool error = m.logoutUser();
+            if (!error)
+            {
+                return Redirect("Login");
+            }
+            else
+            {
+                return Redirect("Index");
+            }
+            
+        }
+
     }
 }

@@ -206,5 +206,17 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool logoutUser()
+        {
+            try
+            {
+                FormsAuthentication.SignOut();
+                return false;
+            }
+            catch(Exception)
+            {
+                return true;
+            }
+        }
     }
 }
