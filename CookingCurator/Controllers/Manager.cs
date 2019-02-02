@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 namespace CookingCurator.Controllers
@@ -140,6 +143,33 @@ namespace CookingCurator.Controllers
 
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+        }
+
+        public bool ContactAdmin(ContactUsViewModel contactUs)
+        {
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                MailMessage mailMessage = new MailMessage(adminEmail, adminEmail, contactUs.emailAddress, contactUs.feedBack);
+                mailMessage.IsBodyHtml = true;
+                mailMessage.BodyEncoding = UTF8Encoding.UTF8;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
     }
