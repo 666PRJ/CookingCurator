@@ -32,6 +32,8 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
+
                 cfg.CreateMap<USER, UserBaseViewModel>();
 
                 cfg.CreateMap<RecipeAddViewModel, RECIPE>();
@@ -140,6 +142,14 @@ namespace CookingCurator.Controllers
 
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+        }
+
+        public IEnumerable<RecipeSourceViewModel> RecipeSourceGetAll()
+        {
+            // The ds object is the data store
+            // It has a collection for each entity it manages
+
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeSourceViewModel>>(ds.Recipes.Where(t => t.source_ID.HasValue == true));
         }
 
     }
