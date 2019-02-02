@@ -5,7 +5,7 @@
     <p>
         @if (User.Identity.IsAuthenticated)
         {
-             <p>Welcome User!! You are Logged In</p>
+             <p>Welcome User @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")!! You are Logged In</p>
         }
     </p>
 </div>
