@@ -1,6 +1,7 @@
 ﻿using CookingCurator.EntityModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -110,25 +111,34 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+            return View(recipe);
         }
 
         // POST: Recipe/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                m.RecipeDelete(id);
             }
-            catch
+            catch (DataException)
             {
-                return View();
+                return RedirectToAction("Delete", ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.");
             }
+            return RedirectToAction("Index");
         }
     }
 }

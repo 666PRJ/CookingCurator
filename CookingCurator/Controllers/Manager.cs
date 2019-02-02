@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 namespace CookingCurator.Controllers
@@ -37,6 +40,10 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<RecipeAddViewModel, RECIPE>();
 
                 cfg.CreateMap<UserFindViewModel, USER>();
+
+                cfg.CreateMap<RecipeIngredViewModel, RECIPE_INGREDS>();
+
+                cfg.CreateMap<RECIPE_INGREDS, RecipeIngredViewModel>();
             });
 
             mapper = config.CreateMapper();
@@ -114,6 +121,18 @@ namespace CookingCurator.Controllers
             // If successful, return the edited recipe (mapped to a view model class).
             return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
+        public IEnumerable<RecipeIngredViewModel> recipeIngredById(int id)
+        {
+            var findItem = ds.Recipe_Ingreds.Where(t => t.recipe_ID.Equals(id));
+
+            return findItem == null ? null : mapper.Map<IEnumerable<RECIPE_INGREDS>, IEnumerable<RecipeIngredViewModel>>(findItem);
+        }
+        public void RecipeDelete(int id)
+        {
+            var recipe = ds.Recipes.Find(id);
+            ds.Recipes.Remove(recipe);
+            ds.SaveChanges();
+        }
 
         public IEnumerable<UserBaseViewModel> UserFindAll()
         {
@@ -140,6 +159,33 @@ namespace CookingCurator.Controllers
 
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+        }
+
+        public bool ContactAdmin(ContactUsViewModel contactUs)
+        {
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                MailMessage mailMessage = new MailMessage(adminEmail, adminEmail, contactUs.emailAddress, contactUs.feedBack);
+                mailMessage.IsBodyHtml = true;
+                mailMessage.BodyEncoding = UTF8Encoding.UTF8;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            
         }
 
     }

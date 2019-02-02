@@ -341,8 +341,10 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="EntityModels\ContactUsViewModel.cs" />
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
+    <Compile Include="EntityModels\RecipeIngredViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />
     <Compile Include="EntityModels\UserFindViewModel.cs" />
     <Compile Include="Global.asax.cs">
@@ -429,7 +431,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -451,6 +455,7 @@
     <Content Include="Views\Recipe\Edit.cshtml" />
     <Content Include="Views\Profile\Dashboard.cshtml" />
     <Content Include="Views\Profile\UserDashboard.cshtml" />
+    <Content Include="Views\Profile\ContactUs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
