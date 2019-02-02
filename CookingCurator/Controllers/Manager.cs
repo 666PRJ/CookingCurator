@@ -111,15 +111,19 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeIDUpdate(RecipeBaseViewModel recipe)
         {
-            // Attempt to add the new item.
-            recipe.source_ID = recipe.recipe_Id;
+            
             // Notice how we map the incoming data to the Customer design model class.
-            var addedItem = ds.Recipes.Add(mapper.Map<RecipeBaseViewModel, RECIPE>(recipe));
+            var recipeUpdate = ds.Recipes.Find(recipe.recipe_Id);
+            if (recipeUpdate.source_Link != "")
+            {
+                recipeUpdate.source_ID = recipeUpdate.recipe_ID;
+            }
+            ds.Entry(recipeUpdate).State = EntityState.Modified;
 
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
-            return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+            return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
 
         public RecipeBaseViewModel RecipeEdit(int id, RecipeAddViewModel recipe)
