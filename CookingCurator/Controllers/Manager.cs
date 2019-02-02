@@ -117,6 +117,13 @@ namespace CookingCurator.Controllers
             return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
 
+        public void RecipeDelete(int id)
+        {
+            var recipe = ds.Recipes.Find(id);
+            ds.Recipes.Remove(recipe);
+            ds.SaveChanges();
+        }
+
         public IEnumerable<UserBaseViewModel> UserFindAll()
         {
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
