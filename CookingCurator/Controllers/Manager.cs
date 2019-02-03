@@ -35,11 +35,23 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
+
+                cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
+
+                cfg.CreateMap<RecipeVerifiedAddViewModel, RECIPE>();
+
                 cfg.CreateMap<USER, UserBaseViewModel>();
 
-                cfg.CreateMap<RecipeAddViewModel, RECIPE>();
+                cfg.CreateMap<RecipeAddViewForm, RECIPE>();
+
+                cfg.CreateMap<RecipeAddViewForm, RECIPE>();
+
+                cfg.CreateMap<RecipeIngred, RECIPE>();
 
                 cfg.CreateMap<UserFindViewModel, USER>();
+
+                cfg.CreateMap<INGRED, IngredBase>();
             });
 
             mapper = config.CreateMapper();
@@ -85,15 +97,58 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
-        public RecipeBaseViewModel RecipeAdd(RecipeAddViewModel recipe)
+        public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
-            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewModel, RECIPE>(recipe));
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
+
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public void createRecipeIngred(IEnumerable<int> ingredIdList, int id)
+        {
+            foreach (var item in ingredIdList)
+            {
+                RecipeIngred recipe_ingreds = new RecipeIngred();
+                recipe_ingreds.recipe_ID = id;
+                recipe_ingreds.ingred_ID = item;
+                var derp = ds.Recipe_Ingreds.Add(mapper.Map<RecipeIngred, RECIPE_INGREDS>(recipe_ingreds));
+            }
+
+            ds.SaveChanges();
+        }
+
+        public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)
+        {
+            // Attempt to add the new item.
+            // Notice how we map the incoming data to the Customer design model class.
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
+
+            ds.SaveChanges();
+
+            // If successful, return the added item (mapped to a view model class).
+            return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public RecipeBaseViewModel RecipeIDUpdate(RecipeBaseViewModel recipe)
+        {
+
+            // Notice how we map the incoming data to the Customer design model class.
+            var recipeUpdate = ds.Recipes.Find(recipe.recipe_Id);
+            if (recipeUpdate.source_Link != "")
+            {
+                recipeUpdate.source_ID = recipeUpdate.recipe_ID;
+            }
+            ds.Entry(recipeUpdate).State = EntityState.Modified;
+
+            ds.SaveChanges();
+
+            // If successful, return the added item (mapped to a view model class).
+            return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
 
         public RecipeBaseViewModel RecipeEdit(int id, RecipeAddViewModel recipe)
@@ -139,12 +194,10 @@ namespace CookingCurator.Controllers
 
             ds.SaveChanges();
 
-
-
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
         }
-
+      
         public bool ContactAdmin(ContactUsViewModel contactUs)
         {
             try
@@ -171,6 +224,18 @@ namespace CookingCurator.Controllers
             }
 
         }
+      
+        public IEnumerable<RecipeSourceViewModel> RecipeSourceGetAll()
+        {
+            // The ds object is the data store
+            // It has a collection for each entity it manages
 
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeSourceViewModel>>(ds.Recipes.Where(t => t.source_ID.HasValue == true));
+        }
+
+        public IEnumerable<IngredBase> IngredGetAll()
+        {
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ds.Ingreds);
+        }
     }
 }

@@ -340,10 +340,13 @@
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
+    <Compile Include="Controllers\ReferencesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
+    <Compile Include="EntityModels\IngredBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
+    <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />
     <Compile Include="EntityModels\UserFindViewModel.cs" />
     <Compile Include="Global.asax.cs">
@@ -444,7 +447,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Recipe\Create.cshtml" />
     <Content Include="Views\Recipe\Details.cshtml" />
     <Content Include="Views\User\Search.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
@@ -453,6 +455,9 @@
     <Content Include="Views\Profile\Dashboard.cshtml" />
     <Content Include="Views\Profile\UserDashboard.cshtml" />
     <Content Include="Views\Profile\ContactUs.cshtml" />
+    <Content Include="Views\References\Index.cshtml" />
+    <Content Include="Views\Recipe\CreateVerified.cshtml" />
+    <Content Include="Views\Recipe\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
