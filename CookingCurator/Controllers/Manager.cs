@@ -116,7 +116,7 @@ namespace CookingCurator.Controllers
             ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
 
             deleteIngredients(recipeIng.recipe.recipe_Id);
-            addIngredients(recipeIng.recipe.recipe_Id, recipeIng.selectedIngredsId);
+            addIngredientsForRecipes(recipeIng.recipe.recipe_Id, recipeIng.selectedIngredsId);
             // Attempt to save the edited recipe.
             ds.SaveChanges();
 
@@ -137,7 +137,7 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
         }
 
-        public void addIngredients(int id, String[] selectedIds)
+        public void addIngredientsForRecipes(int id, String[] selectedIds)
         {
             for(int i = 0; i < selectedIds.Length; i++)
             {
