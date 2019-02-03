@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CookingCurator.EntityModels;
 using CookingCurator.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -39,6 +41,8 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<RecipeAddViewModel, RECIPE>();
 
                 cfg.CreateMap<UserFindViewModel, USER>();
+
+                cfg.CreateMap<INGRED, IngredientBaseViewModel>();
             });
 
             mapper = config.CreateMapper();
@@ -95,21 +99,24 @@ namespace CookingCurator.Controllers
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
         }
 
-        public RecipeBaseViewModel RecipeEdit(int id, RecipeAddViewModel recipe)
+        public RecipeBaseViewModel RecipeEdit(Recipe_IngredViewModel recipeIng)
         {
-            var recipeUpdate = ds.Recipes.Find(id);
+            var recipeUpdate = ds.Recipes.Find(recipeIng.recipe.recipe_Id);
             if (recipeUpdate == null)
             {
                 return null;
             }
-            recipeUpdate.title = recipe.title;
-            recipeUpdate.instructions = recipe.instructions;
+            recipeUpdate.title = recipeIng.recipe.title;
+            recipeUpdate.instructions = recipeIng.recipe.instructions;
             recipeUpdate.lastUpdated = DateTime.Now;
-            recipeUpdate.author = recipe.author;
-            recipeUpdate.source_Link = recipe.source_Link;
-            recipeUpdate.country = recipe.country;
-            recipeUpdate.mealTimeType = recipe.mealTimeType;
-            ds.Entry(recipeUpdate).State = EntityState.Modified;
+            recipeUpdate.author = recipeIng.recipe.author;
+            recipeUpdate.source_Link = recipeIng.recipe.source_Link;
+            recipeUpdate.country = recipeIng.recipe.country;
+            recipeUpdate.mealTimeType = recipeIng.recipe.mealTimeType;
+            ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
+
+            deleteIngredients(recipeIng.recipe.recipe_Id);
+            addIngredients(recipeIng.recipe.recipe_Id, recipeIng.selectedIngredsId);
             // Attempt to save the edited recipe.
             ds.SaveChanges();
 
@@ -119,8 +126,40 @@ namespace CookingCurator.Controllers
 
         public void RecipeDelete(int id)
         {
+            deleteIngredients(id);
             var recipe = ds.Recipes.Find(id);
             ds.Recipes.Remove(recipe);
+            ds.SaveChanges();
+        }
+
+        public IEnumerable<IngredientBaseViewModel> IngredientGetAll()
+        {
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
+        }
+
+        public void addIngredients(int id, String[] selectedIds)
+        {
+            for(int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO RECIPE_INGREDS (recipe_ID, ingred_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public List<String> ingredsForRecipe(int? id)
+        {
+            List<String> selectedIngreds = new List<string>();
+            IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            foreach(var item in ingreds)
+            {
+                selectedIngreds.Add(item.ingred_ID.ToString());
+            }
+            return selectedIngreds;
+        }
+        public void deleteIngredients(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from RECIPE_INGREDS where recipe_Id = " + id);
             ds.SaveChanges();
         }
 
