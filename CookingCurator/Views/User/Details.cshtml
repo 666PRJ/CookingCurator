@@ -1,0 +1,31 @@
+﻿@model CookingCurator.EntityModels.UserBaseViewModel
+
+
+@{
+    ViewBag.Title = "User Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><b><u>Information about "@Html.DisplayFor(model => model.userName)"</u></b></h1>
+<br />
+<h3>
+    @Html.ActionLink("Click here to see this user's recipes.", "Authors", "Recipe", new { authorName = Model.userName }, null)
+</h3>
+<p>
+    Be advised that no user recipes are verified by Cooking Curator administrators.  User discretion is advised.
+</p>
+
+<hr />
+
+<h3>
+    @Html.ActionLink("Click here to search for a different user", "Search")
+</h3>
+
+<hr />
+
+<h4>Click here to report this user.</h4>
+<h6>Abuse of the report system will result in a permanent ban.</h6>
+
+<hr />
+
+<h4>Click here to contact this user.</h4>
