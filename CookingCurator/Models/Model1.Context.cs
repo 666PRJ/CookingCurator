@@ -13,10 +13,10 @@ namespace CookingCurator.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class prj666_191a03Entities : DbContext
+    public partial class prj666_191a03Entities1 : DbContext
     {
-        public prj666_191a03Entities()
-            : base("name=prj666_191a03Entities")
+        public prj666_191a03Entities1()
+            : base("name=prj666_191a03Entities1")
         {
         }
     
@@ -32,5 +32,6 @@ namespace CookingCurator.Models
         public virtual DbSet<RECIPE> RECIPES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
         public virtual DbSet<WARN> WARNs { get; set; }
+        public virtual DbSet<RECIPE_INGREDS> RECIPE_INGREDS { get; set; }
     }
 }

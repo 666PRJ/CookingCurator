@@ -7,27 +7,31 @@
 <!-- <h4>Logged in as @ViewBag.Username</h4> -->
 <hr />
 
-<div style="font-size:xx-large" class="dropdown">
-    <button type="button" data-toggle="dropdown" style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
-        User Options >
-    </button>
-    <ul class="dropdown-menu" style="font-size:x-large">
-        <li style="border:solid; padding:5px; background-color:lightcyan"><a>@Html.ActionLink("View All Users", "Index", "User")</a></li>
-        <li style="border:solid; padding:5px; background-color:lightcyan"><a>@Html.ActionLink("Search Users", "Search", "User")</a></li>
-    </ul>
+<div style="font-size:xx-large" class="col-lg-6 text-center">
+    <p style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
+        User Options
+    </p>
+    <div class="col-lg-12 text-center" style="font-size:x-large">
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightcyan;border:groove;border-width:10px"><a>@Html.ActionLink("View All Users", "Index", "User")</a></p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightcyan;border:groove;border-width:10px"><a>@Html.ActionLink("Search Users", "Search", "User")</a></p>
+    </div>
 </div>
+
+
+<div style="font-size:xx-large" class="col-lg-6 text-center">
+    <p style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
+        Recipe Options
+    </p>
+    <div class="col-lg-12" style="font-size:x-large">
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:beige;border:groove;border-width:10px"><a>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe")</a></p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:beige;border:groove;border-width:10px"><a>@Html.ActionLink("View Verified Recipes", "Index", "Recipe")</a></p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:beige;border:groove;border-width:10px"><a>@Html.ActionLink("Edit Verified Recipes", "Edit", "Recipe")</a></p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:beige;border:groove;border-width:10px"><a>@Html.ActionLink("Delete Verified Recipes", "Delete", "Recipe")</a></p>
+    </div>
+</div>
+
 <hr />
-<div style="font-size:xx-large" class="dropdown">
-    <button type="button" data-toggle="dropdown" style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
-        Recipe Options >
-    </button>
-    <ul style="font-size:x-large" class="dropdown-menu">
-        <li style="border:solid; padding:5px; background-color:lightgreen"><a>@Html.ActionLink("Add Verified Recipe", "Create", "Recipe")</a></li>
-        <li style="border:solid; padding:5px; background-color:lightgreen"><a>@Html.ActionLink("View Verified Recipes", "Index", "Recipe")</a></li>
-        <li style="border:solid; padding:5px; background-color:pink"><a>@Html.ActionLink("Edit Verified Recipes", "", "")</a></li>
-        <li style="border:solid; padding:5px; background-color:pink"><a>@Html.ActionLink("Delete Verified Recipes", "", "")</a></li>
-    </ul>
-</div>
+
 <!-- <hr />
 
 Last Login: @ViewBag.Date
