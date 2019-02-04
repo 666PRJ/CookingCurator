@@ -41,5 +41,16 @@ namespace CookingCurator.Controllers
 
             return View("Index", u);
         }
+
+        // GET: User/Details/5
+        public ActionResult Details(int? id)
+        {
+            var u = m.GetUserById(id.GetValueOrDefault());
+
+            if (u == null)
+                return HttpNotFound();
+            else
+                return View(u);
+        }
     }
 }

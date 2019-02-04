@@ -9,6 +9,10 @@
 
 <div>
     <h4>RecipeWithIngredBaseViewModel</h4>
+    <h5>
+        by @Html.DisplayFor(model => model.author) |
+        @Html.ActionLink("View all Recipes from this Author", "Authors", new { authorName = Model.author }) 
+    </h5>
     <hr />
     <dl class="dl-horizontal">
         <dt>

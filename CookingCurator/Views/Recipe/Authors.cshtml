@@ -1,0 +1,86 @@
+﻿@model IEnumerable<CookingCurator.EntityModels.RecipeBaseViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int counting = Model.Count();
+    if (counting != 0)
+    {
+        string authorName = Model.First().author;
+        ViewBag.Title = authorName + "'s Recipes:";
+    }
+
+}
+
+@if (counting == 0)
+{
+    <h1>This author has added zero recipes to this application!</h1>
+    <h2>Please try a different name.</h2>
+    <h3>@Html.ActionLink("Click here to return to the recipe index", "Index")</h3>
+
+}
+else
+{
+
+    <h2>@ViewBag.Title</h2>
+
+    <!--   if (@ViewBag.Title == "Dairy Farmers of Canada's Recipes:")
+        {
+            <br/>
+            <h5>More informatio about the Dairy Farmers of Canada can be found at: <u>https://dairyfarmersofcanada.ca/en/dairy-in-canada</u> </h5>
+            <h5>More recipes from them can be found at <u>https://www.dairygoodness.ca/</u> </h5>
+            <br/>
+        }
+    -->
+
+    <table class="table">
+        <tr>
+            <th>
+                Recipe Title
+            </th>
+            <th>
+                Recipe Rating
+            </th>
+            <th>
+                Verified Status
+            </th>
+            <th>
+                Source
+            </th>
+            <th>
+                Country of Origin
+            </th>
+            <th>
+                Meal Type
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.verified)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.source_Link)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mealTimeType)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.recipe_Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+}

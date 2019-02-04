@@ -185,5 +185,13 @@ namespace CookingCurator.Controllers
                 return View();
             }
         }
+
+        [Route("User/AuthorProfile")]
+        public ActionResult Authors(string authorName)
+        {
+            var r = m.RecipesByAuthor(authorName);
+            return View(r);
+        }
+
     }
 }

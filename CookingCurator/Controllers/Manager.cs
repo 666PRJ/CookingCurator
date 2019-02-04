@@ -108,6 +108,13 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeWithIngredBaseViewModel>(recipe);
         }
 
+        public IEnumerable<RecipeBaseViewModel> RecipesByAuthor(string byAuthor)
+        {
+            var authorRecipes = ds.Recipes.Where(r => r.author == byAuthor);
+
+            return authorRecipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(authorRecipes);
+        }
+
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
             // Attempt to add the new item.
@@ -203,6 +210,15 @@ namespace CookingCurator.Controllers
         public IEnumerable<UserBaseViewModel> UserFindAll()
         {
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+        }
+
+        public UserBaseViewModel GetUserById(int? id)
+        {
+            //Find user from their unique ID number
+            var user = ds.Users.SingleOrDefault(e => e.user_ID == id);
+
+            //Reutn null if no match found
+            return user == null ? null : mapper.Map<USER, UserBaseViewModel>(user);
         }
 
         public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find) {
