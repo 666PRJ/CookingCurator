@@ -22,8 +22,9 @@ namespace CookingCurator.Controllers
         // GET: Recipe/Details/5
         public ActionResult Details(int? id)
         {
-            var recipe = m.RecipeGetById(id.GetValueOrDefault());
+            var recipe = m.RecipeIngredGetById(id.GetValueOrDefault());
 
+            recipe.ingreds = m.ingredsForRecipe(recipe.recipe_Id);
             if (recipe == null)
                 return HttpNotFound();
             else
@@ -102,7 +103,7 @@ namespace CookingCurator.Controllers
                 newItem.rating = 0;
                 newItem.lastUpdated = DateTime.Now;
                 var addedItem = m.RecipeAdd(newItem);
-
+                m.addIngredientsForRecipes(addedItem.recipe_Id,newItem.ingredListIds);
                 addedItem = m.RecipeIDUpdate(addedItem);
                 // If the item was not added, return the user to the Create page
                 // otherwise redirect them to the Details page.

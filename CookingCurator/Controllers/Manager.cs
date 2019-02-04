@@ -35,6 +35,8 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeWithIngredBaseViewModel>();
+
                 cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
 
                 cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
@@ -97,6 +99,15 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
+        public RecipeWithIngredBaseViewModel RecipeIngredGetById(int? id)
+        {
+            // Attempt to fetch the object.
+            var recipe = ds.Recipes.Find(id);
+
+            // Return the result (or null if not found).
+            return recipe == null ? null : mapper.Map<RECIPE, RecipeWithIngredBaseViewModel>(recipe);
+        }
+
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
             // Attempt to add the new item.
@@ -109,17 +120,33 @@ namespace CookingCurator.Controllers
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
         }
 
-        public void createRecipeIngred(IEnumerable<int> ingredIdList, int id)
+        public void addIngredientsForRecipes(int id, IEnumerable<int> selectedIds)
         {
-            foreach (var item in ingredIdList)
+            foreach (var item in selectedIds)
             {
-                RecipeIngred recipe_ingreds = new RecipeIngred();
-                recipe_ingreds.recipe_ID = id;
-                recipe_ingreds.ingred_ID = item;
-                var derp = ds.Recipe_Ingreds.Add(mapper.Map<RecipeIngred, RECIPE_INGREDS>(recipe_ingreds));
+                String query = "INSERT INTO RECIPE_INGREDS (recipe_ID, ingred_ID) VALUES (" + id + "," + item + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public IEnumerable<IngredBase> ingredsForRecipe(int? id)
+        {
+            List<int> selectedIngreds = new List<int>();
+            IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            foreach (var item in ingreds)
+            {
+                selectedIngreds.Add(item.ingred_ID);
             }
 
-            ds.SaveChanges();
+            List<INGRED> baseIngreds = new List<INGRED>();
+            foreach (var item in selectedIngreds)
+            {
+                baseIngreds.Add(ds.Ingreds.SingleOrDefault(e => e.ingred_ID == item));
+            }
+
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(baseIngreds); 
+
         }
 
         public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)

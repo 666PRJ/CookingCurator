@@ -447,7 +447,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Recipe\Details.cshtml" />
     <Content Include="Views\User\Search.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Recipe\Index.cshtml" />
@@ -458,6 +457,7 @@
     <Content Include="Views\References\Index.cshtml" />
     <Content Include="Views\Recipe\CreateVerified.cshtml" />
     <Content Include="Views\Recipe\Create.cshtml" />
+    <Content Include="Views\Recipe\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
