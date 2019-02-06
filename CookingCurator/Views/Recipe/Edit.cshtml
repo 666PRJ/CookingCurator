@@ -1,94 +1,102 @@
-﻿@model CookingCurator.EntityModels.RecipeBaseViewModel
+﻿@model CookingCurator.EntityModels.Recipe_IngredViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Html.DisplayFor(model => model.title)</h2>
+<h2>@Html.DisplayFor(model => model.recipe.title)</h2>
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Edit</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.recipe.title, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.rating, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.rating, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.rating, new { htmlAttributes = new { @class = "form-control", @readOnly = "readOnly" } })
-                @Html.ValidationMessageFor(model => model.rating, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.rating, new { htmlAttributes = new { @class = "form-control", @readOnly = "readOnly" } })
+                @Html.ValidationMessageFor(model => model.recipe.rating, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.instructions, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.instructions, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.instructions, new { htmlAttributes = new { @class = "form-control col-md-10" } })
-                
-                @Html.ValidationMessageFor(model => model.instructions, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.instructions, new { htmlAttributes = new { @class = "form-control col-md-10" } })
+
+                @Html.ValidationMessageFor(model => model.recipe.instructions, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.lastUpdated, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.lastUpdated, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.lastUpdated, new { htmlAttributes = new { @class = "form-control", @readOnly = "readOnly" } })
-                @Html.ValidationMessageFor(model => model.lastUpdated, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.lastUpdated, new { htmlAttributes = new { @class = "form-control", @readOnly = "readOnly" } })
+                @Html.ValidationMessageFor(model => model.recipe.lastUpdated, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.author, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.author, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.author, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.author, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.author, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.recipe.author, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.source_ID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.source_ID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.source_ID, new { htmlAttributes = new { @class = "form-control", @readOnly = "readOnly" } })
-                @Html.ValidationMessageFor(model => model.source_ID, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.source_ID, new { htmlAttributes = new { @class = "form-control", @readOnly = "readOnly" } })
+                @Html.ValidationMessageFor(model => model.recipe.source_ID, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.source_Link, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.source_Link, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.source_Link, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.source_Link, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.source_Link, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.recipe.source_Link, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.country, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.country, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.country, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.country, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.recipe.country, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.mealTimeType, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recipe.mealTimeType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.mealTimeType, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.mealTimeType, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.recipe.mealTimeType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.recipe.mealTimeType, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        @Html.HiddenFor(model => model.recipe_Id)
+        <div class="form-group">
+            @Html.LabelFor(model => model.selectedIngredsId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.selectedIngredsId, new MultiSelectList(Model.ingredients, "ingred_ID", "ingred_Name"), new { id = "multiSelect", multiple = "multiple" })
+            </div>
+
+        </div>
+
+        @Html.HiddenFor(model => model.recipe.recipe_Id)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -103,5 +111,11 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            $("#multiSelect").chosen({
+                width: "100%"
+            });
+        })
+    </script>
 }
