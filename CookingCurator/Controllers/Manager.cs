@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 namespace CookingCurator.Controllers
@@ -34,15 +37,26 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
+
                 cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
+
+                cfg.CreateMap<RecipeVerifiedAddViewModel, RECIPE>();
 
                 cfg.CreateMap<USER, UserBaseViewModel>();
 
-                cfg.CreateMap<RecipeAddViewModel, RECIPE>();
+                cfg.CreateMap<RecipeAddViewForm, RECIPE>();
+
+                cfg.CreateMap<RecipeAddViewForm, RECIPE>();
+
+                cfg.CreateMap<RecipeIngred, RECIPE>();
 
                 cfg.CreateMap<UserFindViewModel, USER>();
 
                 cfg.CreateMap<INGRED, IngredientBaseViewModel>();
+
+                cfg.CreateMap<INGRED, IngredBase>();
+
             });
 
             mapper = config.CreateMapper();
@@ -88,15 +102,66 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
-        public RecipeBaseViewModel RecipeAdd(RecipeAddViewModel recipe)
+        public IEnumerable<RecipeBaseViewModel> RecipesByAuthor(string byAuthor)
+        {
+            var authorRecipes = ds.Recipes.Where(r => r.author == byAuthor);
+
+            return authorRecipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(authorRecipes);
+        }
+
+
+        public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
-            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewModel, RECIPE>(recipe));
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
+
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
             return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public void createRecipeIngred(IEnumerable<int> ingredIdList, int id)
+        {
+            foreach (var item in ingredIdList)
+            {
+                RecipeIngred recipe_ingreds = new RecipeIngred();
+                recipe_ingreds.recipe_ID = id;
+                recipe_ingreds.ingred_ID = item;
+                var derp = ds.Recipe_Ingreds.Add(mapper.Map<RecipeIngred, RECIPE_INGREDS>(recipe_ingreds));
+            }
+
+            ds.SaveChanges();
+        }
+
+        public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)
+        {
+            // Attempt to add the new item.
+            // Notice how we map the incoming data to the Customer design model class.
+            var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
+
+            ds.SaveChanges();
+
+            // If successful, return the added item (mapped to a view model class).
+            return addedItem == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(addedItem);
+        }
+
+        public RecipeBaseViewModel RecipeIDUpdate(RecipeBaseViewModel recipe)
+        {
+
+            // Notice how we map the incoming data to the Customer design model class.
+            var recipeUpdate = ds.Recipes.Find(recipe.recipe_Id);
+            if (recipeUpdate.source_Link != "")
+            {
+                recipeUpdate.source_ID = recipeUpdate.recipe_ID;
+            }
+            ds.Entry(recipeUpdate).State = EntityState.Modified;
+
+            ds.SaveChanges();
+
+            // If successful, return the added item (mapped to a view model class).
+            return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
 
         public RecipeBaseViewModel RecipeEdit(Recipe_IngredViewModel recipeIng)
@@ -168,6 +233,15 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
         }
 
+        public UserBaseViewModel GetUserById(int? id)
+        {
+            //Find user from their unique ID number
+            var user = ds.Users.SingleOrDefault(e => e.user_ID == id);
+
+            //Reutn null if no match found
+            return user == null ? null : mapper.Map<USER, UserBaseViewModel>(user);
+        }
+
         public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find) {
             var findItem = ds.Users.Where(t => t.userName.Contains(find.userName));
 
@@ -184,12 +258,37 @@ namespace CookingCurator.Controllers
 
             ds.SaveChanges();
 
-
-
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
         }
+      
+        public bool ContactAdmin(ContactUsViewModel contactUs)
+        {
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
 
+                MailMessage mailMessage = new MailMessage(adminEmail, adminEmail, contactUs.emailAddress, contactUs.feedBack);
+                mailMessage.IsBodyHtml = true;
+                mailMessage.BodyEncoding = UTF8Encoding.UTF8;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+      
         public IEnumerable<RecipeSourceViewModel> RecipeSourceGetAll()
         {
             // The ds object is the data store
@@ -198,5 +297,9 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeSourceViewModel>>(ds.Recipes.Where(t => t.source_ID.HasValue == true));
         }
 
+        public IEnumerable<IngredBase> IngredGetAll()
+        {
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ds.Ingreds);
+        }
     }
 }

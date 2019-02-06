@@ -12,16 +12,9 @@ namespace CookingCurator.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class USER
+    public partial class DIET_INGREDS
     {
-        public int user_ID { get; set; }
-        public string userName { get; set; }
-        public bool acceptWaiver { get; set; }
-        public bool banUser { get; set; }
-        public Nullable<int> admin_ID { get; set; }
-        public string userEmail { get; set; }
-        public bool email_Verified { get; set; }
-        public string password { get; set; }
-        public string salt { get; set; }
+        public int diet_ID { get; set; }
+        public int ingred_ID { get; set; }
     }
 }

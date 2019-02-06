@@ -14,13 +14,15 @@ namespace CookingCurator.Models
         {
         }
 
+        public virtual DbSet<RECIPE_INGREDS> Recipe_Ingreds { get; set; }
         public virtual DbSet<RECIPE> Recipes { get; set; }
         public virtual DbSet<ALLERGY> Allergies { get; set; }
         public virtual DbSet<BMK> BMKs { get; set; }
         public virtual DbSet<DIET> Diets { get; set; }
         public virtual DbSet<INGRED> Ingreds { get; set; }
         public virtual DbSet<USER> Users { get; set; }
-        public virtual DbSet<WARN> Warnings { get; set; }
-        public virtual DbSet<RECIPE_INGREDS> Recipe_Ingreds { get; set; }
+        public virtual DbSet<ALLERGY_INGREDS> Allergy_ingreds { get; set; }
+        public virtual DbSet<DIET_INGREDS> Diet_Ingreds { get; set; }
+        public virtual DbSet<RECIPE_USERS> Recipe_Users { get; set; }
     }
 }
