@@ -17,13 +17,14 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
 
-
+        [Authorize]
         public ActionResult Index()
         {
             var recipes = m.RecipeGetAll();
             return View(recipes);
         }
         // GET: Recipe/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             var recipe = m.RecipeGetById(id.GetValueOrDefault());
@@ -35,6 +36,7 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Create
+        [Authorize]
         public ActionResult Create()
         {
             var form = new RecipeAddViewForm();
@@ -48,6 +50,7 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Create
+        [Authorize]
         public ActionResult CreateVerified()
         {
             var form = new RecipeVerifiedAddViewModel();

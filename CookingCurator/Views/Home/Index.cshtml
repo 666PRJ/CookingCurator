@@ -4,7 +4,13 @@
 
 <div class="jumbotron">
     <h1>Cooking Curator</h1>
-    <p class="lead">An application created by David Ferri, Matthew Quan, and Harsh Patel</p>
+    <p class="lead">
+        @if (User.Identity.IsAuthenticated)
+        {
+             <p>Welcome User @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")!! You are Logged In.</p>
+        }
+        
+    </p>
     <p><button><!-- @Html.ActionLink("About this application", "About", "Home") --> About this application </button></p>
 
 </div>

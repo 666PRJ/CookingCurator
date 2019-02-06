@@ -13,17 +13,20 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
         //For Admins (naming convention must change whe we have admins and users)
+        [Authorize]
         public ActionResult Dashboard()
         {
             return View();
         }
 
         //For Non-Admins 
+        [Authorize]
         public ActionResult UserDashboard()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult ContactUs()
         {
             return View();
