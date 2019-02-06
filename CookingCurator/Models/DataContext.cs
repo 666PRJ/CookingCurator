@@ -4,10 +4,11 @@ using System.Linq;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CookingCurator.Models
 {
-    public partial class DataContext : DbContext
+    public partial class DataContext : IdentityDbContext<AppUser>
     {
         public DataContext()
             : base("name=prj666_191a03Entities")
