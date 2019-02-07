@@ -28,6 +28,10 @@ namespace CookingCurator.App_Start
 
             // optionally configure your manager
             // ...
+            manager.AddToRole(manager.FindByName("DavidPFerri").Id, "Admin");
+            manager.AddToRole(manager.FindByName("HarshPatel").Id, "Admin");
+            manager.AddToRole(manager.FindByName("MatthewQuan").Id, "Admin");
+            //manager.AddToRole
 
             return manager;
         }
