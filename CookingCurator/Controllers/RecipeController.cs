@@ -50,7 +50,7 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Create
-        [Authorize]
+        [Authorize(Roles="Admin")]
         public ActionResult CreateVerified()
         {
             var form = new RecipeVerifiedAddViewModel();
