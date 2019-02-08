@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CookingCurator.EntityModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,23 +9,55 @@ namespace CookingCurator.Controllers
 {
     public class HomeController : Controller
     {
+        private Manager m = new Manager();
+
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
 
+        public ActionResult Login()
+        {
             return View();
         }
 
-        public ActionResult Contact()
+        [HttpPost]
+        public ActionResult Login(LoginViewModel loginModel, string returnUrl)
         {
-            ViewBag.Message = "Your contact page.";
+            if (ModelState.IsValid)
+            {
+                bool error = m.LoginUser(loginModel);
+                if (!error)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid Username or Password");
+                    return View();
+                }
+            }
+            else
+            {
+                return View(loginModel);
+            }
 
-            return View();
+        }
+
+        public ActionResult LogOut()
+        {
+            bool error = m.logoutUser();
+            if (!error)
+            {
+                return Redirect("Login");
+            }
+            else
+            {
+                return Redirect("Index");
+            }
+
         }
     }
 }

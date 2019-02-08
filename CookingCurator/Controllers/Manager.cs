@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Web;
+using System.Web.Security;
 
 namespace CookingCurator.Controllers
 {
@@ -156,7 +157,7 @@ namespace CookingCurator.Controllers
             {
                 recipeUpdate.source_ID = recipeUpdate.recipe_ID;
             }
-            ds.Entry(recipeUpdate).State = EntityState.Modified;
+            ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
 
             ds.SaveChanges();
 
@@ -288,7 +289,37 @@ namespace CookingCurator.Controllers
             }
 
         }
-      
+
+        public bool LoginUser(LoginViewModel loginModel)
+        {
+            var loggedInUserName = ds.Users.Where(x => x.userName == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            if (loggedInUserName != null)
+            {
+                FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
+                return false;
+            }
+            var loggedInEmail = ds.Users.Where(x => x.userEmail == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            if (loggedInEmail != null)
+            {
+                FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
+                return false;
+            }
+            return true;
+        }
+
+        public bool logoutUser()
+        {
+            try
+            {
+                FormsAuthentication.SignOut();
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
+
         public IEnumerable<RecipeSourceViewModel> RecipeSourceGetAll()
         {
             // The ds object is the data store
