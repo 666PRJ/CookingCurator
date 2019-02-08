@@ -428,6 +428,7 @@
     <Compile Include="Models\RECIPE_USERS.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SiteRole.cs" />
     <Compile Include="Models\USER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
