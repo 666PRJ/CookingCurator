@@ -313,9 +313,16 @@ namespace CookingCurator.Controllers
 
         public bool RegisterUser(RegisterViewModel registerModel) {
             //no duplicate email
+            var loggedInUserEmail = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+
             var loggedInUserName = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
 
-            if (loggedInUserName > 0) {
+            if (loggedInUserEmail > 0) {
+                return true;
+            }
+
+            if (loggedInUserName > 0)
+            {
                 return true;
             }
 
@@ -329,6 +336,12 @@ namespace CookingCurator.Controllers
             {
                 return true;
             }
+
+            if (registerModel.password != registerModel.confirmPassword)
+            {
+                return true;
+            }
+
             registerModel.acceptWaiver = false;
             registerModel.banUser = false;
             registerModel.email_Verified = false;

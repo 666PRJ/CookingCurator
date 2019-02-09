@@ -13,13 +13,18 @@ namespace CookingCurator.EntityModels
 
         [StringLength(30)]
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string userEmail { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [StringLength(30, MinimumLength=8)]
         public string password { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [StringLength(30, MinimumLength = 8)]
+        public string confirmPassword { get; set; }
 
         public bool acceptWaiver { get; set; }
         public bool banUser { get; set; }
