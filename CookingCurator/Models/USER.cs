@@ -23,5 +23,6 @@ namespace CookingCurator.Models
         public bool email_Verified { get; set; }
         public string password { get; set; }
         public string salt { get; set; }
+        public string GUID { get; set; }
     }
 }

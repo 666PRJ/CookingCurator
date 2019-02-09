@@ -338,13 +338,13 @@ namespace CookingCurator.Controllers
             registerModel.banUser = false;
             registerModel.email_Verified = false;
             registerModel.salt = "AA";
+            registerModel.GUID = "1";
             var addedItem = ds.Users.Add(mapper.Map<RegisterViewModel, USER>(registerModel));
             ds.SaveChanges();
             if (addedItem != null) {
                 FormsAuthentication.SetAuthCookie(addedItem.userName, false);
                 
                 return false;
-
             }
 
             return true;

@@ -13,10 +13,10 @@ namespace CookingCurator.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class prj666_191a03Entities2 : DbContext
+    public partial class prj666_191a03Entities5 : DbContext
     {
-        public prj666_191a03Entities2()
-            : base("name=prj666_191a03Entities2")
+        public prj666_191a03Entities5()
+            : base("name=prj666_191a03Entities5")
         {
         }
     
