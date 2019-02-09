@@ -17,6 +17,33 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register(RegisterViewModel registerModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bool error = m.RegisterUser(registerModel);
+                if (!error)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid Username or Password");
+                    return View();
+                }
+            }
+            else
+            {
+                return View(registerModel);
+            }
+
+        }
 
         public ActionResult Login()
         {
