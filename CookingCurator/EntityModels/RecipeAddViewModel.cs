@@ -41,9 +41,8 @@ namespace CookingCurator.EntityModels
         [Required]
         public string mealTimeType { get; set; }
 
-        public MultiSelectList ingredList { get; set; }
-
-        public IEnumerable<int> ingredListIds { get; set; }
+        public string[] selectedIngredsId { get; set; }
+        public IEnumerable<IngredientBaseViewModel> ingredients;
     }
 
     public class RecipeAddViewModel
