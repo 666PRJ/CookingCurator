@@ -17,7 +17,7 @@ namespace CookingCurator.EntityModels
 
         [Required]
         [DataType(DataType.Password)]
-        [StringLength(8)]
+        [StringLength(30, MinimumLength=8)]
         public string password { get; set; }
 
         public bool acceptWaiver { get; set; }
