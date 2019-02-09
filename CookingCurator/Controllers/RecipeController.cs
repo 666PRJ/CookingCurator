@@ -42,7 +42,7 @@ namespace CookingCurator.Controllers
             var form = new RecipeAddViewForm();
 
             form.ingredients = m.IngredientGetAll();
-            form.selectedIngredsId = m.ingredsForRecipe(1).ToArray();
+            form.selectedIngredsId = new string[0];
             return View(form);
         }
 
@@ -52,13 +52,9 @@ namespace CookingCurator.Controllers
         {
             var form = new RecipeVerifiedAddViewModel();
 
-            form.ingredList = new MultiSelectList(items: m.IngredGetAll(),
-                dataValueField: "ingred_ID",
-                dataTextField: "ingred_Name"
-                );
+            form.ingredients = m.IngredientGetAll();
+            form.selectedIngredsId = new string[0];
 
-            form.ingredListIds = new List<int>();
-            
             return View(form);
         }
 

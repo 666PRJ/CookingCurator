@@ -155,7 +155,8 @@ namespace CookingCurator.Controllers
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
-
+            deleteIngredients(addedItem.recipe_ID);
+            addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
