@@ -325,11 +325,6 @@ namespace CookingCurator.Controllers
                 return true;
             }
 
-            if (!r.IsMatch(registerModel.userEmail))
-            {
-                return true;
-            }
-
             if (!r.IsMatch(registerModel.password))
             {
                 return true;

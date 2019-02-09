@@ -13,6 +13,7 @@ namespace CookingCurator.EntityModels
 
         [StringLength(30)]
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string userEmail { get; set; }
 
         [Required]
