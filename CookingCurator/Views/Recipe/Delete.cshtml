@@ -5,13 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Are you sure you want to delete this?</h2>
+<h2>Are you sure you want to delete this recipe?</h2>
 <div>
     <h4>@Html.DisplayFor(model => model.title)</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.rating)
+            User Rating
         </dt>
 
         <dd>
@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.instructions)
+            Instructions
         </dt>
 
         <dd>
@@ -27,7 +27,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.lastUpdated)
+            Date Last Updated
         </dt>
 
         <dd>
@@ -35,7 +35,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.author)
+            Author
         </dt>
 
         <dd>
@@ -43,7 +43,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.verified)
+            Verified Status
         </dt>
 
         <dd>
@@ -51,7 +51,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.source_ID)
+            Source ID #
         </dt>
 
         <dd>
@@ -59,7 +59,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.source_Link)
+            Source Link
         </dt>
 
         <dd>
@@ -67,7 +67,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.country)
+            Country of Origin
         </dt>
 
         <dd>
@@ -75,7 +75,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.mealTimeType)
+            Meal Type
         </dt>
 
         <dd>
@@ -89,7 +89,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to Recipe List", "Index")
         </div>
     }
 </div>

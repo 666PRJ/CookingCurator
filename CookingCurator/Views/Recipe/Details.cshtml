@@ -9,13 +9,13 @@
 
 <div>
     <h5>
-        by @Html.DisplayFor(model => model.author) |
+        By @Html.DisplayFor(model => model.author) |
         @Html.ActionLink("View all Recipes from this Author", "Authors", new { authorName = Model.author }) 
     </h5>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.instructions)
+            Instructions
         </dt>
 
         <dd>
@@ -23,7 +23,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.rating)
+            User Rating
         </dt>
 
         <dd>
@@ -31,7 +31,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.lastUpdated)
+            Date Last Updated
         </dt>
 
         <dd>
@@ -39,7 +39,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.verified)
+            Verified Status
         </dt>
 
         <dd>
@@ -47,7 +47,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.source_ID)
+            Source ID #
         </dt>
 
         <dd>
@@ -55,7 +55,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.source_Link)
+            Source Link
         </dt>
 
         <dd>
@@ -63,7 +63,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.country)
+            Country of Origin
         </dt>
 
         <dd>
@@ -71,7 +71,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.mealTimeType)
+            Meal Type
         </dt>
 
         <dd>
@@ -82,5 +82,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Recipe List", "Index")
 </p>

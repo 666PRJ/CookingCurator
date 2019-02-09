@@ -4,25 +4,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>User Dashboard</h2>
-<!-- <h4>Logged in as @ViewBag.Username</h4> -->
+@if (User.Identity.IsAuthenticated)
+{
+    <h4>Logged in as @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")</h4>
+}
 <hr />
 
 <div style="font-size:xx-large; background-color:lavender" class="col-lg-6 text-center">
     <p style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
         Your Settings
     </p>
-        <div class="col-lg-12 text-center" style="font-size:x-large">
-            <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Change Username</p>
-            <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Change Password</p>
-            <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Allergies</p>
-            <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Diets</p>
-            <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Sorting Preference</p>
-        </div>
+    <div class="col-lg-12 text-center" style="font-size:x-large">
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Change Username</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Change Password</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Allergies</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Diets</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Sorting Preference</p>
+    </div>
 </div>
 
 
 
-<div style="font-size:xx-large; background-color:lavender"" class="col-lg-6 text-center">
+<div style="font-size:xx-large; background-color:lavender" " class="col-lg-6 text-center">
     <p style="padding:10px 10px 10px 10px;background-color:lightsteelblue;border:groove;border-width:10px">
         Recipes
     </p>
@@ -34,8 +37,8 @@
     </div>
 </div>
 
-<br/>
-<br/>
+<br />
+<br />
 
 
 
@@ -49,10 +52,10 @@
     <hr />
 </div>
 
-<hr/>
+<hr />
 
-    <!-- <hr />
+<!-- <hr />
 
-    Last Login: @ViewBag.Date
+Last Login: @ViewBag.Date
 
-    -->
+-->

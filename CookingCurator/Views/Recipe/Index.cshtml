@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Recipe Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,70 +13,72 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.title)
+            Recipe Title
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.rating)
+            User Rating
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastUpdated)
+            Date Last Updated
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.author)
+            Author
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.verified)
+            Verified Status
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.source_ID)
+            Source ID #
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.source_Link)
+            Source Link
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.country)
+            Country of Origin
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.mealTimeType)
+            Meal Type
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.rating)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.lastUpdated)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.author)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.verified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.source_ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.source_Link)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.country)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.mealTimeType)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.recipe_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.recipe_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.recipe_Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.verified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.source_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.source_Link)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mealTimeType)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
+                @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
+                @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
+            </td>
+        </tr>
+    }
 
 </table>
+

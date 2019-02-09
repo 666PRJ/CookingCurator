@@ -5,18 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<h2>Create Recipe</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>RecipeAddViewForm</h4>
+    <h4>Add User Recipe Form</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <p class="control-label col-md-2">Recipe Title</p>
         <div class="col-md-10">
             @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
@@ -24,7 +24,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.instructions, htmlAttributes: new { @class = "control-label col-md-2" })
+        <p class="control-label col-md-2">Instructions</p>
         <div class="col-md-10">
             @Html.EditorFor(model => model.instructions, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.instructions, "", new { @class = "text-danger" })
@@ -32,7 +32,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.author, htmlAttributes: new { @class = "control-label col-md-2" })
+        <p class="control-label col-md-2">Author</p>
         <div class="col-md-10">
             @Html.EditorFor(model => model.author, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.author, "", new { @class = "text-danger" })
@@ -40,7 +40,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.source_Link, htmlAttributes: new { @class = "control-label col-md-2" })
+        <p class="control-label col-md-2">Source Link</p>
         <div class="col-md-10">
             @Html.EditorFor(model => model.source_Link, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.source_Link, "", new { @class = "text-danger" })
@@ -48,7 +48,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.country, htmlAttributes: new { @class = "control-label col-md-2" })
+        <p class="control-label col-md-2">Country of Origin</p>
         <div class="col-md-10">
             @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.country, "", new { @class = "text-danger" })
@@ -56,7 +56,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.mealTimeType, htmlAttributes: new { @class = "control-label col-md-2" })
+        <p class="control-label col-md-2">Meal Type</p>
         <div class="col-md-10">
             @Html.EditorFor(model => model.mealTimeType, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.mealTimeType, "", new { @class = "text-danger" })
@@ -64,7 +64,7 @@
     </div>
 
     <table class="table">
-        <tr><th></th><th>Ingred</th></tr>
+        <tr><th></th><th>Ingredient Selection</th></tr>
         @foreach (var item in Model.ingredList)
         {
             <tr>
@@ -83,5 +83,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Recipe List", "Index")
 </div>
