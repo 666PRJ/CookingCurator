@@ -100,7 +100,7 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_USERS' does not have a pr
         </EntityType>
         <EntityType Name="USERS">
           <Key>
-            <PropertyRef Name="userEmail" />
+            <PropertyRef Name="user_ID" />
           </Key>
           <Property Name="user_ID" Type="int" Nullable="false" />
           <Property Name="userName" Type="varchar" MaxLength="30" Nullable="false" />
@@ -111,6 +111,7 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_USERS' does not have a pr
           <Property Name="email_Verified" Type="bool" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="salt" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="GUID" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityContainer Name="prj666_191a03ModelStoreContainer">
           <EntitySet Name="ALLERGY" EntityType="Self.ALLERGY" Schema="prj666_191a03" store:Type="Tables" />
@@ -204,7 +205,7 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
         </EntityType>
         <EntityType Name="USER">
           <Key>
-            <PropertyRef Name="userEmail" />
+            <PropertyRef Name="user_ID" />
           </Key>
           <Property Name="user_ID" Type="Int32" Nullable="false" />
           <Property Name="userName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
@@ -215,6 +216,7 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
           <Property Name="email_Verified" Type="Boolean" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="salt" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GUID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ALLERGY_INGREDS">
           <Key>
@@ -251,7 +253,7 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
           <Property Name="reported" Type="Boolean" />
           <Property Name="bookmarked" Type="Boolean" />
         </EntityType>
-        <EntityContainer Name="prj666_191a03Entities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="prj666_191a03Entities5" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ALLERGies" EntityType="Self.ALLERGY" />
           <EntitySet Name="BMKs" EntityType="Self.BMK" />
           <EntitySet Name="DIETS" EntityType="Self.DIET" />
@@ -268,7 +270,7 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="prj666_191a03ModelStoreContainer" CdmEntityContainer="prj666_191a03Entities2">
+        <EntityContainerMapping StorageEntityContainer="prj666_191a03ModelStoreContainer" CdmEntityContainer="prj666_191a03Entities5">
           <EntitySetMapping Name="ALLERGies">
             <EntityTypeMapping TypeName="prj666_191a03Model.ALLERGY">
               <MappingFragment StoreEntitySet="ALLERGY">
@@ -336,6 +338,7 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
                 <ScalarProperty Name="email_Verified" ColumnName="email_Verified" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="salt" ColumnName="salt" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

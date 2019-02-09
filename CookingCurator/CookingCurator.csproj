@@ -378,6 +378,7 @@
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
+    <Compile Include="EntityModels\RegisterViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />
     <Compile Include="EntityModels\UserFindViewModel.cs" />
     <Compile Include="Global.asax.cs">
@@ -507,6 +508,7 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Recipe\Authors.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

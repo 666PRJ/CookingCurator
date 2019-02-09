@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Security;
 
@@ -57,6 +59,8 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<INGRED, IngredientBaseViewModel>();
 
                 cfg.CreateMap<INGRED, IngredBase>();
+
+                cfg.CreateMap<RegisterViewModel, USER>();
 
             });
 
@@ -304,6 +308,53 @@ namespace CookingCurator.Controllers
                 FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
                 return false;
             }
+            return true;
+        }
+
+        public bool RegisterUser(RegisterViewModel registerModel) {
+            //no duplicate email
+            var loggedInUserEmail = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+
+            var loggedInUserName = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+
+            if (loggedInUserEmail > 0) {
+                return true;
+            }
+
+            if (loggedInUserName > 0)
+            {
+                return true;
+            }
+
+            //alphanumeric
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(registerModel.userName)) {
+                return true;
+            }
+
+            if (!r.IsMatch(registerModel.password))
+            {
+                return true;
+            }
+
+            if (registerModel.password != registerModel.confirmPassword)
+            {
+                return true;
+            }
+
+            registerModel.acceptWaiver = false;
+            registerModel.banUser = false;
+            registerModel.email_Verified = false;
+            registerModel.salt = "AA";
+            registerModel.GUID = "1";
+            var addedItem = ds.Users.Add(mapper.Map<RegisterViewModel, USER>(registerModel));
+            ds.SaveChanges();
+            if (addedItem != null) {
+                FormsAuthentication.SetAuthCookie(addedItem.userName, false);
+                
+                return false;
+            }
+
             return true;
         }
 
