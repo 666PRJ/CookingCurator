@@ -10,6 +10,5 @@ namespace CookingCurator.EntityModels
     {
         [Key]
         public int user_ID { get; set; }
-        public bool acceptWaiver { get; set; }
     }
 }
