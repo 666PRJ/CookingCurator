@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AcceptWaiver</h2>
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -76,13 +74,20 @@
 
     <div class="form-group">
         <center>
-            <input type="radio" value="Accept" /> <b>Accept the terms and conditions</b> <hr />
-            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="radio"  name="accept" id="accept" value="Accept" /> <b>Accept the terms and conditions</b> <hr />
+            <input type="submit"  value="Save" class="btn btn-default" />
         </center>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@section Scripts{
+<script type="text/javascript">
+    $(function () {
+        $("form").submit(function (f) {
+            if (!$('input[name="accept"]').is(':checked'))
+                f.preventDefault();
+        });
+    });
+</script>    
+}
