@@ -65,6 +65,12 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+
+        public ActionResult TestAcc()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Login(LoginViewModel loginModel, string returnUrl)
         {
