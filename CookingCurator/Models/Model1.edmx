@@ -13,6 +13,16 @@
           <Property Name="allergyName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="allergyDesc" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.prj666_191a03.ALLERGY_INGREDS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ALLERGY_INGREDS">
+          <Key>
+            <PropertyRef Name="allergy_ID" />
+            <PropertyRef Name="ingred_ID" />
+          </Key>
+          <Property Name="allergy_ID" Type="int" Nullable="false" />
+          <Property Name="ingred_ID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="BMK">
           <Key>
             <PropertyRef Name="bookmark_ID" />
@@ -20,6 +30,16 @@
           <Property Name="bookmark_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="recipeTitle" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="URL" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.prj666_191a03.DIET_INGREDS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DIET_INGREDS">
+          <Key>
+            <PropertyRef Name="diet_ID" />
+            <PropertyRef Name="ingred_ID" />
+          </Key>
+          <Property Name="diet_ID" Type="int" Nullable="false" />
+          <Property Name="ingred_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DIETS">
           <Key>
@@ -49,6 +69,19 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_INGREDS' does not have a 
           <Property Name="recipe_ID" Type="int" Nullable="false" />
           <Property Name="ingred_ID" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.prj666_191a03.RECIPE_USERS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="RECIPE_USERS">
+          <Key>
+            <PropertyRef Name="recipe_ID" />
+            <PropertyRef Name="user_ID" />
+          </Key>
+          <Property Name="recipe_ID" Type="int" Nullable="false" />
+          <Property Name="user_ID" Type="int" Nullable="false" />
+          <Property Name="voting" Type="int" />
+          <Property Name="reported" Type="bool" />
+          <Property Name="bookmarked" Type="bool" />
+        </EntityType>
         <EntityType Name="RECIPES">
           <Key>
             <PropertyRef Name="recipe_ID" />
@@ -67,7 +100,7 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_INGREDS' does not have a 
         </EntityType>
         <EntityType Name="USERS">
           <Key>
-            <PropertyRef Name="userEmail" />
+            <PropertyRef Name="user_ID" />
           </Key>
           <Property Name="user_ID" Type="int" Nullable="false" />
           <Property Name="userName" Type="varchar" MaxLength="30" Nullable="false" />
@@ -75,16 +108,10 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_INGREDS' does not have a 
           <Property Name="banUser" Type="bool" Nullable="false" />
           <Property Name="admin_ID" Type="int" />
           <Property Name="userEmail" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="email_Verified" Type="bool" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="salt" Type="varchar" MaxLength="30" Nullable="false" />
-        </EntityType>
-        <EntityType Name="WARN">
-          <Key>
-            <PropertyRef Name="warning_ID" />
-          </Key>
-          <Property Name="warning_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="warningName" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="warningDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="GUID" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityContainer Name="prj666_191a03ModelStoreContainer">
           <EntitySet Name="ALLERGY" EntityType="Self.ALLERGY" Schema="prj666_191a03" store:Type="Tables" />
@@ -93,12 +120,32 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_INGREDS' does not have a 
           <EntitySet Name="INGRED" EntityType="Self.INGRED" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="RECIPES" EntityType="Self.RECIPES" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="prj666_191a03" store:Type="Tables" />
-          <EntitySet Name="WARN" EntityType="Self.WARN" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="ALLERGY_INGREDS" EntityType="Self.ALLERGY_INGREDS" store:Type="Tables" store:Schema="prj666_191a03">
+            <DefiningQuery>SELECT
+`ALLERGY_INGREDS`.`allergy_ID`, 
+`ALLERGY_INGREDS`.`ingred_ID`
+FROM `ALLERGY_INGREDS` AS `ALLERGY_INGREDS`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="DIET_INGREDS" EntityType="Self.DIET_INGREDS" store:Type="Tables" store:Schema="prj666_191a03">
+            <DefiningQuery>SELECT
+`DIET_INGREDS`.`diet_ID`, 
+`DIET_INGREDS`.`ingred_ID`
+FROM `DIET_INGREDS` AS `DIET_INGREDS`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="RECIPE_INGREDS" EntityType="Self.RECIPE_INGREDS" store:Type="Tables" store:Schema="prj666_191a03">
             <DefiningQuery>SELECT
 `RECIPE_INGREDS`.`recipe_ID`, 
 `RECIPE_INGREDS`.`ingred_ID`
 FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" store:Type="Tables" store:Schema="prj666_191a03">
+            <DefiningQuery>SELECT
+`RECIPE_USERS`.`recipe_ID`, 
+`RECIPE_USERS`.`user_ID`, 
+`RECIPE_USERS`.`voting`, 
+`RECIPE_USERS`.`reported`, 
+`RECIPE_USERS`.`bookmarked`
+FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
           </EntitySet>
         </EntityContainer>
       </Schema>
@@ -158,7 +205,7 @@ FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
         </EntityType>
         <EntityType Name="USER">
           <Key>
-            <PropertyRef Name="userEmail" />
+            <PropertyRef Name="user_ID" />
           </Key>
           <Property Name="user_ID" Type="Int32" Nullable="false" />
           <Property Name="userName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
@@ -166,16 +213,26 @@ FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
           <Property Name="banUser" Type="Boolean" Nullable="false" />
           <Property Name="admin_ID" Type="Int32" />
           <Property Name="userEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email_Verified" Type="Boolean" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="salt" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GUID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="WARN">
+        <EntityType Name="ALLERGY_INGREDS">
           <Key>
-            <PropertyRef Name="warning_ID" />
+            <PropertyRef Name="allergy_ID" />
+            <PropertyRef Name="ingred_ID" />
           </Key>
-          <Property Name="warning_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="warningName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="warningDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="allergy_ID" Type="Int32" Nullable="false" />
+          <Property Name="ingred_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DIET_INGREDS">
+          <Key>
+            <PropertyRef Name="diet_ID" />
+            <PropertyRef Name="ingred_ID" />
+          </Key>
+          <Property Name="diet_ID" Type="Int32" Nullable="false" />
+          <Property Name="ingred_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="RECIPE_INGREDS">
           <Key>
@@ -185,22 +242,35 @@ FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
           <Property Name="recipe_ID" Type="Int32" Nullable="false" />
           <Property Name="ingred_ID" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="prj666_191a03Entities1" annotation:LazyLoadingEnabled="true">
+        <EntityType Name="RECIPE_USERS">
+          <Key>
+            <PropertyRef Name="recipe_ID" />
+            <PropertyRef Name="user_ID" />
+          </Key>
+          <Property Name="recipe_ID" Type="Int32" Nullable="false" />
+          <Property Name="user_ID" Type="Int32" Nullable="false" />
+          <Property Name="voting" Type="Int32" />
+          <Property Name="reported" Type="Boolean" />
+          <Property Name="bookmarked" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="prj666_191a03Entities5" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ALLERGies" EntityType="Self.ALLERGY" />
           <EntitySet Name="BMKs" EntityType="Self.BMK" />
           <EntitySet Name="DIETS" EntityType="Self.DIET" />
           <EntitySet Name="INGREDs" EntityType="Self.INGRED" />
           <EntitySet Name="RECIPES" EntityType="Self.RECIPE" />
           <EntitySet Name="USERS" EntityType="Self.USER" />
-          <EntitySet Name="WARNs" EntityType="Self.WARN" />
+          <EntitySet Name="ALLERGY_INGREDS" EntityType="Self.ALLERGY_INGREDS" />
+          <EntitySet Name="DIET_INGREDS" EntityType="Self.DIET_INGREDS" />
           <EntitySet Name="RECIPE_INGREDS" EntityType="Self.RECIPE_INGREDS" />
+          <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="prj666_191a03ModelStoreContainer" CdmEntityContainer="prj666_191a03Entities1">
+        <EntityContainerMapping StorageEntityContainer="prj666_191a03ModelStoreContainer" CdmEntityContainer="prj666_191a03Entities5">
           <EntitySetMapping Name="ALLERGies">
             <EntityTypeMapping TypeName="prj666_191a03Model.ALLERGY">
               <MappingFragment StoreEntitySet="ALLERGY">
@@ -265,17 +335,26 @@ FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
                 <ScalarProperty Name="banUser" ColumnName="banUser" />
                 <ScalarProperty Name="admin_ID" ColumnName="admin_ID" />
                 <ScalarProperty Name="userEmail" ColumnName="userEmail" />
+                <ScalarProperty Name="email_Verified" ColumnName="email_Verified" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="salt" ColumnName="salt" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="WARNs">
-            <EntityTypeMapping TypeName="prj666_191a03Model.WARN">
-              <MappingFragment StoreEntitySet="WARN">
-                <ScalarProperty Name="warning_ID" ColumnName="warning_ID" />
-                <ScalarProperty Name="warningName" ColumnName="warningName" />
-                <ScalarProperty Name="warningDesc" ColumnName="warningDesc" />
+          <EntitySetMapping Name="ALLERGY_INGREDS">
+            <EntityTypeMapping TypeName="prj666_191a03Model.ALLERGY_INGREDS">
+              <MappingFragment StoreEntitySet="ALLERGY_INGREDS">
+                <ScalarProperty Name="allergy_ID" ColumnName="allergy_ID" />
+                <ScalarProperty Name="ingred_ID" ColumnName="ingred_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DIET_INGREDS">
+            <EntityTypeMapping TypeName="prj666_191a03Model.DIET_INGREDS">
+              <MappingFragment StoreEntitySet="DIET_INGREDS">
+                <ScalarProperty Name="diet_ID" ColumnName="diet_ID" />
+                <ScalarProperty Name="ingred_ID" ColumnName="ingred_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -284,6 +363,17 @@ FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
               <MappingFragment StoreEntitySet="RECIPE_INGREDS">
                 <ScalarProperty Name="recipe_ID" ColumnName="recipe_ID" />
                 <ScalarProperty Name="ingred_ID" ColumnName="ingred_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RECIPE_USERS">
+            <EntityTypeMapping TypeName="prj666_191a03Model.RECIPE_USERS">
+              <MappingFragment StoreEntitySet="RECIPE_USERS">
+                <ScalarProperty Name="recipe_ID" ColumnName="recipe_ID" />
+                <ScalarProperty Name="user_ID" ColumnName="user_ID" />
+                <ScalarProperty Name="voting" ColumnName="voting" />
+                <ScalarProperty Name="reported" ColumnName="reported" />
+                <ScalarProperty Name="bookmarked" ColumnName="bookmarked" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -12,10 +12,12 @@ namespace CookingCurator.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class WARN
+    public partial class RECIPE_USERS
     {
-        public int warning_ID { get; set; }
-        public string warningName { get; set; }
-        public string warningDesc { get; set; }
+        public int recipe_ID { get; set; }
+        public int user_ID { get; set; }
+        public Nullable<int> voting { get; set; }
+        public Nullable<bool> reported { get; set; }
+        public Nullable<bool> bookmarked { get; set; }
     }
 }

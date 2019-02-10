@@ -1,9 +1,13 @@
 ﻿using CookingCurator.EntityModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,17 +17,18 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
 
-
+        [Authorize]
         public ActionResult Index()
         {
             var recipes = m.RecipeGetAll();
             return View(recipes);
         }
         // GET: Recipe/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
-            var recipe = m.RecipeGetById(id.GetValueOrDefault());
-
+            var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
+            recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
             if (recipe == null)
                 return HttpNotFound();
             else
@@ -31,27 +36,24 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Create
+        [Authorize]
         public ActionResult Create()
         {
             var form = new RecipeAddViewForm();
 
-            form.ingredList = new MultiSelectList(items: m.IngredGetAll(),
-                dataValueField: "ingred_ID",
-                dataTextField: "ingred_Name"
-                );
-
+            form.ingredients = m.IngredientGetAll();
+            form.selectedIngredsId = new string[0];
             return View(form);
         }
 
         // GET: Recipe/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateVerified()
         {
             var form = new RecipeVerifiedAddViewModel();
 
-            form.ingredList = new MultiSelectList(items: m.IngredGetAll(),
-                dataValueField: "ingred_ID",
-                dataTextField: "ingred_Name"
-                );
+            form.ingredients = m.IngredientGetAll();
+            form.selectedIngredsId = new string[0];
 
             return View(form);
         }
@@ -120,6 +122,57 @@ namespace CookingCurator.Controllers
         // GET: Recipe/Edit/5
         public ActionResult Edit(int? id)
         {
+            Recipe_IngredViewModel recipes = new Recipe_IngredViewModel();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+            IEnumerable<IngredientBaseViewModel> ingredients = m.IngredientGetAll();
+            String[] selectedIngreds = m.ingredsForRecipe(id).ToArray();
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+            recipes.recipe = recipe;
+            recipes.ingredients = ingredients;
+            recipes.selectedIngredsId = selectedIngreds;
+            return View(recipes);
+        }
+
+        // POST: Recipe/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Recipe_IngredViewModel recipes)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(recipes);
+            }
+
+            try
+            {
+
+                var editedrecipe = m.RecipeEdit(recipes);
+
+                if (editedrecipe == null)
+                {
+                    return View(recipes);
+                }
+                else
+                {
+                    return RedirectToAction("Details", new { id = editedrecipe.recipe_Id });
+                }
+            }
+            catch
+            {
+                return View(recipes);
+            }
+        }
+
+        // GET: Recipe/Delete/5
+        public ActionResult Delete(int? id)
+        {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -129,60 +182,56 @@ namespace CookingCurator.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Title = recipe.title;
             return View(recipe);
-        }
-
-        // POST: Recipe/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, RecipeAddViewModel recipe)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(recipe);
-            }
-
-            try
-            {
-
-                var editedRecipe = m.RecipeEdit(id, recipe);
-
-                if (editedRecipe == null)
-                {
-                    return View(recipe);
-                }
-                else
-                {
-                    return RedirectToAction("Details", new { id = editedRecipe.recipe_Id });
-                }
-            }
-            catch
-            {
-                return View(recipe);
-            }
-        }
-
-        // GET: Recipe/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
         }
 
         // POST: Recipe/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                m.RecipeDelete(id);
             }
-            catch
+            catch (DbEntityValidationException vex)
             {
-                return View();
+                foreach (var error in vex.EntityValidationErrors)
+                {
+                    foreach (var errorMsg in error.ValidationErrors)
+                    {
+                        // logging service based on NLog
+                        Console.WriteLine($"Error trying to save EF changes - {errorMsg.ErrorMessage}");
+                    }
+                }
+
+                throw;
             }
+            catch (DbUpdateException dbu)
+            {
+                var exception = HandleDbUpdateException(dbu);
+                throw exception;
+            }
+            return RedirectToAction("Index");
+        }
+        private Exception HandleDbUpdateException(DbUpdateException dbu)
+        {
+            var builder = new StringBuilder("A DbUpdateException was caught while saving changes. ");
+
+            try
+            {
+                foreach (var result in dbu.Entries)
+                {
+                    builder.AppendFormat("Type: {0} was part of the problem. ", result.Entity.GetType().Name);
+                }
+            }
+            catch (Exception e)
+            {
+                builder.Append("Error parsing DbUpdateException: " + e.ToString());
+            }
+
+            string message = builder.ToString();
+            return new Exception(message, dbu);
         }
 
         [Route("User/AuthorProfile")]

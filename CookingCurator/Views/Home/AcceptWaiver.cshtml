@@ -1,0 +1,93 @@
+﻿@model CookingCurator.EntityModels.UserAcceptWaiverViewModel
+
+@{
+    ViewBag.Title = "AcceptWaiver";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <center><h2>Terms and Conditions</h2></center>
+
+    <div class="form-group-lg">
+        <p>
+            <pre>
+    Before you may access any features of the Cooking Curator application, you must read and agreed to the following conditions.  Access will not be granted 
+    until this is completed.  Please review everything carefully.
+
+    <strong>Privacy:</strong>
+        <b>1)</b> You accept that Cooking Curator will have access to your email address and will be able to contact you through it.  You also accept that 
+        other users of the cooking curator application will be able to contact that email address.  Cooking curator will not release email addresses of 
+        users to any third parties.  No other personal information from you is required to use this application.  
+
+        <b>2)</b> You accept that recipes you upload will be viewable to all other cooking curator users.
+
+        <b>3)</b> You agree to provide the source of any recipe you upload that isn’t of your own creation
+
+    <b>Content:</b>
+        This application allows users to share and bookmark recipes.  Content unrelated to recipes, diets and allergies is not allowed on this site.  
+        The recipes in this application are either user created or obtained from credible sources.  All recipes belong to their original authors.
+
+    <b>Termination of Accounts:</b>
+        All users must have a valid email address.  Failure to validate an email address in a 24 period will result in the locking of the account until
+        it is verified.
+
+        The administrators of Cooking Curator reserve the right to terminate a user account for any of the following reasons:
+
+            <b>1)</b> Abuse of contact and upload systems (including harassment, impersonation, and spamming)
+            <b>2)</b> Uploading of illegal or inappropriate/offensive content anywhere on the site
+            <b>3)</b> Inappropriate/offensive username
+            <b>4)</b> A user claiming others’ recipes as there own
+            <b>5)</b> Falsifying information in a recipe
+            <b>6)</b> Including anything in a recipe that may endanger another user
+            <b>7)</b> Sharing an account with another person
+            <b>8)</b> Creating multiple accounts to bypass systems
+
+    <b>You agree to not perform any of the actions listed above.</b>
+
+    All users have the ability to delete their own accounts.  This can not be reversed, and you accept that all recipes tied to your account 
+    will also be deleted.
+    If a user sees any suspicious content or user behaviour, they should contact the Cooking Curator via the “Contact Us” page immediately. 
+    Abuse of any reporting system will result in the termination of the cooking curator account.
+
+    <b>Links to outside sites:</b>
+        We are not responsible for any content on other web sites linked to through our application.
+        You agree to not post inappropriate or malicious links anywhere in your recipes.
+
+    <b>Waiver:</b>
+        The administrators of Cooking Curator are not responsible for anything that may occur while using any recipe available through this application.  
+        Users are responsible for reviewing all ingredients and instructions beforehand, using sound judgement when following steps.  
+        The user is responsible for any actions they take when following a recipe, including any variations they choose to make.
+            <b>1)</b> YOU ACCEPT THAT YOU ARE RESPONSIBLE FOR ALL FOOD YOU PREPARE AND/OR SERVE.
+            <b>2)</b> YOU ACCEPT THAT COOKING CURATOR CAN NOT BE HELD LIABLE FOR THE ACTIONS OF ANYONE WHO CLAIMS TO BE USING A RECIPE FROM THIS APPLICATION, 
+                INCLUDING INJURIES OR DEATH.
+            <b>3)</b> YOU ACKNOWLEDGE YOU HAVE READ AND ACCEPT ALL OF THE ABOVE INFORMATION:
+            </pre>
+        </p>
+    </div>
+    
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.user_ID)
+
+    <div class="form-group">
+        <center>
+            <input type="radio"  name="accept" id="accept" value="Accept" /> <b>Accept the terms and conditions</b> <hr />
+            <input type="submit"  value="Save" class="btn btn-default" />
+        </center>
+    </div>
+</div>
+}
+
+@section Scripts{
+<script type="text/javascript">
+    $(function () {
+        $("form").submit(function (f) {
+            if (!$('input[name="accept"]').is(':checked'))
+                f.preventDefault();
+        });
+    });
+</script>    
+}

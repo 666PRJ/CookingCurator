@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
 using CookingCurator.EntityModels;
 using CookingCurator.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Security;
 
 namespace CookingCurator.Controllers
 {
@@ -35,6 +40,8 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeWithIngredBaseViewModel>();
+
                 cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
 
                 cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
@@ -51,7 +58,14 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<UserFindViewModel, USER>();
 
-                cfg.CreateMap<INGRED, IngredBase>();
+                cfg.CreateMap<INGRED, IngredientBaseViewModel>();
+
+                cfg.CreateMap<RegisterViewModel, USER>();
+
+                cfg.CreateMap<UserBaseViewModel, UserAcceptWaiverViewModel>();
+
+                cfg.CreateMap<UserAcceptWaiverViewModel, USER>();
+
             });
 
             mapper = config.CreateMapper();
@@ -97,6 +111,15 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
+        public RecipeWithIngredBaseViewModel RecipeWithIngredGetById(int? id)
+        {
+            // Attempt to fetch the object.
+            var recipe = ds.Recipes.Find(id);
+
+            // Return the result (or null if not found).
+            return recipe == null ? null : mapper.Map<RECIPE, RecipeWithIngredBaseViewModel>(recipe);
+        }
+
         public IEnumerable<RecipeBaseViewModel> RecipesByAuthor(string byAuthor)
         {
             var authorRecipes = ds.Recipes.Where(r => r.author == byAuthor);
@@ -110,7 +133,8 @@ namespace CookingCurator.Controllers
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
-
+            deleteIngredients(addedItem.recipe_ID);
+            addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -135,7 +159,8 @@ namespace CookingCurator.Controllers
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
-
+            deleteIngredients(addedItem.recipe_ID);
+            addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -151,7 +176,7 @@ namespace CookingCurator.Controllers
             {
                 recipeUpdate.source_ID = recipeUpdate.recipe_ID;
             }
-            ds.Entry(recipeUpdate).State = EntityState.Modified;
+            ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
 
             ds.SaveChanges();
 
@@ -159,26 +184,86 @@ namespace CookingCurator.Controllers
             return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
         }
 
-        public RecipeBaseViewModel RecipeEdit(int id, RecipeAddViewModel recipe)
+        public RecipeBaseViewModel RecipeEdit(Recipe_IngredViewModel recipeIng)
         {
-            var recipeUpdate = ds.Recipes.Find(id);
+            var recipeUpdate = ds.Recipes.Find(recipeIng.recipe.recipe_Id);
             if (recipeUpdate == null)
             {
                 return null;
             }
-            recipeUpdate.title = recipe.title;
-            recipeUpdate.instructions = recipe.instructions;
+            recipeUpdate.title = recipeIng.recipe.title;
+            recipeUpdate.instructions = recipeIng.recipe.instructions;
             recipeUpdate.lastUpdated = DateTime.Now;
-            recipeUpdate.author = recipe.author;
-            recipeUpdate.source_Link = recipe.source_Link;
-            recipeUpdate.country = recipe.country;
-            recipeUpdate.mealTimeType = recipe.mealTimeType;
-            ds.Entry(recipeUpdate).State = EntityState.Modified;
+            recipeUpdate.author = recipeIng.recipe.author;
+            recipeUpdate.source_Link = recipeIng.recipe.source_Link;
+            recipeUpdate.country = recipeIng.recipe.country;
+            recipeUpdate.mealTimeType = recipeIng.recipe.mealTimeType;
+            ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
+
+            deleteIngredients(recipeIng.recipe.recipe_Id);
+            addIngredientsForRecipes(recipeIng.recipe.recipe_Id, recipeIng.selectedIngredsId);
             // Attempt to save the edited recipe.
             ds.SaveChanges();
 
             // If successful, return the edited recipe (mapped to a view model class).
             return recipeUpdate == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipeUpdate);
+        }
+
+        public void RecipeDelete(int id)
+        {
+            deleteIngredients(id);
+            var recipe = ds.Recipes.Find(id);
+            ds.Recipes.Remove(recipe);
+            ds.SaveChanges();
+        }
+
+        public IEnumerable<IngredientBaseViewModel> IngredientGetAll()
+        {
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
+        }
+
+        public void addIngredientsForRecipes(int id, String[] selectedIds)
+        {
+            for (int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO RECIPE_INGREDS (recipe_ID, ingred_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public List<String> ingredsForRecipe(int? id)
+        {
+            List<String> selectedIngreds = new List<string>();
+            IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            foreach (var item in ingreds)
+            {
+                selectedIngreds.Add(item.ingred_ID.ToString());
+            }
+            return selectedIngreds;
+        }
+
+        public IEnumerable<IngredientBaseViewModel> ingredsForRecipeViewModel(int? id)
+        {
+            List<int> selectedIngreds = new List<int>();
+            IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            foreach (var item in ingreds)
+            {
+                selectedIngreds.Add(item.ingred_ID);
+            }
+
+            List<INGRED> baseIngreds = new List<INGRED>();
+            foreach (var item in selectedIngreds)
+            {
+                baseIngreds.Add(ds.Ingreds.SingleOrDefault(e => e.ingred_ID == item));
+            }
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(baseIngreds);
+        }
+
+        public void deleteIngredients(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from RECIPE_INGREDS where recipe_Id = " + id);
+            ds.SaveChanges();
         }
 
         public IEnumerable<UserBaseViewModel> UserFindAll()
@@ -195,7 +280,8 @@ namespace CookingCurator.Controllers
             return user == null ? null : mapper.Map<USER, UserBaseViewModel>(user);
         }
 
-        public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find) {
+        public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find)
+        {
             var findItem = ds.Users.Where(t => t.userName.Contains(find.userName));
 
             return findItem == null ? null : mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(findItem);
@@ -214,7 +300,7 @@ namespace CookingCurator.Controllers
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
         }
-      
+
         public bool ContactAdmin(ContactUsViewModel contactUs)
         {
             try
@@ -241,7 +327,138 @@ namespace CookingCurator.Controllers
             }
 
         }
-      
+
+        public bool LoginUser(LoginViewModel loginModel)
+        {
+            var loggedInUserName = ds.Users.Where(x => x.userName == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            if (loggedInUserName != null)
+            {
+                FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
+                return false;
+            }
+            var loggedInEmail = ds.Users.Where(x => x.userEmail == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            if (loggedInEmail != null)
+            {
+                FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
+                return false;
+            }
+            return true;
+        }
+
+        public bool RegisterUser(RegisterViewModel registerModel)
+        {
+            //no duplicate email
+            var loggedInUserEmail = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+
+            var loggedInUserName = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+
+            if (loggedInUserEmail > 0)
+            {
+                return true;
+            }
+
+            if (loggedInUserName > 0)
+            {
+                return true;
+            }
+
+            //alphanumeric
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(registerModel.userName))
+            {
+                return true;
+            }
+
+            if (!r.IsMatch(registerModel.password))
+            {
+                return true;
+            }
+
+            if (registerModel.password != registerModel.confirmPassword)
+            {
+                return true;
+            }
+
+            registerModel.acceptWaiver = false;
+            registerModel.banUser = false;
+            registerModel.email_Verified = false;
+            registerModel.salt = "AA";
+            registerModel.GUID = Guid.NewGuid().ToString();
+            var addedItem = ds.Users.Add(mapper.Map<RegisterViewModel, USER>(registerModel));
+            ds.SaveChanges();
+            if (addedItem != null)
+            {
+                FormsAuthentication.SetAuthCookie(addedItem.userName, false);
+                bool verifyEmailSent = SendEmailVerification(registerModel.GUID, registerModel.userEmail);
+                if (verifyEmailSent)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void AccountVerification(string id)
+        {
+            var user = ds.Users.Where(a => a.GUID.Equals(id)).FirstOrDefault();
+            if (user != null)
+            {
+                user.email_Verified = true;
+                ds.SaveChanges();
+            }
+        }
+
+        public bool logoutUser()
+        {
+            try
+            {
+                FormsAuthentication.SignOut();
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
+
+        private bool SendEmailVerification(string GUID, string emailID)
+        {
+            var verificationURL = "/Home/VerifyAccount/" + GUID;
+            var link = "http://localhost:5657" + verificationURL;
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Your account has been successfully created";
+                String Body = "<br/><br/> Thanks for joining Cooking Curator. Your account has been created successfully."
+                            + " Please click on the link to verify your account <a href='" + link + "'>" + link + "</a>";
+                MailMessage mailMessage = new MailMessage(adminEmail, emailID, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public int FetchUserId(String userNameOrEmail)
+        {
+            var loggedInUserName = ds.Users.Where(x => x.userName == userNameOrEmail || x.userEmail == userNameOrEmail).FirstOrDefault();
+
+            return loggedInUserName.user_ID;
+        }
+
         public IEnumerable<RecipeSourceViewModel> RecipeSourceGetAll()
         {
             // The ds object is the data store
@@ -250,9 +467,38 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeSourceViewModel>>(ds.Recipes.Where(t => t.source_ID.HasValue == true));
         }
 
-        public IEnumerable<IngredBase> IngredGetAll()
+        public IEnumerable<IngredientBaseViewModel> IngredGetAll()
         {
-            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ds.Ingreds);
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
+        }
+
+        public bool IsWaiverAccepted(int Id)
+        {
+            var user = ds.Users.SingleOrDefault(e => e.user_ID == Id);
+            if (user.acceptWaiver)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AcceptWaiverByUser(UserAcceptWaiverViewModel user)
+        {
+                try
+                {
+                    String query = "UPDATE USERS SET acceptWaiver = 1 WHERE user_ID = " + user.user_ID;
+                    ds.Database.ExecuteSqlCommand(query);
+                    ds.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+                
         }
     }
 }
