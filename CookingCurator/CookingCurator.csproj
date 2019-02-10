@@ -511,6 +511,7 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\VerifyAccount.cshtml" />
     <Content Include="Views\Home\RegisterationSuccess.cshtml" />
+    <Content Include="Views\Home\TestAcc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

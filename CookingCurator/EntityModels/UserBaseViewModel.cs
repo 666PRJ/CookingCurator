@@ -9,9 +9,15 @@ namespace CookingCurator.EntityModels
 {
     public class UserBaseViewModel
     {
+        [DisplayName(("User ID Number"))]
         public int user_ID { get; set; }
+
+        [DisplayName(("Username"))]
         public string userName { get; set; }
+
+        [DisplayName(("Email Address"))]
         public string userEmail { get; set; }
+
         [DisplayName(("Ban User/Unban User"))]
         public bool banUser { get; set; }
     }
