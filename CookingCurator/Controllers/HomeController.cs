@@ -30,7 +30,7 @@ namespace CookingCurator.Controllers
                 bool error = m.RegisterUser(registerModel);
                 if (!error)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("RegisterationSuccess");
                 }
                 else
                 {
@@ -43,6 +43,18 @@ namespace CookingCurator.Controllers
                 return View(registerModel);
             }
 
+        }
+
+        public ActionResult RegisterationSuccess()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult VerifyAccount(String id)
+        {
+            m.AccountVerification(id);
+
+            return View();
         }
 
         public ActionResult Login()

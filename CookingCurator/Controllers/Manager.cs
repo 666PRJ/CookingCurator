@@ -375,16 +375,29 @@ namespace CookingCurator.Controllers
             registerModel.banUser = false;
             registerModel.email_Verified = false;
             registerModel.salt = "AA";
-            registerModel.GUID = "1";
+            registerModel.GUID = Guid.NewGuid().ToString();
             var addedItem = ds.Users.Add(mapper.Map<RegisterViewModel, USER>(registerModel));
             ds.SaveChanges();
             if (addedItem != null) {
                 FormsAuthentication.SetAuthCookie(addedItem.userName, false);
-                
-                return false;
+                bool verifyEmailSent = SendEmailVerification(registerModel.GUID, registerModel.userEmail);
+                if (verifyEmailSent)
+                {
+                    return false;
+                }
             }
-
+           
             return true;
+        }
+
+        public void AccountVerification(string id)
+        {
+            var user = ds.Users.Where(a => a.GUID.Equals(id)).FirstOrDefault();
+            if(user != null)
+            {
+                user.email_Verified = true;
+                ds.SaveChanges();
+            }
         }
 
         public bool logoutUser()
@@ -397,6 +410,36 @@ namespace CookingCurator.Controllers
             catch (Exception)
             {
                 return true;
+            }
+        }
+
+        private bool SendEmailVerification(string GUID, string emailID)
+        {
+            var verificationURL = "/Home/VerifyAccount/" + GUID;
+            var link = "http://localhost:5657" + verificationURL;
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Your account has been successfully created";
+                String Body = "<br/><br/> Thanks for joining Cooking Curator. Your account has been created successfully."
+                            + " Please click on the link to verify your account <a href='" + link + "'>" + link + "</a>"; 
+                MailMessage mailMessage = new MailMessage(adminEmail, emailID, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
