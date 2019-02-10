@@ -30,7 +30,8 @@ namespace CookingCurator.Controllers
                 bool error = m.RegisterUser(registerModel);
                 if (!error)
                 {
-                    return RedirectToAction("RegisterationSuccess");
+                    int Id = m.FetchUserId(registerModel.userName);
+                    return RedirectToAction("RegisterationSuccess", new { id = Id.ToString() });
                 }
                 else
                 {
@@ -45,8 +46,10 @@ namespace CookingCurator.Controllers
 
         }
 
-        public ActionResult RegisterationSuccess()
+        [Route("registration/success/{id}")]
+        public ActionResult RegisterationSuccess(String id)
         {
+            ViewBag.MyString = id;
             return View();
         }
         [HttpGet]
@@ -76,7 +79,17 @@ namespace CookingCurator.Controllers
                 bool error = m.LoginUser(loginModel);
                 if (!error)
                 {
-                    return RedirectToAction("Index");
+                    int Id = m.FetchUserId(loginModel.userEmail);
+                    bool waiverAccepted = m.IsWaiverAccepted(Id);
+                    if (waiverAccepted)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return RedirectToAction("AcceptWaiver", new { id = Id});
+                    }
+                    
                 }
                 else
                 {
@@ -103,6 +116,29 @@ namespace CookingCurator.Controllers
                 return Redirect("Index");
             }
 
+        }
+
+        [HttpGet]
+        public ActionResult AcceptWaiver(String Id)
+        {
+            int id = Convert.ToInt32(Id);
+            UserBaseViewModel user = m.GetUserById(id);
+            UserAcceptWaiverViewModel acceptWaiverUser = m.mapper.Map<UserBaseViewModel, UserAcceptWaiverViewModel>(user);
+            return View(acceptWaiverUser);
+        }
+
+        [HttpPost]
+        public ActionResult AcceptWaiver(UserAcceptWaiverViewModel user)
+        {
+            bool error = m.AcceptWaiverByUser(user);
+            if (!error)
+            {
+                return View(user.user_ID.ToString());
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

@@ -62,6 +62,10 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RegisterViewModel, USER>();
 
+                cfg.CreateMap<UserBaseViewModel, UserAcceptWaiverViewModel>();
+
+                cfg.CreateMap<UserAcceptWaiverViewModel, USER>();
+
             });
 
             mapper = config.CreateMapper();
@@ -448,6 +452,13 @@ namespace CookingCurator.Controllers
             }
         }
 
+        public int FetchUserId(String userNameOrEmail)
+        {
+            var loggedInUserName = ds.Users.Where(x => x.userName == userNameOrEmail || x.userEmail == userNameOrEmail).FirstOrDefault();
+
+            return loggedInUserName.user_ID;
+        }
+
         public IEnumerable<RecipeSourceViewModel> RecipeSourceGetAll()
         {
             // The ds object is the data store
@@ -459,6 +470,35 @@ namespace CookingCurator.Controllers
         public IEnumerable<IngredientBaseViewModel> IngredGetAll()
         {
             return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
+        }
+
+        public bool IsWaiverAccepted(int Id)
+        {
+            var user = ds.Users.SingleOrDefault(e => e.user_ID == Id);
+            if (user.acceptWaiver)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AcceptWaiverByUser(UserAcceptWaiverViewModel user)
+        {
+                try
+                {
+                    String query = "UPDATE USERS SET acceptWaiver = 1 WHERE user_ID = " + user.user_ID;
+                    ds.Database.ExecuteSqlCommand(query);
+                    ds.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+                
         }
     }
 }
