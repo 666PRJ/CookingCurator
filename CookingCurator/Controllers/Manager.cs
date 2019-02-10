@@ -40,6 +40,8 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeWithIngredBaseViewModel>();
+
                 cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
 
                 cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
@@ -57,8 +59,6 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<UserFindViewModel, USER>();
 
                 cfg.CreateMap<INGRED, IngredientBaseViewModel>();
-
-                cfg.CreateMap<INGRED, IngredBase>();
 
                 cfg.CreateMap<RegisterViewModel, USER>();
 
@@ -107,6 +107,15 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
+        public RecipeWithIngredBaseViewModel RecipeWithIngredGetById(int? id)
+        {
+            // Attempt to fetch the object.
+            var recipe = ds.Recipes.Find(id);
+
+            // Return the result (or null if not found).
+            return recipe == null ? null : mapper.Map<RECIPE, RecipeWithIngredBaseViewModel>(recipe);
+        }
+
         public IEnumerable<RecipeBaseViewModel> RecipesByAuthor(string byAuthor)
         {
             var authorRecipes = ds.Recipes.Where(r => r.author == byAuthor);
@@ -120,7 +129,8 @@ namespace CookingCurator.Controllers
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
-
+            deleteIngredients(addedItem.recipe_ID);
+            addIngredientsForRecipes(addedItem.recipe_ID,recipe.selectedIngredsId);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -145,7 +155,8 @@ namespace CookingCurator.Controllers
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
-
+            deleteIngredients(addedItem.recipe_ID);
+            addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -227,6 +238,24 @@ namespace CookingCurator.Controllers
             }
             return selectedIngreds;
         }
+
+        public IEnumerable<IngredientBaseViewModel> ingredsForRecipeViewModel(int? id)
+        {
+            List<int> selectedIngreds = new List<int>();
+            IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            foreach (var item in ingreds)
+            {
+                selectedIngreds.Add(item.ingred_ID);
+            }
+
+            List<INGRED> baseIngreds = new List<INGRED>();
+            foreach (var item in selectedIngreds)
+            {
+                baseIngreds.Add(ds.Ingreds.SingleOrDefault(e => e.ingred_ID == item));
+            }
+            return mapper.Map<IEnumerable<INGRED>,IEnumerable<IngredientBaseViewModel>>(baseIngreds);
+        }
+
         public void deleteIngredients(int id)
         {
             ds.Database.ExecuteSqlCommand("delete from RECIPE_INGREDS where recipe_Id = " + id);
@@ -422,9 +451,9 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeSourceViewModel>>(ds.Recipes.Where(t => t.source_ID.HasValue == true));
         }
 
-        public IEnumerable<IngredBase> IngredGetAll()
+        public IEnumerable<IngredientBaseViewModel> IngredGetAll()
         {
-            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ds.Ingreds);
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
         }
     }
 }
