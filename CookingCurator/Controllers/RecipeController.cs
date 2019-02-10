@@ -27,8 +27,8 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Details(int? id)
         {
-            var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
-            recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
+            var recipe = m.RecipeGetById(id.GetValueOrDefault());
+
             if (recipe == null)
                 return HttpNotFound();
             else
@@ -41,8 +41,11 @@ namespace CookingCurator.Controllers
         {
             var form = new RecipeAddViewForm();
 
-            form.ingredients = m.IngredientGetAll();
-            form.selectedIngredsId = new string[0];
+            form.ingredList = new MultiSelectList(items: m.IngredGetAll(),
+                dataValueField: "ingred_ID",
+                dataTextField: "ingred_Name"
+                );
+
             return View(form);
         }
 
@@ -52,8 +55,10 @@ namespace CookingCurator.Controllers
         {
             var form = new RecipeVerifiedAddViewModel();
 
-            form.ingredients = m.IngredientGetAll();
-            form.selectedIngredsId = new string[0];
+            form.ingredList = new MultiSelectList(items: m.IngredGetAll(),
+                dataValueField: "ingred_ID",
+                dataTextField: "ingred_Name"
+                );
 
             return View(form);
         }

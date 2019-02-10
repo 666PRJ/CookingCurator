@@ -63,12 +63,16 @@
         </div>
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.selectedIngredsId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.ListBoxFor(model => model.selectedIngredsId, new MultiSelectList(Model.ingredients, "ingred_ID", "ingred_Name"), new { id = "multiSelect", multiple = "multiple" })
-        </div>
-    </div>
+    <table class="table">
+        <tr><th></th><th>Ingred</th></tr>
+        @foreach (var item in Model.ingredList)
+        {
+            <tr>
+                <td><input type="checkbox" name="ingredListIds" value="@item.Value" checked="@item.Selected" /></td>
+                <td>@item.Text</td>
+            </tr>
+        }
+    </table>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -84,11 +88,4 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script>
-        $(function () {
-            $("#multiSelect").chosen({
-                width: "100%"
-            });
-        })
-</script>
 }

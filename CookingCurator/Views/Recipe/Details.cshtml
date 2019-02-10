@@ -1,22 +1,25 @@
-﻿@model CookingCurator.EntityModels.RecipeWithIngredBaseViewModel
+﻿@model CookingCurator.EntityModels.RecipeBaseViewModel
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.title)</h2>
 
 <div>
-    <h4>RecipeWithIngredBaseViewModel</h4>
+    <h5>
+        by @Html.DisplayFor(model => model.author) |
+        @Html.ActionLink("View all Recipes from this Author", "Authors", new { authorName = Model.author }) 
+    </h5>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.title)
+            @Html.DisplayNameFor(model => model.instructions)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.title)
+            @Html.DisplayFor(model => model.instructions)
         </dd>
 
         <dt>
@@ -28,27 +31,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.instructions)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.instructions)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.lastUpdated)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.lastUpdated)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.author)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.author)
         </dd>
 
         <dt>
@@ -89,17 +76,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.mealTimeType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ingreds)
-        </dt>
-
-        <dd>
-            @foreach (var p in Model.ingreds)
-            {
-                <span>@p.ingred_Name</span><br/>
-            }
         </dd>
 
     </dl>

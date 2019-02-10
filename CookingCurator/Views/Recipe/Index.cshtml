@@ -72,8 +72,8 @@
             @Html.DisplayFor(modelItem => item.mealTimeType)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.recipe_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.recipe_Id }) |
+            @Html.ActionLink("Edit", "Edit", new { id=item.recipe_Id }) <br />
+            @Html.ActionLink("Details", "Details", new { id=item.recipe_Id }) <br />
             @Html.ActionLink("Delete", "Delete", new { id=item.recipe_Id })
         </td>
     </tr>

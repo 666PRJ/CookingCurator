@@ -11,13 +11,4 @@ namespace CookingCurator.EntityModels
         [Key]
         public int recipe_Id { get; set; }
     }
-
-    public class RecipeWithIngredBaseViewModel : RecipeBaseViewModel
-    {
-        public RecipeWithIngredBaseViewModel()
-        {
-            ingreds = new List<IngredientBaseViewModel>();
-        }
-        public IEnumerable<IngredientBaseViewModel> ingreds { get; set; }
-    }
 }
