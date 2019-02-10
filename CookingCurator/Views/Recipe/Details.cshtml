@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Recipe Details</h2>
 
 <div>
-    <h4>RecipeWithIngredBaseViewModel</h4>
+    <h4>Detailed Recipe Information</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -92,13 +92,13 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ingreds)
+            Ingredients
         </dt>
 
         <dd>
             @foreach (var p in Model.ingreds)
             {
-                <span>@p.ingred_Name</span><br/>
+                <span>@p.ingred_Name</span><br />
             }
         </dd>
 
@@ -106,5 +106,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Recipe List", "Index")
 </p>

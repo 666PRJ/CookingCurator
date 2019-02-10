@@ -130,7 +130,7 @@ namespace CookingCurator.Controllers
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
             deleteIngredients(addedItem.recipe_ID);
-            addIngredientsForRecipes(addedItem.recipe_ID,recipe.selectedIngredsId);
+            addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -220,7 +220,7 @@ namespace CookingCurator.Controllers
 
         public void addIngredientsForRecipes(int id, String[] selectedIds)
         {
-            for(int i = 0; i < selectedIds.Length; i++)
+            for (int i = 0; i < selectedIds.Length; i++)
             {
                 String query = "INSERT INTO RECIPE_INGREDS (recipe_ID, ingred_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
                 ds.Database.ExecuteSqlCommand(query);
@@ -232,7 +232,7 @@ namespace CookingCurator.Controllers
         {
             List<String> selectedIngreds = new List<string>();
             IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
-            foreach(var item in ingreds)
+            foreach (var item in ingreds)
             {
                 selectedIngreds.Add(item.ingred_ID.ToString());
             }
@@ -253,7 +253,7 @@ namespace CookingCurator.Controllers
             {
                 baseIngreds.Add(ds.Ingreds.SingleOrDefault(e => e.ingred_ID == item));
             }
-            return mapper.Map<IEnumerable<INGRED>,IEnumerable<IngredientBaseViewModel>>(baseIngreds);
+            return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(baseIngreds);
         }
 
         public void deleteIngredients(int id)
@@ -276,7 +276,8 @@ namespace CookingCurator.Controllers
             return user == null ? null : mapper.Map<USER, UserBaseViewModel>(user);
         }
 
-        public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find) {
+        public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find)
+        {
             var findItem = ds.Users.Where(t => t.userName.Contains(find.userName));
 
             return findItem == null ? null : mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(findItem);
@@ -295,7 +296,7 @@ namespace CookingCurator.Controllers
             // Return the result (or null if not found).
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
         }
-      
+
         public bool ContactAdmin(ContactUsViewModel contactUs)
         {
             try
@@ -340,13 +341,15 @@ namespace CookingCurator.Controllers
             return true;
         }
 
-        public bool RegisterUser(RegisterViewModel registerModel) {
+        public bool RegisterUser(RegisterViewModel registerModel)
+        {
             //no duplicate email
             var loggedInUserEmail = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
 
             var loggedInUserName = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
 
-            if (loggedInUserEmail > 0) {
+            if (loggedInUserEmail > 0)
+            {
                 return true;
             }
 
@@ -357,7 +360,8 @@ namespace CookingCurator.Controllers
 
             //alphanumeric
             Regex r = new Regex("^[a-zA-Z0-9_]*$");
-            if (!r.IsMatch(registerModel.userName)) {
+            if (!r.IsMatch(registerModel.userName))
+            {
                 return true;
             }
 
@@ -378,7 +382,8 @@ namespace CookingCurator.Controllers
             registerModel.GUID = Guid.NewGuid().ToString();
             var addedItem = ds.Users.Add(mapper.Map<RegisterViewModel, USER>(registerModel));
             ds.SaveChanges();
-            if (addedItem != null) {
+            if (addedItem != null)
+            {
                 FormsAuthentication.SetAuthCookie(addedItem.userName, false);
                 bool verifyEmailSent = SendEmailVerification(registerModel.GUID, registerModel.userEmail);
                 if (verifyEmailSent)
@@ -386,14 +391,14 @@ namespace CookingCurator.Controllers
                     return false;
                 }
             }
-           
+
             return true;
         }
 
         public void AccountVerification(string id)
         {
             var user = ds.Users.Where(a => a.GUID.Equals(id)).FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
                 user.email_Verified = true;
                 ds.SaveChanges();
@@ -430,7 +435,7 @@ namespace CookingCurator.Controllers
 
                 String Subject = "Your account has been successfully created";
                 String Body = "<br/><br/> Thanks for joining Cooking Curator. Your account has been created successfully."
-                            + " Please click on the link to verify your account <a href='" + link + "'>" + link + "</a>"; 
+                            + " Please click on the link to verify your account <a href='" + link + "'>" + link + "</a>";
                 MailMessage mailMessage = new MailMessage(adminEmail, emailID, Subject, Body);
                 mailMessage.IsBodyHtml = true;
                 client.Send(mailMessage);

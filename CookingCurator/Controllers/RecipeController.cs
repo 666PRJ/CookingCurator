@@ -47,7 +47,7 @@ namespace CookingCurator.Controllers
         }
 
         // GET: Recipe/Create
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateVerified()
         {
             var form = new RecipeVerifiedAddViewModel();
@@ -201,7 +201,7 @@ namespace CookingCurator.Controllers
                     foreach (var errorMsg in error.ValidationErrors)
                     {
                         // logging service based on NLog
-                        Console.WriteLine( $"Error trying to save EF changes - {errorMsg.ErrorMessage}");
+                        Console.WriteLine($"Error trying to save EF changes - {errorMsg.ErrorMessage}");
                     }
                 }
 

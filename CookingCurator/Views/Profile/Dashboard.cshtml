@@ -1,10 +1,15 @@
 ﻿
 @{
-    ViewBag.Title = "AdminDashboard";
+    ViewBag.Title = "Admin Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>Admin Dashboard</h2>
-<!-- <h4>Logged in as @ViewBag.Username</h4> -->
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h4>Logged in as @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")</h4>
+}
+
 <hr />
 
 <div style="font-size:xx-large" class="col-lg-6 text-center">
