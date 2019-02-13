@@ -369,6 +369,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
@@ -379,6 +380,7 @@
     <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
+    <Compile Include="EntityModels\SearchViewModel.cs" />
     <Compile Include="EntityModels\UserAcceptWaiverViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />
     <Compile Include="EntityModels\UserFindViewModel.cs" />
@@ -517,6 +519,7 @@
     <Content Include="Views\Home\RegisterationSuccess.cshtml" />
     <Content Include="Views\Home\AcceptWaiver.cshtml" />
     <Content Include="Views\Home\TestAcc.cshtml" />
+    <Content Include="Views\Search\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

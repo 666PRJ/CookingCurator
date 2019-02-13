@@ -222,6 +222,38 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
         }
 
+        public SearchViewModel searchForRecipe(SearchViewModel search)
+        {
+            List<INGRED> ingreds = new List<INGRED>();
+            //split ingred
+            List<String> selectedIngreds = search.searchString.Split(',').ToList();
+            //search for ingreds 
+            List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
+            List<RECIPE> recipes = new List<RECIPE>();
+            foreach (var item in selectedIngreds) {
+                IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where( e => e.ingred_Name.Contains(item));
+                ingreds.AddRange(ingredSearch);
+            }
+            
+            foreach (var item in ingreds)
+            {
+                IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item.ingred_ID);
+                recipesIngreds.AddRange(bridge);
+            }
+
+            foreach (var item in recipesIngreds)
+            {
+                IEnumerable<RECIPE> derp = ds.Recipes.Where( e => e.recipe_ID == item.recipe_ID);
+                recipes.AddRange(derp);
+            }
+
+            recipes = recipes.Distinct().ToList();
+
+            search.recipeList = mapper.Map<List<RECIPE>,List<RecipeBaseViewModel>>(recipes);
+
+            return search;
+        }
+
         public void addIngredientsForRecipes(int id, String[] selectedIds)
         {
             for (int i = 0; i < selectedIds.Length; i++)
