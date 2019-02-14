@@ -11,10 +11,12 @@ namespace CookingCurator.EntityModels
     {
         [StringLength(30, MinimumLength = 8)]
         [DisplayName(("Password"))]
+        [DataType(DataType.Password)]
         public string password { get; set; }
 
         [StringLength(30, MinimumLength = 8)]
         [DisplayName(("Confirm Password"))]
+        [DataType(DataType.Password)]
         public string confirmPassword { get; set; }
     }
 }

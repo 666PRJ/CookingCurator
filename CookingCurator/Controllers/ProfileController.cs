@@ -48,8 +48,13 @@ namespace CookingCurator.Controllers
             {
                 return View(newUsername);
             }
-            m.ChangeUsername(newUsername);
-            return Redirect("UserDashboard");
+            bool error = m.ChangeUsername(newUsername);
+            if (error == false) {
+                return View(newUsername);
+            }
+            else {
+                return Redirect("UserDashboard");
+            }
         }
 
         [HttpPost]
@@ -59,8 +64,13 @@ namespace CookingCurator.Controllers
             {
                 return View(newPassword);
             }
-            m.ChangePassword(newPassword);
-            return Redirect("UserDashboard");
+            bool error = m.ChangePassword(newPassword);
+            if (error == false) {
+                return View(newPassword);
+            }
+            else {
+                return Redirect("UserDashboard");
+            }
         }
 
         [Authorize]
