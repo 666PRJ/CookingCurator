@@ -32,6 +32,43 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult ChangeUsername()
+        {
+            ChangeUsernameViewModel username = m.GetUsername();
+            username.userName = "";
+            return View(username);
+            //return View();
+        }
+
+        [HttpPost]
+        public ActionResult ChangeUsername(ChangeUsernameViewModel newUsername)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(newUsername);
+            }
+            m.ChangeUsername(newUsername);
+            return Redirect("UserDashboard");
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordViewModel newPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(newPassword);
+            }
+            m.ChangePassword(newPassword);
+            return Redirect("UserDashboard");
+        }
+
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult ContactUs(ContactUsViewModel contactUs)
         {

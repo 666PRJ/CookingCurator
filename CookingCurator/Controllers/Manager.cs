@@ -66,6 +66,10 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<UserAcceptWaiverViewModel, USER>();
 
+                cfg.CreateMap<USER, ChangeUsernameViewModel>();
+
+                cfg.CreateMap<USER, ChangePasswordViewModel>();
+
             });
 
             mapper = config.CreateMapper();
@@ -92,13 +96,65 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
+        public ChangeUsernameViewModel GetUsername()
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            USER current = ds.Users.SingleOrDefault(e => e.userName == username);
 
+            return current == null ? null : mapper.Map<USER, ChangeUsernameViewModel>(current);
+        }
+
+        public ChangeUsernameViewModel GetPassword()
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            USER current = ds.Users.SingleOrDefault(e => e.userName == username);
+
+            return current == null ? null : mapper.Map<USER, ChangeUsernameViewModel>(current);
+        }
+
+        public bool ChangeUsername(ChangeUsernameViewModel newUsername) {
+            var user = ds.Users.SingleOrDefault(e => e.user_ID == newUsername.user_ID);
+            var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
+            if (user == null) {
+                return false;
+            }
+            if (duplicateFound.Count() > 0) {
+                return false;
+            }
+            user.userName = newUsername.userName;
+            ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
+
+            ds.SaveChanges();
+
+            FormsAuthentication.SignOut();
+            FormsAuthentication.SetAuthCookie(newUsername.userName, false);
+            return true;
+        }
+
+        public bool ChangePassword(ChangePasswordViewModel newPassword)
+        {
+            var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
+            if (user == null)
+            {
+                return false;
+            }
+            if (newPassword.password != newPassword.confirmPassword) {
+                return false;
+            }
+            user.password = newPassword.password;
+            ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
+
+            ds.SaveChanges();
+
+            FormsAuthentication.SignOut();
+            FormsAuthentication.SetAuthCookie(user.userName, false);
+            return true;
+        }
 
         public IEnumerable<RecipeBaseViewModel> RecipeGetAll()
         {
             // The ds object is the data store
             // It has a collection for each entity it manages
-
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);
         }
 

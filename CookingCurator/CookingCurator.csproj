@@ -370,6 +370,8 @@
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
+    <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
     <Compile Include="EntityModels\IngredBaseViewModel.cs" />
@@ -517,6 +519,8 @@
     <Content Include="Views\Home\RegisterationSuccess.cshtml" />
     <Content Include="Views\Home\AcceptWaiver.cshtml" />
     <Content Include="Views\Home\TestAcc.cshtml" />
+    <Content Include="Views\Profile\ChangeUsername.cshtml" />
+    <Content Include="Views\Profile\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
