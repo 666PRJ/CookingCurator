@@ -379,6 +379,7 @@
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
+    <Compile Include="EntityModels\RecoverViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
     <Compile Include="EntityModels\SearchViewModel.cs" />
     <Compile Include="EntityModels\UserAcceptWaiverViewModel.cs" />
@@ -520,6 +521,8 @@
     <Content Include="Views\Home\AcceptWaiver.cshtml" />
     <Content Include="Views\Home\TestAcc.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
+    <Content Include="Views\Home\Forgot.cshtml" />
+    <Content Include="Views\Home\Reset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
