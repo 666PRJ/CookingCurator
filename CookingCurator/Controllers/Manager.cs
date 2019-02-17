@@ -66,6 +66,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<UserAcceptWaiverViewModel, USER>();
 
+                cfg.CreateMap<USER, RecoverViewModel>();
+
             });
 
             mapper = config.CreateMapper();
@@ -312,6 +314,15 @@ namespace CookingCurator.Controllers
             return user == null ? null : mapper.Map<USER, UserBaseViewModel>(user);
         }
 
+        public RecoverViewModel GetUserByEmail(string email)
+        {
+            //Find user from their unique ID number
+            var user = ds.Users.SingleOrDefault(e => e.userEmail == email);
+
+            //Reutn null if no match found
+            return user == null ? null : mapper.Map<USER, RecoverViewModel>(user);
+        }
+
         public IEnumerable<UserBaseViewModel> UserFind(UserFindViewModel find)
         {
             var findItem = ds.Users.Where(t => t.userName.Contains(find.userName));
@@ -350,6 +361,31 @@ namespace CookingCurator.Controllers
                 mailMessage.IsBodyHtml = true;
                 mailMessage.BodyEncoding = UTF8Encoding.UTF8;
                 client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        public bool RecoverInfo(RecoverViewModel recovery)
+        {
+            try
+            {
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                //client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                //MailMessage mailMessage = new MailMessage(adminEmail, adminEmail, contactUs.emailAddress, contactUs.feedBack);
+                //mailMessage.IsBodyHtml = true;
+                //mailMessage.BodyEncoding = UTF8Encoding.UTF8;
+                //client.Send(mailMessage);
 
                 return true;
             }
@@ -431,6 +467,51 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool RecoverUser(RecoverViewModel recoverModel)
+        {
+            //Check if email exists
+            var loggedInUserEmail = ds.Users.Where(x => x.userEmail == recoverModel.userEmail).Count();
+
+            if (loggedInUserEmail == 0)
+            {
+                return true;
+            }
+
+            //Check if user was banned
+            if (recoverModel.banUser)
+            {
+                return true;
+            }
+
+            //Check if email address was not verified
+            if (!recoverModel.email_Verified)
+            {
+                return true;
+            }
+
+            recoverModel.GUID = Guid.NewGuid().ToString();
+
+            try
+            {
+                String query = "UPDATE USERS SET GUID = \"" + recoverModel.GUID + "\" WHERE userEmail = \"" + recoverModel.userEmail + "\"";
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+            }
+            catch
+            {
+                return true;
+            }
+
+
+            bool verifyEmailSent = SendPasswordRecovery(recoverModel.GUID, recoverModel.userEmail, recoverModel.userName);
+            if (verifyEmailSent)
+            {
+                    return false;
+            }
+          
+            return true;
+        }
+   
         public void AccountVerification(string id)
         {
             var user = ds.Users.Where(a => a.GUID.Equals(id)).FirstOrDefault();
@@ -484,6 +565,39 @@ namespace CookingCurator.Controllers
             }
         }
 
+        private bool SendPasswordRecovery(string GUID, string emailID, string userName)
+        {
+            var verificationURL = "/Home/Reset/" + GUID;
+            var link = "http://localhost:5657" + verificationURL;
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Forgotten Password - Cooking Curator";
+                String Body = "<br/><br/> A password recovery was requested for this email address for the account " + userName + " ."
+                            + "<br/> Please click on this link to to reset your password for Cooking Curator <a href='" + link + "'>" + link + "</a>"
+                            + "<br/> If you did not request this, ignore and delete this email.";
+                MailMessage mailMessage = new MailMessage(adminEmail, emailID, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
+
         public int FetchUserId(String userNameOrEmail)
         {
             var loggedInUserName = ds.Users.Where(x => x.userName == userNameOrEmail || x.userEmail == userNameOrEmail).FirstOrDefault();
@@ -531,6 +645,22 @@ namespace CookingCurator.Controllers
                     return false;
                 }
                 
+        }
+
+        public bool ChangePW(RecoverViewModel resetPW)
+        {
+            try
+            {
+                String query = "UPDATE USERS SET password = \"" + resetPW.password + "\" WHERE GUID = \"" + resetPW.GUID +"\"";
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
     }
 }
