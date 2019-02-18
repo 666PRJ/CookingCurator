@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -52,6 +53,7 @@ namespace CookingCurator.Controllers
             ViewBag.MyString = id;
             return View();
         }
+
         [HttpGet]
         public ActionResult VerifyAccount(String id)
         {
@@ -138,6 +140,93 @@ namespace CookingCurator.Controllers
             else
             {
                 return RedirectToAction("Index");
+            }
+        }
+
+        public ActionResult Forgot()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Forgot(RecoverViewModel recoverModel)
+        {
+
+            var u = m.GetUserByEmail(recoverModel.userEmail);
+
+            //Vague message to prevent guessing emails
+            if(u == null)
+            {
+                ModelState.AddModelError("", "An email has been sent to the specified email, provided it was used to make a Cooking Curator Account");
+                return View();
+            }
+
+            recoverModel.banUser = u.banUser;
+            recoverModel.email_Verified = u.email_Verified;
+            recoverModel.userName = u.userName;
+
+            bool error = m.RecoverUser(recoverModel);
+            if (!error)
+            {
+                ModelState.AddModelError("", "An email has been sent to the specified email, provided it was used to make a Cooking Curator Account");
+                u.GUID = recoverModel.GUID;
+                return View();
+            }
+            else
+            {
+                //Account is banned or email was never verified
+                ModelState.AddModelError("", "The account beloning to the specified email address can not be recovered.");
+                return View();
+            }
+
+        }
+
+        [Route("reset/{id}")]
+        public ActionResult Reset(String id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("reset/{id}")]
+        public ActionResult Reset(RecoverViewModel resetModel, String id)
+        {
+
+            //Take the GUID from the URL
+            resetModel.GUID = id;
+
+            //Passwords must match
+            if(resetModel.confirmPassword != resetModel.password)
+            {
+                ModelState.AddModelError("", "Error: The passwords you entered do not match.");
+                return View();
+            }
+
+            //Check for special characters
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(resetModel.password))
+            {
+                ModelState.AddModelError("", "Error: Do not use special characters, only alphanumeric values.");
+                return View();
+            }
+
+            if (resetModel.password.Length < 8)
+            {
+                ModelState.AddModelError("", "Error: Password must be at least 8 characters.");
+                return View();
+            }
+
+            bool changeSuccess = m.ChangePW(resetModel);
+
+            //Database updated successfully or not
+            if(changeSuccess)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Error: An unknown error occured.");
+                return View();
             }
         }
     }
