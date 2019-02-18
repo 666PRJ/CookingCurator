@@ -425,7 +425,7 @@ namespace CookingCurator.Controllers
         private bool SendEmailVerification(string GUID, string emailID)
         {
             var verificationURL = "/Home/VerifyAccount/" + GUID;
-            var link = "http://localhost:5657" + verificationURL;
+            var link = "http://myvmlab.senecacollege.ca:6390/" + verificationURL;
             try
             {
                 string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
