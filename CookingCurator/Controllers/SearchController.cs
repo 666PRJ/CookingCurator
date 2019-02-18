@@ -11,11 +11,8 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
         // GET: Search
-        public ActionResult Index()
-        {
-            return View();
-        }
 
+        [Authorize]
         public ActionResult Search()
         {
             SearchViewModel search = new SearchViewModel();

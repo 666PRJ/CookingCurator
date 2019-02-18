@@ -19,6 +19,7 @@ namespace CookingCurator.Controllers
         }
 
         [Route("User/Search")]
+        [Authorize]
         public ActionResult Search()
         {
             return View();
