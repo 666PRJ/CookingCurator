@@ -13,6 +13,7 @@ namespace CookingCurator.Controllers
         // GET: Search
 
         [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult Search()
         {
             SearchViewModel search = new SearchViewModel();
