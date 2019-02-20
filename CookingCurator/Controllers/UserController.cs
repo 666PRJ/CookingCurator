@@ -12,7 +12,7 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
 
         // GET: User
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var u = m.UserFindAll();
@@ -20,7 +20,7 @@ namespace CookingCurator.Controllers
         }
 
         [Route("User/Search")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult Search()
         {
             return View();
@@ -35,8 +35,6 @@ namespace CookingCurator.Controllers
             return View("Index", u);
         }
 
-
-        [Authorize]
         [Authorize(Roles = "Admin")]
         public ActionResult BanUser(int? id)
         {
@@ -46,7 +44,6 @@ namespace CookingCurator.Controllers
         }
 
         // GET: User/Details/5
-        [Authorize]
         [Authorize(Roles = "Admin")]
         public ActionResult Details(int? id)
         {
