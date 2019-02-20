@@ -369,6 +369,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
@@ -380,7 +381,9 @@
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
+    <Compile Include="EntityModels\RecoverViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
+    <Compile Include="EntityModels\SearchViewModel.cs" />
     <Compile Include="EntityModels\UserAcceptWaiverViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />
     <Compile Include="EntityModels\UserFindViewModel.cs" />
@@ -521,6 +524,9 @@
     <Content Include="Views\Home\TestAcc.cshtml" />
     <Content Include="Views\Profile\ChangeUsername.cshtml" />
     <Content Include="Views\Profile\ChangePassword.cshtml" />
+    <Content Include="Views\Search\Search.cshtml" />
+    <Content Include="Views\Home\Forgot.cshtml" />
+    <Content Include="Views\Home\Reset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
