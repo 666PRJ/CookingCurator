@@ -69,7 +69,7 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<USER, ChangeUsernameViewModel>();
 
                 cfg.CreateMap<USER, ChangePasswordViewModel>();
-              
+
                 cfg.CreateMap<USER, RecoverViewModel>();
             });
 
@@ -306,6 +306,13 @@ namespace CookingCurator.Controllers
         public IEnumerable<IngredientBaseViewModel> IngredientGetAll()
         {
             return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
+        }
+
+        public SearchViewModel searchByTitle(SearchViewModel search){
+            var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
+            var listItems = items.ToList();
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(listItems);
+            return search;
         }
 
         public SearchViewModel searchForRecipe(SearchViewModel search)
