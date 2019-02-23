@@ -18,9 +18,32 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
 
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string countryName, string mealType, string verified, int? page)
         {
             var recipes = m.RecipeGetAll();
+            if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
+            {
+                recipes = m.FilterRecipesByMealTypeAndCountry(mealType, countryName);
+            }
+            else 
+            {
+                if (!string.IsNullOrEmpty(countryName))
+                {
+                     recipes = m.FilterRecipesByCountry(countryName);
+                }
+                else if (!string.IsNullOrEmpty(mealType))
+                {
+                     recipes = m.FilterRecipesByCountry(countryName);
+                }
+            }
+            if (!string.IsNullOrEmpty(verified))
+            {
+                if (!verified.Equals("0"))
+                {
+                    recipes = m.FilterVerifiedRecipes(verified, recipes);
+                }
+            }
+
             return View(recipes);
         }
         // GET: Recipe/Details/5
