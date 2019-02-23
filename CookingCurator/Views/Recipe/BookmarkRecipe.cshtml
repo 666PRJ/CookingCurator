@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "BookmarkRecipe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Bookmark Recipe</h2>
+
+@if (ViewBag.MyString == 0)
+{
+    <div class="alert alert-success">
+        <p> <b>Success!</b> This recipe has been bookmarked successfully</p>
+        <p> Click here to view all @Html.ActionLink("Recipes", "Index", "Recipe") </p>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <p> <b>Error!</b> This recipe is already bookmarked. All bookmarked recipe can be viewed from Dashboard page.</p>
+        <p> Click here to view all your @Html.ActionLink("Bookmarks", "Index", "Bookmark") </p>
+    </div>
+}
+
+
+
+
+
