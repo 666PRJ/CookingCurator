@@ -32,6 +32,67 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult ChangeUsername()
+        {
+            ChangeUsernameViewModel username = new ChangeUsernameViewModel();
+            username.userName = "";
+            return View(username);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeUsername(ChangeUsernameViewModel newUsername)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(newUsername);
+            }
+
+            bool isDup = m.IsDupUserName(newUsername);
+
+            if (isDup == false) {
+                newUsername.ErrorMessage = "Username taken";
+                return View(newUsername);
+            }
+
+            bool error = m.ChangeUsername(newUsername);
+            if (error == false) {
+                newUsername.ErrorMessage = "Error with username";
+                return View(newUsername);
+            }
+            else {
+                return Redirect("UserDashboard");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordViewModel newPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(newPassword);
+            }
+
+            bool error = m.ChangePassword(newPassword);
+            if (error == false) {
+                newPassword.ErrorMessage = "Error with Password";
+                return View(newPassword);
+            }
+            else {
+                return Redirect("UserDashboard");
+            }
+        }
+
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            ChangePasswordViewModel model = new ChangePasswordViewModel();
+
+            model.ErrorMessage = "";
+
+            return View(model);
+        }
+
         [HttpPost]
         public ActionResult ContactUs(ContactUsViewModel contactUs)
         {

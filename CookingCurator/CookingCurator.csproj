@@ -371,6 +371,8 @@
     <Compile Include="Controllers\ReferencesController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
+    <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
     <Compile Include="EntityModels\IngredBaseViewModel.cs" />
@@ -523,6 +525,8 @@
     <Content Include="Views\Search\Search.cshtml" />
     <Content Include="Views\Home\Forgot.cshtml" />
     <Content Include="Views\Home\Reset.cshtml" />
+    <Content Include="Views\Profile\ChangePassword.cshtml" />
+    <Content Include="Views\Profile\ChangeUsername.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
