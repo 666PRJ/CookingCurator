@@ -386,7 +386,8 @@ namespace CookingCurator.Controllers
 
         public IEnumerable<UserBaseViewModel> UserFindAll()
         {
-            return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(ds.Users);
+            var users = ds.Users.Where(e => String.IsNullOrEmpty(e.admin_ID.ToString()));
+            return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(users);
         }
 
         public UserBaseViewModel GetUserById(int? id)
@@ -483,17 +484,28 @@ namespace CookingCurator.Controllers
         public bool LoginUser(LoginViewModel loginModel)
         {
             var loggedInUserName = ds.Users.Where(x => x.userName == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+
             if (loggedInUserName != null)
             {
+                if (loggedInUserName.banUser == true)
+                {
+                    return true;
+                }
                 FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
                 return false;
             }
+
             var loggedInEmail = ds.Users.Where(x => x.userEmail == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
             if (loggedInEmail != null)
             {
+                if (loggedInEmail.banUser == true)
+                {
+                    return true;
+                }
                 FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
                 return false;
             }
+            
             return true;
         }
 
