@@ -9,14 +9,15 @@ namespace CookingCurator.EntityModels
 {
     public class ChangeUsernameViewModel
     {
-        [DisplayName(("User ID Number"))]
-        public int user_ID { get; set; }
+        [StringLength(30, MinimumLength = 8)]
+        [DisplayName(("Password"))]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
 
         [DisplayName(("Username"))]
         [StringLength(30)]
         public string userName { get; set; }
 
-        //[DisplayName(( "New Username"))]
-        //public string newUserName { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

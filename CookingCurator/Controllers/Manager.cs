@@ -113,8 +113,24 @@ namespace CookingCurator.Controllers
             return current == null ? null : mapper.Map<USER, ChangeUsernameViewModel>(current);
         }
 
+        public bool IsDupUserName(ChangeUsernameViewModel newUsername) {
+            var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
+            var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
+            if (user == null)
+            {
+                return false;
+            }
+            if (duplicateFound.Count() > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool ChangeUsername(ChangeUsernameViewModel newUsername) {
-            var user = ds.Users.SingleOrDefault(e => e.user_ID == newUsername.user_ID);
+            //var user = ds.Users.SingleOrDefault(e => e.user_ID == newUsername.user_ID);
+            var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
             var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
             if (user == null) {
                 return false;
@@ -139,9 +155,22 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
+
+            if (user.password != newPassword.OldPassword)
+            {
+                return false;
+            }
+
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(newPassword.password))
+            {
+                return false;
+            }
+
             if (newPassword.password != newPassword.confirmPassword) {
                 return false;
             }
+
             user.password = newPassword.password;
             ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
 

@@ -35,10 +35,9 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult ChangeUsername()
         {
-            ChangeUsernameViewModel username = m.GetUsername();
+            ChangeUsernameViewModel username = new ChangeUsernameViewModel();
             username.userName = "";
             return View(username);
-            //return View();
         }
 
         [HttpPost]
@@ -48,8 +47,17 @@ namespace CookingCurator.Controllers
             {
                 return View(newUsername);
             }
+
+            bool isDup = m.IsDupUserName(newUsername);
+
+            if (isDup == false) {
+                newUsername.ErrorMessage = "Username taken";
+                return View(newUsername);
+            }
+
             bool error = m.ChangeUsername(newUsername);
             if (error == false) {
+                newUsername.ErrorMessage = "Error with username";
                 return View(newUsername);
             }
             else {
@@ -64,8 +72,10 @@ namespace CookingCurator.Controllers
             {
                 return View(newPassword);
             }
+
             bool error = m.ChangePassword(newPassword);
             if (error == false) {
+                newPassword.ErrorMessage = "Error with Password";
                 return View(newPassword);
             }
             else {
@@ -76,7 +86,11 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            return View();
+            ChangePasswordViewModel model = new ChangePasswordViewModel();
+
+            model.ErrorMessage = "";
+
+            return View(model);
         }
 
         [HttpPost]

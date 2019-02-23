@@ -522,11 +522,11 @@
     <Content Include="Views\Home\RegisterationSuccess.cshtml" />
     <Content Include="Views\Home\AcceptWaiver.cshtml" />
     <Content Include="Views\Home\TestAcc.cshtml" />
-    <Content Include="Views\Profile\ChangeUsername.cshtml" />
-    <Content Include="Views\Profile\ChangePassword.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
     <Content Include="Views\Home\Forgot.cshtml" />
     <Content Include="Views\Home\Reset.cshtml" />
+    <Content Include="Views\Profile\ChangePassword.cshtml" />
+    <Content Include="Views\Profile\ChangeUsername.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
