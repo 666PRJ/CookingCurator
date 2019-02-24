@@ -18,6 +18,12 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult About()
+        {
+            return View();
+        }
+
         public ActionResult Register()
         {
             return View();
