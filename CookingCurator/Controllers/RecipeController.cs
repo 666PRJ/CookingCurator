@@ -18,11 +18,35 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
 
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string countryName, string mealType, string verified, int? page)
         {
             var recipes = m.RecipeGetAll();
+            if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
+            {
+                recipes = m.FilterRecipesByMealTypeAndCountry(mealType, countryName);
+            }
+            else 
+            {
+                if (!string.IsNullOrEmpty(countryName))
+                {
+                     recipes = m.FilterRecipesByCountry(countryName);
+                }
+                else if (!string.IsNullOrEmpty(mealType))
+                {
+                     recipes = m.FilterRecipesByCountry(countryName);
+                }
+            }
+            if (!string.IsNullOrEmpty(verified))
+            {
+                if (!verified.Equals("0"))
+                {
+                    recipes = m.FilterVerifiedRecipes(verified, recipes);
+                }
+            }
+
             return View(recipes);
         }
+
         // GET: Recipe/Details/5
         [Authorize]
         public ActionResult Details(int? id)
@@ -32,8 +56,62 @@ namespace CookingCurator.Controllers
             if (recipe == null)
                 return HttpNotFound();
             else
+            {
                 return View(recipe);
+            }
+                
         }
+
+        // GET: Recipe/VoteUp/5
+        public ActionResult VoteUp(int? id)
+        {
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+
+            //use recipe id and logged in user's name
+            if(recipe == null)
+            {
+                return HttpNotFound();
+            }
+
+            bool voteMade = m.CheckForVote(recipe.recipe_Id);
+
+            if (!voteMade)
+            {
+                m.AlterRating(recipe.recipe_Id, 1);
+            }
+            else
+            {
+                return View("AlreadyVoted");
+            }
+
+            return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
+        }
+
+        // GET: Recipe/VoteDown/5
+        public ActionResult VoteDown(int? id)
+        {
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+
+            //use recipe id and logged in user's name
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+
+            bool voteMade = m.CheckForVote(recipe.recipe_Id);
+
+            if (!voteMade)
+            {
+                m.AlterRating(recipe.recipe_Id, -1);
+            }
+            else
+            {             
+                return View("AlreadyVoted");
+            }
+
+            return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
+        }
+
 
         // GET: Recipe/Create
         [Authorize]
