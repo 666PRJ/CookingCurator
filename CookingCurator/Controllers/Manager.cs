@@ -326,10 +326,10 @@ namespace CookingCurator.Controllers
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
             foreach (var item in selectedIngreds) {
-                IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where( e => e.ingred_Name.Contains(item));
+                IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where(e => e.ingred_Name.Contains(item));
                 ingreds.AddRange(ingredSearch);
             }
-            
+
             foreach (var item in ingreds)
             {
                 IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item.ingred_ID);
@@ -338,13 +338,13 @@ namespace CookingCurator.Controllers
 
             foreach (var item in recipesIngreds)
             {
-                IEnumerable<RECIPE> derp = ds.Recipes.Where( e => e.recipe_ID == item.recipe_ID);
+                IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
                 recipes.AddRange(derp);
             }
 
             recipes = recipes.Distinct().ToList();
 
-            search.recipeList = mapper.Map<List<RECIPE>,List<RecipeBaseViewModel>>(recipes);
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
 
             return search;
         }
@@ -458,7 +458,7 @@ namespace CookingCurator.Controllers
 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -514,7 +514,7 @@ namespace CookingCurator.Controllers
                 FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
                 return false;
             }
-            
+
             return true;
         }
 
@@ -611,12 +611,12 @@ namespace CookingCurator.Controllers
             bool verifyEmailSent = SendPasswordRecovery(recoverModel.GUID, recoverModel.userEmail, recoverModel.userName);
             if (verifyEmailSent)
             {
-                    return false;
+                return false;
             }
-          
+
             return true;
         }
-   
+
         public void AccountVerification(string id)
         {
             var user = ds.Users.Where(a => a.GUID.Equals(id)).FirstOrDefault();
@@ -738,25 +738,9 @@ namespace CookingCurator.Controllers
 
         public bool AcceptWaiverByUser(UserAcceptWaiverViewModel user)
         {
-                try
-                {
-                    String query = "UPDATE USERS SET acceptWaiver = 1 WHERE user_ID = " + user.user_ID;
-                    ds.Database.ExecuteSqlCommand(query);
-                    ds.SaveChanges();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-                
-        }
-
-        public bool ChangePW(RecoverViewModel resetPW)
-        {
             try
             {
-                String query = "UPDATE USERS SET password = \"" + resetPW.password + "\" WHERE GUID = \"" + resetPW.GUID +"\"";
+                String query = "UPDATE USERS SET acceptWaiver = 1 WHERE user_ID = " + user.user_ID;
                 ds.Database.ExecuteSqlCommand(query);
                 ds.SaveChanges();
                 return true;
@@ -768,6 +752,21 @@ namespace CookingCurator.Controllers
 
         }
 
+        public bool ChangePW(RecoverViewModel resetPW)
+        {
+            try
+            {
+                String query = "UPDATE USERS SET password = \"" + resetPW.password + "\" WHERE GUID = \"" + resetPW.GUID + "\"";
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
 
         public bool CheckForVote(int recipeId)
         {
@@ -817,6 +816,47 @@ namespace CookingCurator.Controllers
             query = "UPDATE RECIPES SET rating = " + sum + " WHERE recipe_ID = " + recipeId;
             ds.Database.ExecuteSqlCommand(query);
             ds.SaveChanges();
+          
+        public IEnumerable<RecipeBaseViewModel> FilterRecipesByCountry(string countryName)
+        {
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.country.Contains(countryName)));
+        }
+
+        public IEnumerable<RecipeBaseViewModel> FilterRecipesByMealType(string mealType)
+        {
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.mealTimeType.Contains(mealType)));
+        }
+
+        public IEnumerable<RecipeBaseViewModel> FilterRecipesByMealTypeAndCountry(string mealType, string countryName)
+        {
+            var recipes = ds.Recipes.Where(r => r.country.Contains(countryName));
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(recipes.Where(r => r.mealTimeType.Contains(mealType)));
+        }
+
+        public IEnumerable<RecipeBaseViewModel> FilterVerifiedRecipes(string verified, IEnumerable<RecipeBaseViewModel> recipes)
+        {
+            if(recipes == null)
+            {
+                if (verified.Equals("1"))
+                {
+                    return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.verified == true));
+                }
+                else
+                {
+                    return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.verified == false));
+                }
+            }
+            else
+            {
+                if (verified.Equals("1"))
+                {
+                    return recipes.Where(r => r.verified == true);
+                }
+                else
+                {
+                    return recipes.Where(r => r.verified == false);
+                }
+            }
         }
 
         public int BookMarkRecipe(int id)
@@ -838,7 +878,7 @@ namespace CookingCurator.Controllers
                     return 0;
                 }
             }
-            else
+            else 
             {
                 String query = "INSERT INTO RECIPE_USERS(recipe_ID, user_ID, voting, reported, bookmarked) VALUES (" + id + ", " + user.user_ID + ", " + "0, 0, 1)";
                 ds.Database.ExecuteSqlCommand(query);
