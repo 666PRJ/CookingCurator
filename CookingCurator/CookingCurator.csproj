@@ -379,7 +379,6 @@
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
-    <Compile Include="Controllers\VotingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
@@ -537,6 +536,7 @@
     <Content Include="Views\Home\Reset.cshtml" />
     <Content Include="Views\Profile\ChangePassword.cshtml" />
     <Content Include="Views\Profile\ChangeUsername.cshtml" />
+    <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

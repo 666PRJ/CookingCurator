@@ -33,7 +33,10 @@ namespace CookingCurator.Controllers
             if (recipe == null)
                 return HttpNotFound();
             else
+            {
                 return View(recipe);
+            }
+                
         }
 
         // GET: Recipe/VoteUp/5
@@ -53,11 +56,15 @@ namespace CookingCurator.Controllers
             {
                 m.AlterRating(recipe.recipe_Id, 1);
             }
+            else
+            {
+                return View("AlreadyVoted");
+            }
 
             return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
         }
 
-        // GET: Recipe/VoteUp/5
+        // GET: Recipe/VoteDown/5
         public ActionResult VoteDown(int? id)
         {
             RecipeBaseViewModel recipe = m.RecipeGetById(id);
@@ -73,6 +80,10 @@ namespace CookingCurator.Controllers
             if (!voteMade)
             {
                 m.AlterRating(recipe.recipe_Id, -1);
+            }
+            else
+            {             
+                return View("AlreadyVoted");
             }
 
             return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });

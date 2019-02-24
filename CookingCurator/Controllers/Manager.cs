@@ -770,9 +770,9 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
-            else if(checkVote.voting != 1 || checkVote.voting != -1)
+            else if(checkVote.voting != 1 && checkVote.voting != -1)
             {
-                return false;
+               return false;
             }
             else
             {
