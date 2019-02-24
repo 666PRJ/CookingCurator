@@ -5,14 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Search</h2>
+<h2>Search for Recipes</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>SearchViewModel</h4>
+    <h4>By Title or Ingredients</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <p>Note: When using Search By Ingred, use "," to seperate ingredients</p>
+    <p>Note: When searching by ingredients, use a comma (",") to seperate ingredients</p>
 
     @Html.DropDownListFor(m => m.searchSelection, Model.list)
 
@@ -88,5 +88,5 @@
 </div>
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Recipe List", "Index", "Recipe")
 </div>
