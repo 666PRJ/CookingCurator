@@ -817,6 +817,7 @@ namespace CookingCurator.Controllers
             query = "UPDATE RECIPES SET rating = " + sum + " WHERE recipe_ID = " + recipeId;
             ds.Database.ExecuteSqlCommand(query);
             ds.SaveChanges();
+        }
 
         public int BookMarkRecipe(int id)
         {
