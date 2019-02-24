@@ -69,8 +69,10 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<USER, ChangeUsernameViewModel>();
 
                 cfg.CreateMap<USER, ChangePasswordViewModel>();
-              
+
                 cfg.CreateMap<USER, RecoverViewModel>();
+
+                cfg.CreateMap<RECIPE_USERS, BookmarkViewModel>();
             });
 
             mapper = config.CreateMapper();
@@ -306,6 +308,13 @@ namespace CookingCurator.Controllers
         public IEnumerable<IngredientBaseViewModel> IngredientGetAll()
         {
             return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
+        }
+
+        public SearchViewModel searchByTitle(SearchViewModel search){
+            var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
+            var listItems = items.ToList();
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(listItems);
+            return search;
         }
 
         public SearchViewModel searchForRecipe(SearchViewModel search)
@@ -759,6 +768,7 @@ namespace CookingCurator.Controllers
 
         }
 
+
         public bool CheckForVote(int recipeId)
         {
             var username = HttpContext.Current.User.Identity.Name;
@@ -807,6 +817,65 @@ namespace CookingCurator.Controllers
             query = "UPDATE RECIPES SET rating = " + sum + " WHERE recipe_ID = " + recipeId;
             ds.Database.ExecuteSqlCommand(query);
             ds.SaveChanges();
+
+        public int BookMarkRecipe(int id)
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            var user = ds.Users.Where(u => u.userName == userName).FirstOrDefault();
+            var bookmark = ds.Recipe_Users.Where(b => b.user_ID == user.user_ID && b.recipe_ID == id).FirstOrDefault();
+            if(bookmark != null)
+            {
+                if (bookmark.bookmarked.GetValueOrDefault())
+                {
+                    return 1;
+                }
+                else
+                {
+                    String query = "UPDATE RECIPE_USERS SET bookmarked=1 WHERE recipe_ID = " + id;
+                    ds.Database.ExecuteSqlCommand(query);
+                    ds.SaveChanges();
+                    return 0;
+                }
+            }
+            else
+            {
+                String query = "INSERT INTO RECIPE_USERS(recipe_ID, user_ID, voting, reported, bookmarked) VALUES (" + id + ", " + user.user_ID + ", " + "0, 0, 1)";
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+                return 0;
+            }
+        }
+
+        public IEnumerable<BookmarkViewModel> GetAllBookmarks()
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            var user = ds.Users.Where(u => u.userName == userName).FirstOrDefault();
+            var bookmarks = ds.Recipe_Users.Where(b => b.user_ID == user.user_ID && b.bookmarked == true);
+            var bmks = mapper.Map<IEnumerable<RECIPE_USERS>, IEnumerable<BookmarkViewModel>>(bookmarks);
+            foreach (var bmk in bmks)
+            {
+                bmk.Recipe = mapper.Map<RECIPE, RecipeBaseViewModel>(ds.Recipes.Find(bmk.recipe_ID));
+            }
+
+            return bmks;
+        }
+
+        public bool DeleteBookmark(int id)
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            var user = ds.Users.Where(u => u.userName == userName).FirstOrDefault();
+            var bookmark = ds.Recipe_Users.Where(b => b.user_ID == user.user_ID && b.recipe_ID == id).FirstOrDefault();
+            try
+            {
+                String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + bookmark.user_ID + "&& recipe_ID = " + bookmark.recipe_ID;
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+                return false ;
+            }
+            catch{
+                return true;
+            }
+
         }
     }
 }

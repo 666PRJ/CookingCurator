@@ -373,6 +373,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BookmarkController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -380,6 +381,7 @@
     <Compile Include="Controllers\ReferencesController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="EntityModels\BookmarkViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
@@ -537,6 +539,8 @@
     <Content Include="Views\Profile\ChangePassword.cshtml" />
     <Content Include="Views\Profile\ChangeUsername.cshtml" />
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
+    <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
+    <Content Include="Views\Bookmark\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

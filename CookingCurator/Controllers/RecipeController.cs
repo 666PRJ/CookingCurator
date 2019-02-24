@@ -296,5 +296,23 @@ namespace CookingCurator.Controllers
             return View(r);
         }
 
+        public ActionResult BookmarkRecipe(int? ID)
+        {
+            if(ID == null)
+            {
+                return View("Details", new { id = ID});
+            }
+            var error = m.BookMarkRecipe(ID.GetValueOrDefault());
+            if(error == 0)
+            {
+                ViewBag.MyString = 0;
+                return View();
+            }
+            else
+            {
+                ViewBag.MyString = 1;
+                return View();
+            }
+        }
     }
 }
