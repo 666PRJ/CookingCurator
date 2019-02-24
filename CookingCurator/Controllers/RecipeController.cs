@@ -23,6 +23,7 @@ namespace CookingCurator.Controllers
             var recipes = m.RecipeGetAll();
             return View(recipes);
         }
+
         // GET: Recipe/Details/5
         [Authorize]
         public ActionResult Details(int? id)
@@ -34,6 +35,49 @@ namespace CookingCurator.Controllers
             else
                 return View(recipe);
         }
+
+        // GET: Recipe/VoteUp/5
+        public ActionResult VoteUp(int? id)
+        {
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+
+            //use recipe id and logged in user's name
+            if(recipe == null)
+            {
+                return HttpNotFound();
+            }
+
+            bool voteMade = m.CheckForVote(recipe.recipe_Id);
+
+            if (!voteMade)
+            {
+                m.AlterRating(recipe.recipe_Id, 1);
+            }
+
+            return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
+        }
+
+        // GET: Recipe/VoteUp/5
+        public ActionResult VoteDown(int? id)
+        {
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+
+            //use recipe id and logged in user's name
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+
+            bool voteMade = m.CheckForVote(recipe.recipe_Id);
+
+            if (!voteMade)
+            {
+                m.AlterRating(recipe.recipe_Id, -1);
+            }
+
+            return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
+        }
+
 
         // GET: Recipe/Create
         [Authorize]

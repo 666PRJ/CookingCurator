@@ -25,6 +25,8 @@
 
         <dd>
             @Html.DisplayFor(model => model.rating)
+            || @Html.ActionLink("Rate Up", "VoteUp", new { id = Model.recipe_Id })
+            || @Html.ActionLink("Rate Down", "VoteDown", new { id = Model.recipe_Id })
         </dd>
 
         <dt>

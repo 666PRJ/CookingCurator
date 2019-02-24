@@ -758,5 +758,55 @@ namespace CookingCurator.Controllers
             }
 
         }
+
+        public bool CheckForVote(int recipeId)
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var votingUser = ds.Users.SingleOrDefault(u => u.userName == username);
+            var checkVote = ds.Recipe_Users.SingleOrDefault(v => v.recipe_ID == recipeId && v.user_ID == votingUser.user_ID);
+
+            if (checkVote == null)
+            {
+                return false;
+            }
+            else if(checkVote.voting != 1 || checkVote.voting != -1)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void AlterRating(int recipeId, int ratingChange)
+        {
+            String query;
+            var username = HttpContext.Current.User.Identity.Name;
+            var votingUser = ds.Users.SingleOrDefault(u => u.userName == username);
+            var checkVote = ds.Recipe_Users.SingleOrDefault(v => v.recipe_ID == recipeId && v.user_ID == votingUser.user_ID);
+
+            if (checkVote == null)
+            {
+                query = "INSERT INTO RECIPE_USERS VALUES (" + recipeId + ", " + votingUser.user_ID + ", " + ratingChange + ", " + 0 + ", " + 0 + ")";
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+            }
+            else
+            {
+                query = "UPDATE RECIPE_USERS SET voting = " + ratingChange + " WHERE recipe_ID = " + checkVote.recipe_ID + " AND user_ID = " + votingUser.user_ID;
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+            }
+
+            query = "SELECT SUM(voting) FROM RECIPE_USERS WHERE recipe_ID = " + recipeId;
+            int sum = ds.Database.SqlQuery<int>(query).FirstOrDefault();
+
+            //Update recipe's overall rating
+            query = "UPDATE RECIPES SET rating = " + sum + " WHERE recipe_ID = " + recipeId;
+            ds.Database.ExecuteSqlCommand(query);
+            ds.SaveChanges();
+        }
     }
 }
