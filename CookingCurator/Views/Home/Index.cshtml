@@ -3,7 +3,7 @@
 }
 
 <div class="jumbotron">
-    <h1>Cooking Curator</h1>
+    <h2>Cooking Curator</h2>
     <p class="lead">
         @if (User.Identity.IsAuthenticated)
         {
@@ -12,8 +12,7 @@
             <p><button>@Html.ActionLink("Log Out", "Logout", "Home")</button></p>
         }
 
-        </p>
-        <p><button><!-- @Html.ActionLink("About this application", "About", "Home") --> About this application </button></p>
+        <p><button> @Html.ActionLink("About this application", "About", "Home") </button></p>
 
     </div>
 
@@ -24,6 +23,7 @@
         <p><button>@Html.ActionLink("Add User Recipe", "Create", "Recipe")</button></p>
         <p><button>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe")</button></p>
         <p><button>@Html.ActionLink("References", "Index", "References")</button></p>
+        <p><button>@Html.ActionLink("Search for Recipe", "Search", "Search")</button></p>
 
     </div>
     <div class="col-md-6">

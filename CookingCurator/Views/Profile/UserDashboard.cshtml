@@ -17,8 +17,8 @@
         Your Settings
     </p>
     <div class="col-lg-12 text-center" style="font-size:x-large">
-        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Change Username</p>
-        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Change Password</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightgoldenrodyellow;border:groove;border-width:10px">@Html.ActionLink("Change Username",  "ChangeUsername", "Profile")</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightgoldenrodyellow;border:groove;border-width:10px">@Html.ActionLink("Change Password", "ChangePassword", "Profile")</p>
         <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Allergies</p>
         <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Diets</p>
         <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Set Sorting Preference</p>
@@ -34,8 +34,8 @@
     <div class="col-lg-12 text-center" style="font-size:x-large; padding-bottom:84px">
         <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightgoldenrodyellow;border:groove;border-width:10px">@Html.ActionLink("View All Recipes", "Index", "Recipe")</p>
         <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightgoldenrodyellow;border:groove;border-width:10px">@Html.ActionLink("Create New Recipe", "Create", "Recipe")</p>
-        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">View Bookmarks</p>
-        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:pink;border:groove;border-width:10px">Search For Recipes</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightgoldenrodyellow;border:groove;border-width:10px">@Html.ActionLink("View Bookmarks", "Index", "Bookmark")</p>
+        <p class="text-center" style="padding:10px 10px 10px 10px;background-color:lightgoldenrodyellow;border:groove;border-width:10px">@Html.ActionLink("Search For Recipes", "Search", "Search")</p>
     </div>
 </div>
 
@@ -47,10 +47,10 @@
 
 <div class="col-lg-12">
     <hr />
-    <h3>
+    <p>
         Have a concern?
-        @Html.ActionLink("Contact Us", "Contact", "Home")
-    </h3>
+        @Html.ActionLink("Contact Us", "ContactUs", "Profile")
+    </p>
     <hr />
 </div>
 

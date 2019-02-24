@@ -12,19 +12,50 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
         // GET: Search
 
-        [Authorize]
-        [Authorize(Roles = "Admin")]
+        //[Authorize]
         public ActionResult Search()
         {
             SearchViewModel search = new SearchViewModel();
+            int[] ids = { 1, 2 };
+            string[] stringSelection = { "Search By Ingred", "Search By Title" };
+            search.list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text = "Search By Ingred", Value = "1" },
+                new SelectListItem{ Text = "Search By Title", Value = "2" }
+            };
+
+            search.searchSelection = stringSelection;
             return View(search);
         }
 
         [HttpPost]
         public ActionResult Search(SearchViewModel searchModel)
         {
-            var recipes = m.searchForRecipe(searchModel);
-            return View("Search",recipes);
+            if (searchModel.searchSelection[0] == "1")
+            {
+                var recipes = m.searchForRecipe(searchModel);
+                string[] stringSelection = { "Search By Ingred", "Search By Title" };
+                recipes.list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text = "Search By Ingred", Value = "1", Selected = true },
+                new SelectListItem{ Text = "Search By Title", Value = "2" }
+            };
+                recipes.searchSelection = stringSelection;
+                return View("Search", recipes);
+            }
+            else
+            {
+                var recipes = m.searchByTitle(searchModel);
+                string[] stringSelection = { "Search By Ingred", "Search By Title" };
+                recipes.list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text = "Search By Ingred", Value = "1" },
+                new SelectListItem{ Text = "Search By Title", Value = "2", Selected = true }
+            };
+                recipes.searchSelection = stringSelection;
+
+                return View("Search", recipes);
+            }
         }
     }
 }

@@ -3,80 +3,117 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int counting = Model.Count();
+
 }
 
-<h2>Index</h2>
+<h2>List of Recipes</h2>
+<nav class="navbar navbar-default">
+    <div class="collapse navbar-collapse">
+        @using (Html.BeginForm("Index", "Recipe", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
+        {
+            <div class="form-group">
+                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "search by country name" })
+            </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.rating)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.lastUpdated)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.author)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.verified)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.source_ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.source_Link)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.country)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.mealTimeType)
-        </th>
-        <th></th>
-    </tr>
+            <div class="form-group">
+                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "search by meal time type" })
+            </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.rating)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.lastUpdated)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.author)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.verified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.source_ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.source_Link)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.country)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.mealTimeType)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.recipe_Id }) <br />
-            @Html.ActionLink("Details", "Details", new { id=item.recipe_Id }) <br />
-            @Html.ActionLink("Delete", "Delete", new { id=item.recipe_Id })
-        </td>
-    </tr>
+            <div class="form-group">
+                <select class="form-control" id="verified" name="verified" width="100">
+                    <option value="0">Select Verified or User Recipes</option>
+                    <option value="1">Verified Recipes</option>
+                    <option value="2">User's Recipes</option>
+                </select>
+            </div> <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
+            <button type="submit" value="Search" class="btn btn-success">Search</button>
+        }
+    </div>
+
+</nav>
+
+
+@if (counting == 0)
+{
+    <hr />
+    <h4>No recipes found!!! Please search again.</h4>
+}
+else
+{
+    <p>
+        @Html.ActionLink("Add New Recipe", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.verified)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.source_ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.source_Link)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mealTimeType)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastUpdated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.verified)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.source_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.source_Link)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mealTimeType)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
+                    @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
+                    @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
 
-</table>
