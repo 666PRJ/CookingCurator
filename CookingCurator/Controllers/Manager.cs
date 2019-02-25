@@ -52,8 +52,6 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RecipeAddViewForm, RECIPE>();
 
-                cfg.CreateMap<RecipeAddViewForm, RECIPE>();
-
                 cfg.CreateMap<RecipeIngred, RECIPE>();
 
                 cfg.CreateMap<UserFindViewModel, USER>();
@@ -185,14 +183,6 @@ namespace CookingCurator.Controllers
 
         public IEnumerable<RecipeBaseViewModel> RecipeGetAll()
         {
-
-            //IEnumerable<RecipeBaseViewModel> rec = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);
-
-            //foreach (var item in rec) {
-            //    RECIPE[] ingreds = ds.Recipes.SingleOrDefault();
-            //    item.user_Id = ingreds[0].user_ID;
-            //}
-            //return rec;
             // The ds object is the data store
             // It has a collection for each entity it manages
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);

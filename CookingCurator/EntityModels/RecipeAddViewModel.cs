@@ -30,7 +30,7 @@ namespace CookingCurator.EntityModels
         [DisplayName("Date Last Updated")]
         public System.DateTime lastUpdated { get; set; }
 
-        [Required]
+        //[Required]
         [DisplayName("Author")]
         public string author { get; set; }
 
