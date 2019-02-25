@@ -10,6 +10,8 @@ namespace CookingCurator.EntityModels
     {
         [Key]
         public int recipe_Id { get; set; }
+
+        public int user_Id { get; set; }
     }
 
     public class RecipeWithIngredBaseViewModel : RecipeBaseViewModel
@@ -18,6 +20,18 @@ namespace CookingCurator.EntityModels
         {
             ingreds = new List<IngredientBaseViewModel>();
         }
+
+        public IEnumerable<IngredientBaseViewModel> ingreds { get; set; }
+    }
+
+    public class RecipeWithIngredBaseUserViewModel : RecipeBaseViewModel
+    {
+        public RecipeWithIngredBaseUserViewModel()
+        {
+            ingreds = new List<IngredientBaseViewModel>();
+        }
+
+        public string user_Id { get; set; }
         public IEnumerable<IngredientBaseViewModel> ingreds { get; set; }
     }
 }

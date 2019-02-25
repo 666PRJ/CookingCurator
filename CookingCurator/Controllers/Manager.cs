@@ -185,6 +185,14 @@ namespace CookingCurator.Controllers
 
         public IEnumerable<RecipeBaseViewModel> RecipeGetAll()
         {
+
+            //IEnumerable<RecipeBaseViewModel> rec = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);
+
+            //foreach (var item in rec) {
+            //    RECIPE[] ingreds = ds.Recipes.SingleOrDefault();
+            //    item.user_Id = ingreds[0].user_ID;
+            //}
+            //return rec;
             // The ds object is the data store
             // It has a collection for each entity it manages
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);
@@ -218,6 +226,7 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
+            recipe.author = HttpContext.Current.User.Identity.Name;
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
@@ -397,6 +406,29 @@ namespace CookingCurator.Controllers
         {
             var users = ds.Users.Where(e => String.IsNullOrEmpty(e.admin_ID.ToString()));
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(users);
+        }
+
+        public bool IsUserAdmin(string id)
+        {
+            var users = ds.Users.SingleOrDefault(e => e.userName == id);
+            //String.IsNullOrEmpty(users.admin_ID.ToString()
+            if (String.IsNullOrEmpty(users.admin_ID.ToString()))
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        }
+
+        public string GetCurrentUsername()
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var user = ds.Users.SingleOrDefault(u => u.userName == username);
+
+            return user.userName;
         }
 
         public UserBaseViewModel GetUserById(int? id)

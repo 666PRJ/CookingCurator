@@ -21,6 +21,11 @@ namespace CookingCurator.Controllers
         public ActionResult Index(string countryName, string mealType, string verified, int? page)
         {
             var recipes = m.RecipeGetAll();
+
+            ViewBag.Username = m.GetCurrentUsername();
+
+            ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
+
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
             {
                 recipes = m.FilterRecipesByMealTypeAndCountry(mealType, countryName);
