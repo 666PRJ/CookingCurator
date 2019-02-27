@@ -205,6 +205,10 @@ namespace CookingCurator.Controllers
         // GET: Recipe/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!m.CanUserEdit(id.GetValueOrDefault())) {
+                return RedirectToAction("Index");
+            }
+
             Recipe_IngredViewModel recipes = new Recipe_IngredViewModel();
             if (id == null)
             {

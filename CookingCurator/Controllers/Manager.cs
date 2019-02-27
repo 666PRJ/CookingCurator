@@ -398,10 +398,34 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(users);
         }
 
+        public bool CanUserEdit(int recipeID) {
+            var username = HttpContext.Current.User.Identity.Name;
+            var users = ds.Users.SingleOrDefault(e => e.userName == username);
+            if (String.IsNullOrEmpty(users.admin_ID.ToString()))
+            {
+                var recipe = ds.Recipes.SingleOrDefault(e => e.recipe_ID == recipeID);
+
+                if (recipe == null) {
+                    return false;
+                }
+
+                if (recipe.author == username)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public bool IsUserAdmin(string id)
         {
             var users = ds.Users.SingleOrDefault(e => e.userName == id);
-            //String.IsNullOrEmpty(users.admin_ID.ToString()
             if (String.IsNullOrEmpty(users.admin_ID.ToString()))
             {
                 return false;
