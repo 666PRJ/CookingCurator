@@ -21,6 +21,11 @@ namespace CookingCurator.Controllers
         public ActionResult Index(string countryName, string mealType, string verified, int? page)
         {
             var recipes = m.RecipeGetAll();
+
+            ViewBag.Username = m.GetCurrentUsername();
+
+            ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
+
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
             {
                 recipes = m.FilterRecipesByMealTypeAndCountry(mealType, countryName);
@@ -53,6 +58,11 @@ namespace CookingCurator.Controllers
         {
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
+
+            ViewBag.Username = m.GetCurrentUsername();
+
+            ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
+
             if (recipe == null)
                 return HttpNotFound();
             else
@@ -200,6 +210,10 @@ namespace CookingCurator.Controllers
         // GET: Recipe/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!m.CanUserEdit(id.GetValueOrDefault())) {
+                return RedirectToAction("Index");
+            }
+
             Recipe_IngredViewModel recipes = new Recipe_IngredViewModel();
             if (id == null)
             {

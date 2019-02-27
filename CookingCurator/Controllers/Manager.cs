@@ -52,8 +52,6 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RecipeAddViewForm, RECIPE>();
 
-                cfg.CreateMap<RecipeAddViewForm, RECIPE>();
-
                 cfg.CreateMap<RecipeIngred, RECIPE>();
 
                 cfg.CreateMap<UserFindViewModel, USER>();
@@ -218,6 +216,7 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
+            recipe.author = HttpContext.Current.User.Identity.Name;
             // Attempt to add the new item.
             // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
@@ -397,6 +396,53 @@ namespace CookingCurator.Controllers
         {
             var users = ds.Users.Where(e => String.IsNullOrEmpty(e.admin_ID.ToString()));
             return mapper.Map<IEnumerable<USER>, IEnumerable<UserBaseViewModel>>(users);
+        }
+
+        public bool CanUserEdit(int recipeID) {
+            var username = HttpContext.Current.User.Identity.Name;
+            var users = ds.Users.SingleOrDefault(e => e.userName == username);
+            if (String.IsNullOrEmpty(users.admin_ID.ToString()))
+            {
+                var recipe = ds.Recipes.SingleOrDefault(e => e.recipe_ID == recipeID);
+
+                if (recipe == null) {
+                    return false;
+                }
+
+                if (recipe.author == username)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool IsUserAdmin(string id)
+        {
+            var users = ds.Users.SingleOrDefault(e => e.userName == id);
+            if (String.IsNullOrEmpty(users.admin_ID.ToString()))
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        }
+
+        public string GetCurrentUsername()
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var user = ds.Users.SingleOrDefault(u => u.userName == username);
+
+            return user.userName;
         }
 
         public UserBaseViewModel GetUserById(int? id)
