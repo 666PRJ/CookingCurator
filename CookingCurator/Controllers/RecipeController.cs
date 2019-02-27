@@ -58,6 +58,11 @@ namespace CookingCurator.Controllers
         {
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
+
+            ViewBag.Username = m.GetCurrentUsername();
+
+            ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
+
             if (recipe == null)
                 return HttpNotFound();
             else

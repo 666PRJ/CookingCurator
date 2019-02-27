@@ -110,6 +110,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) |
+    @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <br />
+        @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id })
+    }
     @Html.ActionLink("Back to Recipe List", "Index")
 </p>
