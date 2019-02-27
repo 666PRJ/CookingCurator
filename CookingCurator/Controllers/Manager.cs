@@ -40,6 +40,8 @@ namespace CookingCurator.Controllers
                 // cfg.CreateMap<Employee, EmployeeBase>();
                 cfg.CreateMap<RECIPE, RecipeBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeSearchViewModel>();
+
                 cfg.CreateMap<RECIPE, RecipeWithIngredBaseViewModel>();
 
                 cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
@@ -310,10 +312,11 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredientBaseViewModel>>(ds.Ingreds);
         }
 
-        public SearchViewModel searchByTitle(SearchViewModel search){
+        public SearchViewModel searchByTitle(SearchViewModel search)
+        {
             var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
             var listItems = items.ToList();
-            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(listItems);
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeSearchViewModel>>(listItems);
             return search;
         }
 
@@ -326,7 +329,7 @@ namespace CookingCurator.Controllers
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
             foreach (var item in selectedIngreds) {
-                IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where(e => e.ingred_Name.Contains(item));
+                IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where(e => e.ingred_Name.Contains(item));       
                 ingreds.AddRange(ingredSearch);
             }
 
@@ -336,6 +339,8 @@ namespace CookingCurator.Controllers
                 recipesIngreds.AddRange(bridge);
             }
 
+            recipesIngreds = recipesIngreds.Distinct().ToList();
+
             foreach (var item in recipesIngreds)
             {
                 IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
@@ -344,7 +349,29 @@ namespace CookingCurator.Controllers
 
             recipes = recipes.Distinct().ToList();
 
-            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeSearchViewModel>>(recipes);
+
+            //look at ingred ID and match them
+
+            foreach (var item in search.recipeList)
+            {
+                item.totalIngred = getTotalIngred(item.recipe_Id);
+                List<string> ingredNames = ingredsForRecipeName(item.recipe_Id);
+
+                int match = 0;
+
+                foreach (var ingred in selectedIngreds) {
+                    foreach (var names in ingredNames) {
+                        if (names.ToLower().Contains(ingred.ToLower())) {
+                            match++;
+                        }
+                    }
+                }
+                item.sentIngred = match;
+            }
+
+            search.recipeList = search.recipeList.OrderByDescending(e => e.sentIngred).ToList();
+            //need to sort recipes given
 
             return search;
         }
@@ -358,6 +385,37 @@ namespace CookingCurator.Controllers
             }
             ds.SaveChanges();
         }
+
+        private int getTotalIngred(int id) {
+            IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            return bridge.Count();
+        }
+
+
+        public List<string> ingredsForRecipeName(int? id)
+        {
+            List<int> selectedIngreds = new List<int>();
+            List<string> fullIngredNames = new List<string>();
+            IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
+            foreach (var item in ingreds)
+            {
+                selectedIngreds.Add(item.ingred_ID);
+            }
+
+            List<INGRED> baseIngreds = new List<INGRED>();
+            foreach (var item in selectedIngreds)
+            {
+                baseIngreds.Add(ds.Ingreds.SingleOrDefault(e => e.ingred_ID == item));
+            }
+
+            foreach (var item in baseIngreds)
+            {
+                fullIngredNames.Add(item.ingred_Name);
+            }
+
+            return fullIngredNames;
+        }
+
 
         public List<String> ingredsForRecipe(int? id)
         {

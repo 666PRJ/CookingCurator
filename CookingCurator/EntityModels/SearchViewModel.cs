@@ -10,13 +10,13 @@ namespace CookingCurator.EntityModels
     public class SearchViewModel
     {
         public SearchViewModel() {
-            recipeList = new List<RecipeBaseViewModel>();
+            recipeList = new List<RecipeSearchViewModel>();
         }
 
         [DisplayName("Search")]
         public string searchString { get; set; }
 
-        public List<RecipeBaseViewModel> recipeList;
+        public List<RecipeSearchViewModel> recipeList;
 
         public List<SelectListItem> list { get; set; }
 

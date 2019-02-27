@@ -55,31 +55,43 @@
             <th>
                 Country
             </th>
+            <th>
+                Matches
+            </th>
+            <th>
+                Ingred Needed
+            </th>
             <th></th>
         </tr>
 
         @foreach (var item in Model.recipeList)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.rating)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.author)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.verified)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.country)
-                </td>
-                <td>
-                    @Html.ActionLink("Details","Details", "Recipe", new { id = item.recipe_Id }, null)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.verified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sentIngred)
+            </td>
+            <td>
+                @(item.totalIngred - @item.sentIngred)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "Recipe", new { id = item.recipe_Id }, null)
+            </td>
+        </tr>
         }
 
     </table>
