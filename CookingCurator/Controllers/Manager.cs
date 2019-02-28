@@ -965,5 +965,96 @@ namespace CookingCurator.Controllers
             }
 
         }
+
+        public IEnumerable<RecipeBaseViewModel> SortRecipes(string sortOrder, IEnumerable<RecipeBaseViewModel> recipes)
+        {
+            IEnumerable<RecipeBaseViewModel> Sortedrecipes;
+            if(recipes == null)
+            {
+                switch (sortOrder)
+                {
+                    case "title_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.title));
+                        break;
+                    case "ratings_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.rating));
+                        break;
+                    case "ratings":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.rating));
+                        break;
+                    case "author_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.author));
+                        break;
+                    case "author":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.author));
+                        break;
+                    case "sourceId_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.source_ID));
+                        break;
+                    case "sourceId":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
+                        break;
+                    case "country_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
+                        break;
+                    case "country":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.country));
+                        break;
+                    case "mealTimeType_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.mealTimeType));
+                        break;
+                    case "mealTimeType":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.mealTimeType));
+                        break;
+                    default:
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.title));
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortOrder)
+                {
+                    case "title_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.title);
+                        break;
+                    case "ratings_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.rating);
+                        break;
+                    case "ratings":
+                        Sortedrecipes = recipes.OrderBy(r => r.rating);
+                        break;
+                    case "author_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.author);
+                        break;
+                    case "author":
+                        Sortedrecipes = recipes.OrderBy(r => r.author);
+                        break;
+                    case "sourceId_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.source_ID);
+                        break;
+                    case "sourceId":
+                        Sortedrecipes = recipes.OrderBy(r => r.source_ID);
+                        break;
+                    case "country_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.country);
+                        break;
+                    case "country":
+                        Sortedrecipes = recipes.OrderBy(r => r.country);
+                        break;
+                    case "mealTimeType_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.mealTimeType);
+                        break;
+                    case "mealTimeType":
+                        Sortedrecipes = recipes.OrderBy(r => r.mealTimeType);
+                        break;
+                    default:
+                        Sortedrecipes = recipes.OrderBy(r => r.title);
+                        break;
+                }
+            }
+            
+            return Sortedrecipes;
+        }
     }
 }

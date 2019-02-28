@@ -18,7 +18,7 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
 
         [Authorize]
-        public ActionResult Index(string countryName, string mealType, string verified, int? page)
+        public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
         {
             var recipes = m.RecipeGetAll();
 
@@ -48,7 +48,13 @@ namespace CookingCurator.Controllers
                     recipes = m.FilterVerifiedRecipes(verified, recipes);
                 }
             }
-
+            ViewBag.titleSort = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewBag.rateSort = sortOrder == "ratings" ? "ratings_desc" : "ratings";
+            ViewBag.authorSort = sortOrder == "author" ? "author_desc" : "author";
+            ViewBag.sourceIdSort = sortOrder == "sourceId" ? "sourceId_desc" : "sourceId";
+            ViewBag.countrySort = sortOrder == "country" ? "country_desc" : "country";
+            ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
+            recipes = m.SortRecipes(sortOrder, recipes);
             return View(recipes);
         }
 
