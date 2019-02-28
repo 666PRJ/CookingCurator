@@ -919,7 +919,7 @@ namespace CookingCurator.Controllers
                 }
                 else
                 {
-                    String query = "UPDATE RECIPE_USERS SET bookmarked=1 WHERE recipe_ID = " + id;
+                    String query = "UPDATE RECIPE_USERS SET bookmarked=1 WHERE recipe_ID = " + id + " && user_ID = " + bookmark.user_ID;
                     ds.Database.ExecuteSqlCommand(query);
                     ds.SaveChanges();
                     return 0;
@@ -964,6 +964,85 @@ namespace CookingCurator.Controllers
                 return true;
             }
 
+        }
+
+
+        public int ReportRecipe(ReportRecipeViewModel reportedRecipe)
+        {
+            var username = GetCurrentUsername();
+            reportedRecipe.userName = username;
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            var reportRecipe = ds.Recipe_Users.Where(b => b.user_ID == user.user_ID && b.recipe_ID == reportedRecipe.recipeId).FirstOrDefault();
+            if (reportRecipe != null)
+            {
+                if (reportRecipe.reported.GetValueOrDefault())
+                {
+                    return 1;
+                }
+                else
+                {
+                    bool error = SendReportRecipeEmail(reportedRecipe);
+                    if (error)
+                    {
+                        String query = "UPDATE RECIPE_USERS SET reported=1 WHERE recipe_ID = " + reportedRecipe.recipeId + " && user_ID = " + user.user_ID;
+                        ds.Database.ExecuteSqlCommand(query);
+                        ds.SaveChanges();
+                        return 0;
+                    }
+                    else
+                    {
+                        return 2;
+                    }
+                }
+            }
+            else
+            {
+                bool error = SendReportRecipeEmail(reportedRecipe);
+                if (error)
+                {
+                    String query = "INSERT INTO RECIPE_USERS(recipe_ID, user_ID, voting, reported, bookmarked) VALUES (" + reportedRecipe.recipeId + ", " + user.user_ID + ", " + "0, 1, 0)";
+                    ds.Database.ExecuteSqlCommand(query);
+                    ds.SaveChanges();
+                    return 0;
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+        }
+
+        private bool SendReportRecipeEmail(ReportRecipeViewModel reportedRecipe)
+        {
+            var URL = "/Recipe/Details/" + reportedRecipe.recipeId;
+            var link = "http://localhost:5657" + URL;
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Report Recipe - Cooking Curator";
+                String Body = "<br/><br/>A recipe was reported by user " + reportedRecipe.userName + " ."
+                    + "<br/> Due to the reason mentioned below :-"
+                    + "<br/><br/> " + reportedRecipe.feedBack
+                + "<br/><br/> Please click on this link to to view the recipe details <a href='" + link + "'>" + link + "</a>";
+                            
+                MailMessage mailMessage = new MailMessage(adminEmail, adminEmail, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

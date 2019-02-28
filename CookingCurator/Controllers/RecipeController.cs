@@ -351,5 +351,56 @@ namespace CookingCurator.Controllers
                 return View();
             }
         }
+
+        [Route("/Recipe/Report/{id}")]
+        public ActionResult ReportRecipe(int? id)
+        {
+            string username = m.GetCurrentUsername();
+            if(id == null)
+            {
+                return View();
+            }
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+            ReportRecipeViewModel reportRecipe = new ReportRecipeViewModel();
+            reportRecipe.recipeId = recipe.recipe_Id;
+            reportRecipe.userName = username;
+            reportRecipe.recipeTitle = recipe.title;
+
+            return View(reportRecipe);
+        }
+
+        [HttpPost]
+        public ActionResult ReportRecipe(ReportRecipeViewModel reportRecipe)
+        {
+            int error = m.ReportRecipe(reportRecipe);
+            if (error == 1)
+            {
+                return RedirectToAction("ReportedRecipe", new { succError = error});
+            }
+            else if (error == 0)
+            {
+                return RedirectToAction("ReportedRecipe", new { succError = error });
+            }
+            else
+            {
+                ModelState.AddModelError("", "An error occurred while sending an email. Please try again!");
+                return View();
+            }
+        }
+
+        [Route("Recipe/Reported")]
+        public ActionResult ReportedRecipe(int succError)
+        {
+            if(succError == 1)
+            {
+                ViewBag.MyString = 1;
+                return View();
+            }
+            else
+            {
+                ViewBag.MyString = 0;
+                return View();
+            }
+        }
     }
 }
