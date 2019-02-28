@@ -54,6 +54,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RecipeIngred, RECIPE>();
 
+                cfg.CreateMap<RECIPE, RecipeWithMatchedIngred>();
+
                 cfg.CreateMap<UserFindViewModel, USER>();
 
                 cfg.CreateMap<INGRED, IngredientBaseViewModel>();
@@ -312,7 +314,7 @@ namespace CookingCurator.Controllers
         public SearchViewModel searchByTitle(SearchViewModel search){
             var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
             var listItems = items.ToList();
-            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(listItems);
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeWithMatchedIngred>>(listItems);
             return search;
         }
 
@@ -324,17 +326,32 @@ namespace CookingCurator.Controllers
             //search for ingreds 
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
+            Dictionary<int, int> matchedIngredients = new Dictionary<int, int>();
             foreach (var item in selectedIngreds) {
                 IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where(e => e.ingred_Name.Contains(item));
                 ingreds.AddRange(ingredSearch);
             }
-
+            
             foreach (var item in ingreds)
             {
                 IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item.ingred_ID);
                 recipesIngreds.AddRange(bridge);
+                
             }
 
+            foreach (var tmp in recipesIngreds)
+            {
+                int value;
+                if (matchedIngredients.TryGetValue(tmp.recipe_ID, out value))
+                {
+                    matchedIngredients[tmp.recipe_ID] = value + 1;
+                }
+                else
+                {
+                    matchedIngredients.Add(tmp.recipe_ID, 1);
+                }
+
+            }
             foreach (var item in recipesIngreds)
             {
                 IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
@@ -342,9 +359,18 @@ namespace CookingCurator.Controllers
             }
 
             recipes = recipes.Distinct().ToList();
+            
+            var matchedIngredRecipes = mapper.Map<List<RECIPE>, List<RecipeWithMatchedIngred>>(recipes);
 
-            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
-
+            foreach(var item in matchedIngredRecipes)
+            {
+                int value;
+                if (matchedIngredients.TryGetValue(item.recipe_Id, out value))
+                {
+                    item.matchedIngredients = value;
+                }
+            }
+            search.recipeList = matchedIngredRecipes;
             return search;
         }
 
