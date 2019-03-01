@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CookingCurator.EntityModels.AllergyViewModel>
+
+@{
+    ViewBag.Title = "Allergy Index";
+}
+
+<h2>Allergy Index</h2>
+
+<p>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.allergyName) 
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.allergyDesc)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.allergyName) --  @Html.ActionLink("Allergens", "Ingredient", "Allergy", new { allergyName = item.allergyName }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.allergyDesc)
+            </td>
+
+            <td></td>
+        </tr>
+    }
+
+</table>
+
+<hr />
+
+@Html.ActionLink("Return to Recipe Index", "Index", "Recipe")
+

@@ -71,6 +71,10 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<USER, RecoverViewModel>();
 
                 cfg.CreateMap<RECIPE_USERS, BookmarkViewModel>();
+
+                cfg.CreateMap<ALLERGY, AllergyViewModel>();
+
+                cfg.CreateMap<AllergyViewModel, ALLERGY>();
             });
 
             mapper = config.CreateMapper();
@@ -964,6 +968,22 @@ namespace CookingCurator.Controllers
                 return true;
             }
 
+        }
+
+        //Retreive all allergy descriptions
+        public IEnumerable<AllergyViewModel> AllergyGetAll()
+        {
+            return mapper.Map<IEnumerable<ALLERGY>, IEnumerable<AllergyViewModel>>(ds.Allergies);
+        }
+
+        //Retrieve all ingredients per allergy with unique names
+        public IEnumerable<IngredBase> GetIngredByAllergen(string allergy_Name)
+        {
+            var allergy_num = ds.Allergies.SingleOrDefault(a => a.allergyName == allergy_Name);
+
+            IEnumerable<INGRED> ingredients = ds.Ingreds.SqlQuery("Select * FROM INGRED WHERE ingred_ID IN (SELECT ingred_ID FROM ALLERGY_INGREDS WHERE allergy_ID = " + allergy_num.allergy_ID + ")");
+
+            return ingredients == null ? null : mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ingredients);
         }
     }
 }

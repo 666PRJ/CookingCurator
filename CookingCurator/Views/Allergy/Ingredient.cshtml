@@ -1,0 +1,29 @@
+﻿@model IEnumerable<CookingCurator.EntityModels.IngredBase>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Allergy Allergy</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Look out for these ingredients when searching:
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ingred_Name)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<p>@Html.ActionLink("Return to Allergy List", "Index", "Allergy")</p>
+<p>@Html.ActionLink("Return to Recipe List", "Details", "Recipe")</p>
