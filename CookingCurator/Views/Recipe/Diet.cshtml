@@ -51,7 +51,7 @@
                 @Html.DisplayFor(modelItem => item.mealTimeType)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", "Recipe", new { id = item.recipe_Id })
+                @Html.ActionLink("Details", "Details", new { id = item.recipe_Id })
             </td>
         </tr>
     }
@@ -59,4 +59,4 @@
 </table>
 
 <p>@Html.ActionLink("Return to Diet List", "Index", "Diet")</p>
-<p>@Html.ActionLink("Return to Recipe List", "Details", "Recipe")</p>
+<p>@Html.ActionLink("Return to Recipe List", "Index", "Recipe")</p>

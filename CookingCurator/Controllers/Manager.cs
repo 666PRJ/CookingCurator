@@ -219,16 +219,12 @@ namespace CookingCurator.Controllers
 
         public IEnumerable<DietDescViewModel> DietGetAll()
         {
-            // The ds object is the data store
-            // It has a collection for each entity it manages
             return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(ds.Diets);
         }
 
         public IEnumerable<RecipeBaseViewModel> GetRecipesByDiet(string diet_Name)
         {
             var diet_num = ds.Diets.SingleOrDefault(d => d.dietName == diet_Name);
-
-            //IEnumerable<RECIPE_INGREDS> ingreds = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where recipe_Id = " + id);
 
             IEnumerable<RECIPE> recipes = ds.Recipes.SqlQuery("Select * FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
 
