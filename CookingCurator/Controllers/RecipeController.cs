@@ -326,10 +326,19 @@ namespace CookingCurator.Controllers
             return new Exception(message, dbu);
         }
 
+        [Authorize]
         [Route("User/AuthorProfile")]
         public ActionResult Authors(string authorName)
         {
             var r = m.RecipesByAuthor(authorName);
+            return View(r);
+        }
+
+        [Authorize]
+        public ActionResult Diet(string dietName)
+        {
+            var r = m.GetRecipesByDiet(dietName);
+            ViewBag.Diet = dietName;
             return View(r);
         }
 
