@@ -6,10 +6,11 @@
 
 <h2>@ViewBag.Allergy Allergy</h2>
 
+
 <table class="table">
     <tr>
         <th>
-            Look out for these ingredients when searching:
+            Look out for these ingredients when examining recipes:
         </th>
         <th></th>
     </tr>
@@ -25,5 +26,6 @@
 
 </table>
 
+<p>@Html.ActionLink("Search for Recipes that contain these ingredients", "Search", "Search")</p>
 <p>@Html.ActionLink("Return to Allergy List", "Index", "Allergy")</p>
 <p>@Html.ActionLink("Return to Recipe List", "Index", "Recipe")</p>
