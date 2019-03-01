@@ -544,6 +544,8 @@
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
+    <Content Include="Views\Profile\AdminDoc.cshtml" />
+    <Content Include="Views\Profile\UserDoc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

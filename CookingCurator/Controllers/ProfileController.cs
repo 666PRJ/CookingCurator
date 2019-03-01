@@ -19,9 +19,21 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult AdminDoc()
+        {
+            return View();
+        }
+
         //For Non-Admins 
         [Authorize]
         public ActionResult UserDashboard()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult UserDoc()
         {
             return View();
         }
