@@ -21,6 +21,10 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Ingredient(string allergyName)
         {
+            if(allergyName == null){
+                return RedirectToAction("Index");
+            }
+
             var i = m.GetIngredByAllergen(allergyName);
             ViewBag.Allergy = allergyName;
             return View(i);
