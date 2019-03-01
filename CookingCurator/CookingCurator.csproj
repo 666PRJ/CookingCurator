@@ -417,6 +417,9 @@
     <Compile Include="Models\DIET_INGREDS.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DIET_RECIPES.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityRole.cs" />
     <Compile Include="Models\IdentityUser.cs" />
     <Compile Include="Models\INGRED.cs">
