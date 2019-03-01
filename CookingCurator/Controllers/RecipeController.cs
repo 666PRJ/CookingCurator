@@ -337,6 +337,11 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Diet(string dietName)
         {
+            if (dietName == null)
+            {
+                return View("Index");
+            }
+
             var r = m.GetRecipesByDiet(dietName);
             ViewBag.Diet = dietName;
             return View(r);
