@@ -8,11 +8,7 @@
         @if (User.Identity.IsAuthenticated)
         {
             <p>Welcome User @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")!! You are Logged In.</p>
-
-            <p><button>@Html.ActionLink("Log Out", "Logout", "Home")</button></p>
         }
-
-        <p><button> @Html.ActionLink("About this application", "About", "Home") </button></p>
 
     </div>
 
@@ -20,15 +16,16 @@
     <div class="col-md-6">
         <h2>Recipes</h2>
         <p>Getting started creating recipes using the links below: </p>
-        <p><button>@Html.ActionLink("Add User Recipe", "Create", "Recipe")</button></p>
-        <p><button>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe")</button></p>
-        <p><button>@Html.ActionLink("References", "Index", "References")</button></p>
-        <p><button>@Html.ActionLink("Search for Recipe", "Search", "Search")</button></p>
+        <p>@Html.ActionLink("Add User Recipe", "Create", "Recipe", null, new { @class = "btn btn-default" })</p>
+        <p>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe", null, new { @class = "btn btn-default" })</p>
+        <p>@Html.ActionLink("References", "Index", "References",null , new { @class = "btn btn-default" })</p>
+        <p>@Html.ActionLink("Search for Recipe", "Search", "Search", null, new { @class = "btn btn-secondary" })</p>
 
     </div>
     <div class="col-md-6">
         <h2>Users</h2>
         <p>Search through the list of users in the application:</p>
-        <p><button>@Html.ActionLink("Search for a user", "Search", "User")</button></p>
+        <p>@Html.ActionLink("Search for a user", "Search", "User", null, new { @class = "btn-default" })</p>
+        <p>@Html.ActionLink("About this application", "About", "Home", null, new { @class = "btn-default" })</p>
     </div>
 </div>

@@ -90,6 +90,18 @@ else
                     @Html.DisplayFor(modelItem => item.title)
                 </td>
                 <td>
+                    @if (item.rating > 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                    }
+                    else if (item.rating < 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-hand-right"></span>
+                    }
                     @Html.DisplayFor(modelItem => item.rating)
                 </td>
                 <td>
