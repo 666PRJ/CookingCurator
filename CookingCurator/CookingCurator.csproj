@@ -379,6 +379,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
+    <Compile Include="Controllers\ReportRecipeViewModel.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
@@ -415,6 +416,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DIET_INGREDS.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DIET_RECIPES.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityRole.cs" />
@@ -541,6 +545,8 @@
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
+    <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
+    <Content Include="Views\Recipe\ReportRecipe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

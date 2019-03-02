@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="prj666_191a03Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="prj666_191a03Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ALLERGY">
           <Key>
             <PropertyRef Name="allergy_ID" />
@@ -41,6 +41,14 @@ warning 6002: The table/view 'def.prj666_191a03.DIET_INGREDS' does not have a pr
           <Property Name="diet_ID" Type="int" Nullable="false" />
           <Property Name="ingred_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="DIET_RECIPES">
+          <Key>
+            <PropertyRef Name="recipe_ID" />
+            <PropertyRef Name="diet_ID" />
+          </Key>
+          <Property Name="recipe_ID" Type="int" Nullable="false" />
+          <Property Name="diet_ID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="DIETS">
           <Key>
             <PropertyRef Name="diet_ID" />
@@ -69,8 +77,6 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_INGREDS' does not have a 
           <Property Name="recipe_ID" Type="int" Nullable="false" />
           <Property Name="ingred_ID" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.prj666_191a03.RECIPE_USERS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="RECIPE_USERS">
           <Key>
             <PropertyRef Name="recipe_ID" />
@@ -102,7 +108,7 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_USERS' does not have a pr
           <Key>
             <PropertyRef Name="user_ID" />
           </Key>
-          <Property Name="user_ID" Type="int" Nullable="false" />
+          <Property Name="user_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="userName" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="acceptWaiver" Type="bool" Nullable="false" />
           <Property Name="banUser" Type="bool" Nullable="false" />
@@ -116,8 +122,10 @@ warning 6002: The table/view 'def.prj666_191a03.RECIPE_USERS' does not have a pr
         <EntityContainer Name="prj666_191a03ModelStoreContainer">
           <EntitySet Name="ALLERGY" EntityType="Self.ALLERGY" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="BMK" EntityType="Self.BMK" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="DIET_RECIPES" EntityType="Self.DIET_RECIPES" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="DIETS" EntityType="Self.DIETS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="INGRED" EntityType="Self.INGRED" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="RECIPES" EntityType="Self.RECIPES" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="ALLERGY_INGREDS" EntityType="Self.ALLERGY_INGREDS" store:Type="Tables" store:Schema="prj666_191a03">
@@ -138,18 +146,8 @@ FROM `DIET_INGREDS` AS `DIET_INGREDS`</DefiningQuery>
 `RECIPE_INGREDS`.`ingred_ID`
 FROM `RECIPE_INGREDS` AS `RECIPE_INGREDS`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" store:Type="Tables" store:Schema="prj666_191a03">
-            <DefiningQuery>SELECT
-`RECIPE_USERS`.`recipe_ID`, 
-`RECIPE_USERS`.`user_ID`, 
-`RECIPE_USERS`.`voting`, 
-`RECIPE_USERS`.`reported`, 
-`RECIPE_USERS`.`bookmarked`
-FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="prj666_191a03Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -264,7 +262,16 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
           <EntitySet Name="DIET_INGREDS" EntityType="Self.DIET_INGREDS" />
           <EntitySet Name="RECIPE_INGREDS" EntityType="Self.RECIPE_INGREDS" />
           <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" />
+          <EntitySet Name="DIET_RECIPES" EntityType="prj666_191a03Model.DIET_RECIPES" />
         </EntityContainer>
+        <EntityType Name="DIET_RECIPES">
+          <Key>
+            <PropertyRef Name="recipe_ID" />
+            <PropertyRef Name="diet_ID" />
+          </Key>
+          <Property Name="recipe_ID" Type="Int32" Nullable="false" />
+          <Property Name="diet_ID" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -374,6 +381,14 @@ FROM `RECIPE_USERS` AS `RECIPE_USERS`</DefiningQuery>
                 <ScalarProperty Name="voting" ColumnName="voting" />
                 <ScalarProperty Name="reported" ColumnName="reported" />
                 <ScalarProperty Name="bookmarked" ColumnName="bookmarked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DIET_RECIPES">
+            <EntityTypeMapping TypeName="prj666_191a03Model.DIET_RECIPES">
+              <MappingFragment StoreEntitySet="DIET_RECIPES">
+                <ScalarProperty Name="diet_ID" ColumnName="diet_ID" />
+                <ScalarProperty Name="recipe_ID" ColumnName="recipe_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
