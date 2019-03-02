@@ -42,7 +42,14 @@
 else
 {
     <p>
-        @Html.ActionLink("Add New Recipe", "Create")
+        @if (ViewBag.Admin == true)
+        {
+            @Html.ActionLink("Add New Recipe", "CreateVerified")
+        }
+        else
+        {
+            @Html.ActionLink("Add New Recipe", "Create")
+        }
     </p>
     <table class="table">
         <tr>
