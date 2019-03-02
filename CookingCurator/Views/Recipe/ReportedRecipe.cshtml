@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "ReportedRecipe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.MyString == 0)
+{
+    <h2>Recipe Reported Successfully</h2>
+    <div class="alert alert-success">
+        <p> <b>Success!</b> This recipe has been reported successfully.</p>
+        <p> An email is sent to the administrator.</p>
+        <p>Click on <b>back to list</b> link to go back.</p>
+    </div>
+}
+else
+{
+    <h2>Recipe Already Reported</h2>
+    <div class="alert alert-danger">
+        <p> <b>Error!</b> This recipe is already reported by you.</p>
+        <p>Click on <b>back to list</b> link to go back.</p>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
