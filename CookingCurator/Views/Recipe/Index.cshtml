@@ -13,11 +13,11 @@
         @using (Html.BeginForm("Index", "Recipe", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
         {
             <div class="form-group">
-                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "search by country name" })
+                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "Search By Country Name" })
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
-                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "search by meal time type" })
+                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "Search By Mealtime Type" })
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
