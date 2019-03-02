@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace CookingCurator.EntityModels
 {
+    public class RecipeWithMatchedIngred : RecipeBaseViewModel
+    {
+        [DisplayName("Matched Ingredients")]
+        public int matchedIngredients { get; set; }
+    }
+
     public class RecipeBaseViewModel : RecipeAddViewModel
     {
         [Key]
