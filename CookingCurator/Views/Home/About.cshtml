@@ -1,9 +1,52 @@
 ﻿@{
-    ViewBag.Title = "About this application";
+    ViewBag.Title = "About the Cooking Curator";
 }
-<h2>@ViewBag.Title:</h2>
+<h2 class="text-center">@ViewBag.Title</h2>
 
-<p>Cooking Curator is an application where users can find recipes suited to their available ingredients,
-    dietary needs, and allergy restrictions.  Currently the viewing, adding, editing, and deleting of recipes
-    is available.  Verified recipes are ones gathered and inspected by the administrators of this application.
-    It is possible to see all recipes from a single author or user.</p>
+
+<h4 class="text-center">Cooking Curator is an application created by David Ferri, Matthew Quan, and Harsh Patel using ASP.NET and C#. </h4>
+
+    <br />
+    <div class="col-md-8">
+            <p> The purpose of this application is to give people a place to find and store new recipes with a personal account. </p>
+
+            <p>
+                Users can search for recipes suited to their dietary preferences, allergic restrictions, and available ingredients.
+
+            <p>
+                If you wish to use certain ingredients, you can look for recipes that contain them.<br/>
+                If you wish to avoid certain ingredients, you can apply filters that hide recipes which contain them.
+            </p>
+
+            <p>
+                You can change the order results are displayed by clicking on table headings.
+            </p>
+            <p>
+                There are two main types of recipes in this application:  <b>Verified</b> and <i>User</i>
+            </p>
+
+            <ul>
+                <li>Verified recipes are hand picked by the Cooking Curator team as recommendations</li>
+                <ul><li>The sources they were obtained from are always listed alongside their details</li></ul>
+                <li>User recipes are uploaded by someone with a user account using our application</li>
+            </ul>
+
+            <p>
+                Our rating system allows users give up and down votes to each recipes.  Help us find the best of the best!
+            </p>
+
+            <p>
+                Using our application, you can upload a recipe by filling out a form, and it will be visible to all other users.*
+            </p>
+    </div>
+
+    <div class="col-md-4">
+        <img src="~/Content/images/CookingCuratorLogo.jpg" />
+    </div>
+
+
+     <br />
+     <p><button> @Html.ActionLink("Return to Home Page", "Index", "Home") </button></p>
+     <br />
+
+     <p>*Please note, the Cooking Curator Team reserves the right to take down any recipe considered to be in violation of our terms of service.</p>
