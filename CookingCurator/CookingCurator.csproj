@@ -465,6 +465,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\CookingCuratorLogo.jpg" />
     <Content Include="Content\MultiSelect\chosen-sprite.png" />
     <Content Include="Content\MultiSelect\chosen.min.css" />
     <Content Include="favicon.ico" />
