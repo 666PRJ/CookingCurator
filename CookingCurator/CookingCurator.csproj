@@ -374,6 +374,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BookmarkController.cs" />
+    <Compile Include="Controllers\DietController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -385,6 +386,7 @@
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
+    <Compile Include="EntityModels\DietDescViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
     <Compile Include="EntityModels\IngredBaseViewModel.cs" />
@@ -545,6 +547,8 @@
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
+    <Content Include="Views\Recipe\Diet.cshtml" />
+    <Content Include="Views\Diet\Index.cshtml" />
     <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
     <Content Include="Views\Recipe\ReportRecipe.cshtml" />
   </ItemGroup>

@@ -73,6 +73,10 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<USER, RecoverViewModel>();
 
                 cfg.CreateMap<RECIPE_USERS, BookmarkViewModel>();
+
+                cfg.CreateMap<DIET, DietDescViewModel>();
+
+                cfg.CreateMap<DietDescViewModel, DIET>();
             });
 
             mapper = config.CreateMapper();
@@ -214,6 +218,22 @@ namespace CookingCurator.Controllers
 
             return authorRecipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(authorRecipes);
         }
+
+        public IEnumerable<DietDescViewModel> DietGetAll()
+        {
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(ds.Diets);
+        }
+
+        public IEnumerable<RecipeBaseViewModel> GetRecipesByDiet(string diet_Name)
+        {
+            var diet_num = ds.Diets.SingleOrDefault(d => d.dietName == diet_Name);
+
+            IEnumerable<RECIPE> recipes = ds.Recipes.SqlQuery("Select * FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
+
+            return recipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(recipes);
+        }
+
+
 
 
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
