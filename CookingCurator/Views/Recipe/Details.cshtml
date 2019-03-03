@@ -112,8 +112,8 @@
 <p>
     @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <br />
-        @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id })
+        @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
+        @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
     }
-    @Html.ActionLink("Back to Recipe List", "Index")
+    @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
 </p>
