@@ -54,6 +54,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RecipeIngred, RECIPE>();
 
+                cfg.CreateMap<RECIPE, RecipeWithMatchedIngred>();
+
                 cfg.CreateMap<UserFindViewModel, USER>();
 
                 cfg.CreateMap<INGRED, IngredientBaseViewModel>();
@@ -332,7 +334,7 @@ namespace CookingCurator.Controllers
         public SearchViewModel searchByTitle(SearchViewModel search){
             var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
             var listItems = items.ToList();
-            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(listItems);
+            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeWithMatchedIngred>>(listItems);
             return search;
         }
 
@@ -344,17 +346,32 @@ namespace CookingCurator.Controllers
             //search for ingreds 
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
+            Dictionary<int, int> matchedIngredients = new Dictionary<int, int>();
             foreach (var item in selectedIngreds) {
                 IEnumerable<INGRED> ingredSearch = ds.Ingreds.Where(e => e.ingred_Name.Contains(item));
                 ingreds.AddRange(ingredSearch);
             }
-
+            
             foreach (var item in ingreds)
             {
                 IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item.ingred_ID);
                 recipesIngreds.AddRange(bridge);
+                
             }
 
+            foreach (var tmp in recipesIngreds)
+            {
+                int value;
+                if (matchedIngredients.TryGetValue(tmp.recipe_ID, out value))
+                {
+                    matchedIngredients[tmp.recipe_ID] = value + 1;
+                }
+                else
+                {
+                    matchedIngredients.Add(tmp.recipe_ID, 1);
+                }
+
+            }
             foreach (var item in recipesIngreds)
             {
                 IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
@@ -362,9 +379,18 @@ namespace CookingCurator.Controllers
             }
 
             recipes = recipes.Distinct().ToList();
+            
+            var matchedIngredRecipes = mapper.Map<List<RECIPE>, List<RecipeWithMatchedIngred>>(recipes);
 
-            search.recipeList = mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
-
+            foreach(var item in matchedIngredRecipes)
+            {
+                int value;
+                if (matchedIngredients.TryGetValue(item.recipe_Id, out value))
+                {
+                    item.matchedIngredients = value;
+                }
+            }
+            search.recipeList = matchedIngredRecipes;
             return search;
         }
 
@@ -939,7 +965,7 @@ namespace CookingCurator.Controllers
                 }
                 else
                 {
-                    String query = "UPDATE RECIPE_USERS SET bookmarked=1 WHERE recipe_ID = " + id;
+                    String query = "UPDATE RECIPE_USERS SET bookmarked=1 WHERE recipe_ID = " + id + " && user_ID = " + bookmark.user_ID;
                     ds.Database.ExecuteSqlCommand(query);
                     ds.SaveChanges();
                     return 0;
@@ -984,6 +1010,175 @@ namespace CookingCurator.Controllers
                 return true;
             }
 
+        }
+
+        public IEnumerable<RecipeBaseViewModel> SortRecipes(string sortOrder, IEnumerable<RecipeBaseViewModel> recipes)
+        {
+            IEnumerable<RecipeBaseViewModel> Sortedrecipes;
+            if(recipes == null)
+            {
+                switch (sortOrder)
+                {
+                    case "title_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.title));
+                        break;
+                    case "ratings_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.rating));
+                        break;
+                    case "ratings":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.rating));
+                        break;
+                    case "author_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.author));
+                        break;
+                    case "author":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.author));
+                        break;
+                    case "sourceId_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.source_ID));
+                        break;
+                    case "sourceId":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
+                        break;
+                    case "country_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
+                        break;
+                    case "country":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.country));
+                        break;
+                    case "mealTimeType_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.mealTimeType));
+                        break;
+                    case "mealTimeType":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.mealTimeType));
+                        break;
+                    default:
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.title));
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortOrder)
+                {
+                    case "title_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.title);
+                        break;
+                    case "ratings_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.rating);
+                        break;
+                    case "ratings":
+                        Sortedrecipes = recipes.OrderBy(r => r.rating);
+                        break;
+                    case "author_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.author);
+                        break;
+                    case "author":
+                        Sortedrecipes = recipes.OrderBy(r => r.author);
+                        break;
+                    case "sourceId_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.source_ID);
+                        break;
+                    case "sourceId":
+                        Sortedrecipes = recipes.OrderBy(r => r.source_ID);
+                        break;
+                    case "country_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.country);
+                        break;
+                    case "country":
+                        Sortedrecipes = recipes.OrderBy(r => r.country);
+                        break;
+                    case "mealTimeType_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.mealTimeType);
+                        break;
+                    case "mealTimeType":
+                        Sortedrecipes = recipes.OrderBy(r => r.mealTimeType);
+                        break;
+                    default:
+                        Sortedrecipes = recipes.OrderBy(r => r.title);
+                        break;
+                }
+            }
+            
+            return Sortedrecipes;
+        }
+      
+        public int ReportRecipe(ReportRecipeViewModel reportedRecipe)
+        {
+            var username = GetCurrentUsername();
+            reportedRecipe.userName = username;
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            var reportRecipe = ds.Recipe_Users.Where(b => b.user_ID == user.user_ID && b.recipe_ID == reportedRecipe.recipeId).FirstOrDefault();
+            if (reportRecipe != null)
+            {
+                if (reportRecipe.reported.GetValueOrDefault())
+                {
+                    return 1;
+                }
+                else
+                {
+                    bool error = SendReportRecipeEmail(reportedRecipe);
+                    if (error)
+                    {
+                        String query = "UPDATE RECIPE_USERS SET reported=1 WHERE recipe_ID = " + reportedRecipe.recipeId + " && user_ID = " + user.user_ID;
+                        ds.Database.ExecuteSqlCommand(query);
+                        ds.SaveChanges();
+                        return 0;
+                    }
+                    else
+                    {
+                        return 2;
+                    }
+                }
+            }
+            else
+            {
+                bool error = SendReportRecipeEmail(reportedRecipe);
+                if (error)
+                {
+                    String query = "INSERT INTO RECIPE_USERS(recipe_ID, user_ID, voting, reported, bookmarked) VALUES (" + reportedRecipe.recipeId + ", " + user.user_ID + ", " + "0, 1, 0)";
+                    ds.Database.ExecuteSqlCommand(query);
+                    ds.SaveChanges();
+                    return 0;
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+        }
+
+        private bool SendReportRecipeEmail(ReportRecipeViewModel reportedRecipe)
+        {
+            var URL = "/Recipe/Details/" + reportedRecipe.recipeId;
+            var link = "http://localhost:5657" + URL;
+            try
+            {
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Report Recipe - Cooking Curator";
+                String Body = "<br/><br/>A recipe was reported by user " + reportedRecipe.userName + " ."
+                    + "<br/> Due to the reason mentioned below :-"
+                    + "<br/><br/> " + reportedRecipe.feedBack
+                + "<br/><br/> Please click on this link to to view the recipe details <a href='" + link + "'>" + link + "</a>";
+                            
+                MailMessage mailMessage = new MailMessage(adminEmail, adminEmail, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

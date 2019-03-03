@@ -380,6 +380,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
+    <Compile Include="Controllers\ReportRecipeViewModel.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
@@ -548,6 +549,8 @@
     <Content Include="Views\Bookmark\Index.cshtml" />
     <Content Include="Views\Recipe\Diet.cshtml" />
     <Content Include="Views\Diet\Index.cshtml" />
+    <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
+    <Content Include="Views\Recipe\ReportRecipe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
