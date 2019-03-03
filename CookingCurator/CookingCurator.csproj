@@ -547,6 +547,8 @@
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
+    <Content Include="Views\Profile\AdminDoc.cshtml" />
+    <Content Include="Views\Profile\UserDoc.cshtml" />
     <Content Include="Views\Recipe\Diet.cshtml" />
     <Content Include="Views\Diet\Index.cshtml" />
     <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
