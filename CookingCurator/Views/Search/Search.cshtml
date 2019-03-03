@@ -55,6 +55,9 @@
             <th>
                 Country
             </th>
+            <th>
+                Matched Ingredients
+            </th>
             <th></th>
         </tr>
 
@@ -75,6 +78,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.matchedIngredients)
                 </td>
                 <td>
                     @Html.ActionLink("Details","Details", "Recipe", new { id = item.recipe_Id }, null)

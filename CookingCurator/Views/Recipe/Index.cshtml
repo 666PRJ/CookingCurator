@@ -47,31 +47,31 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.title)
+               @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.rating)
+                @Html.ActionLink("User rating", "Index", new { sortOrder = ViewBag.rateSort })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.lastUpdated)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.author)
+                @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.authorSort })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.verified)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.source_ID)
+                @Html.ActionLink("Source ID #", "Index", new { sortOrder = ViewBag.sourceIdSort })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.source_Link)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.country)
+                @Html.ActionLink("Country of Origin", "Index", new { sortOrder = ViewBag.countrySort })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.mealTimeType)
+                @Html.ActionLink("Meal Type", "Index", new { sortOrder = ViewBag.mealTimeTypeSort })
             </th>
             <th></th>
         </tr>
