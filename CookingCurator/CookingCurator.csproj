@@ -373,6 +373,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AllergyController.cs" />
     <Compile Include="Controllers\BookmarkController.cs" />
     <Compile Include="Controllers\DietController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
+    <Compile Include="EntityModels\AllergyViewModel.cs" />
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
     <Compile Include="EntityModels\RecoverViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
@@ -547,6 +549,8 @@
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
+    <Content Include="Views\Allergy\Index.cshtml" />
+    <Content Include="Views\Allergy\Ingredient.cshtml" />
     <Content Include="Views\Profile\AdminDoc.cshtml" />
     <Content Include="Views\Profile\UserDoc.cshtml" />
     <Content Include="Views\Recipe\Diet.cshtml" />
