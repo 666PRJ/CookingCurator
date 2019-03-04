@@ -13,9 +13,6 @@
                 <p class="lead">
                 <p>Welcome! You are logged in as: @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")</p>
 
-                <p><button>@Html.ActionLink("Log Out", "Logout", "Home")</button></p>
-
-                <p><button> @Html.ActionLink("About this application", "About", "Home") </button></p>
             </div>
             <div class="col-md-4">
                 <img src="~/Content/images/CookingCuratorLogo.jpg" />
@@ -25,15 +22,16 @@
 
     <div class="row">
         <div class="col-md-6">
+            <p>@Html.ActionLink("About this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
             <h2>Recipes</h2>
             <p>Getting started creating recipes using the links below: </p>
-            <p><button>@Html.ActionLink("Add User Recipe", "Create", "Recipe")</button></p>
+            <p>@Html.ActionLink("Add User Recipe", "Create", "Recipe", null, new { @class = "btn btn-default" })</p>
             @if (this.User.IsInRole("Admin"))
             {
-                <p><button>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe")</button></p>
+                <p>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe", null, new { @class = "btn btn-default" })</p>
             }
-            <p><button>@Html.ActionLink("References", "Index", "References")</button></p>
-            <p><button>@Html.ActionLink("Search for Recipe", "Search", "Search")</button></p>
+            <p>@Html.ActionLink("References", "Index", "References", null, new { @class = "btn btn-default" })</p>
+            <p>@Html.ActionLink("Search for Recipe", "Search", "Search", null, new { @class = "btn btn-default" })</p>
 
         </div>
         @if (this.User.IsInRole("Admin"))
@@ -41,7 +39,7 @@
             <div class="col-md-6">
                 <h2>Users</h2>
                 <p>Search through the list of users in the application:</p>
-                <p><button>@Html.ActionLink("Search for a user", "Search", "User")</button></p>
+                <p>@Html.ActionLink("Search for a user", "Search", "User", null, new { @class = "btn btn-default" })</p>
             </div>
         }
         </div>
@@ -63,7 +61,7 @@ else
                         <li>And more!</li>
                     </ul>
                     <br />
-                    <p><button> @Html.ActionLink("Learn more about this application", "About", "Home") </button></p>
+                    <p>@Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
                 </div>
                 <div class="col-md-4">
                     <img src="~/Content/images/CookingCuratorLogo.jpg" />
@@ -76,13 +74,12 @@ else
 
     <div class="row">
         <div class="col-md-6">
-            <h3>New to the site?  Click <button> @Html.ActionLink("here", "Register", "Home") </button> to register.</h3>
+            <h3>New to the site?  Click @Html.ActionLink("Here", "Register", "Home", null, new { @class = "btn btn-default" }) to register.</h3>
             <h3>Only a valid email address is required to sign up!</h3>
 
         </div>
         <div class="col-md-6 text-right">
-            <h3>Already signed up?  Click <button> @Html.ActionLink("here", "Login", "Home") </button> to log in.</h3>
-
+            <h3>Already signed up?  Click @Html.ActionLink("Here", "Login", "Home", null, new { @class = "btn btn-default" }) to log in.</h3>
         </div>
     </div>
 }
