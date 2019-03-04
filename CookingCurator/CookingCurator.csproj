@@ -373,17 +373,21 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AllergyController.cs" />
     <Compile Include="Controllers\BookmarkController.cs" />
+    <Compile Include="Controllers\DietController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
+    <Compile Include="Controllers\ReportRecipeViewModel.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
+    <Compile Include="EntityModels\DietDescViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
     <Compile Include="EntityModels\IngredBaseViewModel.cs" />
@@ -391,6 +395,7 @@
     <Compile Include="EntityModels\RecipeAddViewModel.cs" />
     <Compile Include="EntityModels\RecipeBaseViewModel.cs" />
     <Compile Include="EntityModels\RecipeSourceViewModel.cs" />
+    <Compile Include="EntityModels\AllergyViewModel.cs" />
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
     <Compile Include="EntityModels\RecoverViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
@@ -415,6 +420,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DIET_INGREDS.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DIET_RECIPES.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityRole.cs" />
@@ -457,6 +465,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\CookingCuratorLogo.jpg" />
     <Content Include="Content\MultiSelect\chosen-sprite.png" />
     <Content Include="Content\MultiSelect\chosen.min.css" />
     <Content Include="favicon.ico" />
@@ -541,6 +550,14 @@
     <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
+    <Content Include="Views\Allergy\Index.cshtml" />
+    <Content Include="Views\Allergy\Ingredient.cshtml" />
+    <Content Include="Views\Profile\AdminDoc.cshtml" />
+    <Content Include="Views\Profile\UserDoc.cshtml" />
+    <Content Include="Views\Recipe\Diet.cshtml" />
+    <Content Include="Views\Diet\Index.cshtml" />
+    <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
+    <Content Include="Views\Recipe\ReportRecipe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

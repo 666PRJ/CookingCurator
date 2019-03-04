@@ -35,5 +35,6 @@ namespace CookingCurator.Models
         public virtual DbSet<DIET_INGREDS> DIET_INGREDS { get; set; }
         public virtual DbSet<RECIPE_INGREDS> RECIPE_INGREDS { get; set; }
         public virtual DbSet<RECIPE_USERS> RECIPE_USERS { get; set; }
+        public virtual DbSet<DIET_RECIPES> DIET_RECIPES { get; set; }
     }
 }

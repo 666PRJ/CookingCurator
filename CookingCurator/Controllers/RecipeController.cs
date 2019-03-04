@@ -18,9 +18,14 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
 
         [Authorize]
-        public ActionResult Index(string countryName, string mealType, string verified, int? page)
+        public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
         {
             var recipes = m.RecipeGetAll();
+
+            ViewBag.Username = m.GetCurrentUsername();
+
+            ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
+
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
             {
                 recipes = m.FilterRecipesByMealTypeAndCountry(mealType, countryName);
@@ -43,7 +48,13 @@ namespace CookingCurator.Controllers
                     recipes = m.FilterVerifiedRecipes(verified, recipes);
                 }
             }
-
+            ViewBag.titleSort = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewBag.rateSort = sortOrder == "ratings" ? "ratings_desc" : "ratings";
+            ViewBag.authorSort = sortOrder == "author" ? "author_desc" : "author";
+            ViewBag.sourceIdSort = sortOrder == "sourceId" ? "sourceId_desc" : "sourceId";
+            ViewBag.countrySort = sortOrder == "country" ? "country_desc" : "country";
+            ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
+            recipes = m.SortRecipes(sortOrder, recipes);
             return View(recipes);
         }
 
@@ -53,6 +64,11 @@ namespace CookingCurator.Controllers
         {
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
+
+            ViewBag.Username = m.GetCurrentUsername();
+
+            ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
+
             if (recipe == null)
                 return HttpNotFound();
             else
@@ -200,6 +216,10 @@ namespace CookingCurator.Controllers
         // GET: Recipe/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!m.CanUserEdit(id.GetValueOrDefault())) {
+                return RedirectToAction("Index");
+            }
+
             Recipe_IngredViewModel recipes = new Recipe_IngredViewModel();
             if (id == null)
             {
@@ -312,10 +332,24 @@ namespace CookingCurator.Controllers
             return new Exception(message, dbu);
         }
 
+        [Authorize]
         [Route("User/AuthorProfile")]
         public ActionResult Authors(string authorName)
         {
             var r = m.RecipesByAuthor(authorName);
+            return View(r);
+        }
+
+        [Authorize]
+        public ActionResult Diet(string dietName)
+        {
+            if (dietName == null)
+            {
+                return View("Index");
+            }
+
+            var r = m.GetRecipesByDiet(dietName);
+            ViewBag.Diet = dietName;
             return View(r);
         }
 
@@ -334,6 +368,57 @@ namespace CookingCurator.Controllers
             else
             {
                 ViewBag.MyString = 1;
+                return View();
+            }
+        }
+
+        [Route("/Recipe/Report/{id}")]
+        public ActionResult ReportRecipe(int? id)
+        {
+            string username = m.GetCurrentUsername();
+            if(id == null)
+            {
+                return View();
+            }
+            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+            ReportRecipeViewModel reportRecipe = new ReportRecipeViewModel();
+            reportRecipe.recipeId = recipe.recipe_Id;
+            reportRecipe.userName = username;
+            reportRecipe.recipeTitle = recipe.title;
+
+            return View(reportRecipe);
+        }
+
+        [HttpPost]
+        public ActionResult ReportRecipe(ReportRecipeViewModel reportRecipe)
+        {
+            int error = m.ReportRecipe(reportRecipe);
+            if (error == 1)
+            {
+                return RedirectToAction("ReportedRecipe", new { succError = error});
+            }
+            else if (error == 0)
+            {
+                return RedirectToAction("ReportedRecipe", new { succError = error });
+            }
+            else
+            {
+                ModelState.AddModelError("", "An error occurred while sending an email. Please try again!");
+                return View();
+            }
+        }
+
+        [Route("Recipe/Reported")]
+        public ActionResult ReportedRecipe(int succError)
+        {
+            if(succError == 1)
+            {
+                ViewBag.MyString = 1;
+                return View();
+            }
+            else
+            {
+                ViewBag.MyString = 0;
                 return View();
             }
         }
