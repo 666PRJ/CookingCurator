@@ -12,13 +12,11 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
 
-        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
-        [Authorize]
         public ActionResult About()
         {
             return View();

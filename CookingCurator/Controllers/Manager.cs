@@ -73,6 +73,15 @@ namespace CookingCurator.Controllers
                 cfg.CreateMap<USER, RecoverViewModel>();
 
                 cfg.CreateMap<RECIPE_USERS, BookmarkViewModel>();
+
+                cfg.CreateMap<ALLERGY, AllergyViewModel>();
+
+                cfg.CreateMap<AllergyViewModel, ALLERGY>();
+
+                cfg.CreateMap<DIET, DietDescViewModel>();
+
+                cfg.CreateMap<DietDescViewModel, DIET>();
+
             });
 
             mapper = config.CreateMapper();
@@ -214,6 +223,22 @@ namespace CookingCurator.Controllers
 
             return authorRecipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(authorRecipes);
         }
+
+        public IEnumerable<DietDescViewModel> DietGetAll()
+        {
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(ds.Diets);
+        }
+
+        public IEnumerable<RecipeBaseViewModel> GetRecipesByDiet(string diet_Name)
+        {
+            var diet_num = ds.Diets.SingleOrDefault(d => d.dietName == diet_Name);
+
+            IEnumerable<RECIPE> recipes = ds.Recipes.SqlQuery("Select * FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
+
+            return recipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(recipes);
+        }
+
+
 
 
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
@@ -992,6 +1017,22 @@ namespace CookingCurator.Controllers
 
         }
 
+        //Retreive all allergy descriptions
+        public IEnumerable<AllergyViewModel> AllergyGetAll()
+        {
+            return mapper.Map<IEnumerable<ALLERGY>, IEnumerable<AllergyViewModel>>(ds.Allergies);
+        }
+
+        //Retrieve all ingredients per allergy with unique names
+        public IEnumerable<IngredBase> GetIngredByAllergen(string allergy_Name)
+        {
+            var allergy_num = ds.Allergies.SingleOrDefault(a => a.allergyName == allergy_Name);
+
+            IEnumerable<INGRED> ingredients = ds.Ingreds.SqlQuery("Select * FROM INGRED WHERE ingred_ID IN (SELECT ingred_ID FROM ALLERGY_INGREDS WHERE allergy_ID = " + allergy_num.allergy_ID + ")");
+
+            return ingredients == null ? null : mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ingredients);
+        }
+
         public IEnumerable<RecipeBaseViewModel> SortRecipes(string sortOrder, IEnumerable<RecipeBaseViewModel> recipes)
         {
             IEnumerable<RecipeBaseViewModel> Sortedrecipes;
@@ -1159,6 +1200,7 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
+
         }
     }
 }
