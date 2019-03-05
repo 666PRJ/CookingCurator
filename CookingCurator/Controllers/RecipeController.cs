@@ -20,6 +20,7 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
         {
+            m.isUserBanned();
             var recipes = m.RecipeGetAll();
 
             ViewBag.Username = m.GetCurrentUsername();

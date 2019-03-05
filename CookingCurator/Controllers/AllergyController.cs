@@ -14,6 +14,7 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            m.isUserBanned();
             var a = m.AllergyGetAll();
             return View(a);
         }
@@ -21,7 +22,8 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Ingredient(string allergyName)
         {
-            if(allergyName == null){
+            m.isUserBanned();
+            if (allergyName == null){
                 return RedirectToAction("Index");
             }
 

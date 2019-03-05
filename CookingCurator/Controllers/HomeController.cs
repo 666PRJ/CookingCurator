@@ -14,11 +14,13 @@ namespace CookingCurator.Controllers
 
         public ActionResult Index()
         {
+            m.isUserBanned();
             return View();
         }
 
         public ActionResult About()
         {
+            m.isUserBanned();
             return View();
         }
 

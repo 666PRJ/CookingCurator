@@ -15,6 +15,7 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Search()
         {
+            m.isUserBanned();
             SearchViewModel search = new SearchViewModel();
             int[] ids = { 1, 2 };
             string[] stringSelection = { "Search By Ingred", "Search By Title" };
