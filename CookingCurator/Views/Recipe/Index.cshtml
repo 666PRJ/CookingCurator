@@ -13,11 +13,11 @@
         @using (Html.BeginForm("Index", "Recipe", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
         {
             <div class="form-group">
-                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "search by country name" })
+                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "Search By Country Name" })
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
-                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "search by meal time type" })
+                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "Search By Meal Time Type" })
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
@@ -83,6 +83,18 @@ else
                     @Html.DisplayFor(modelItem => item.title)
                 </td>
                 <td>
+                    @if (item.rating > 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                    }
+                    else if (item.rating < 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-hand-right"></span>
+                    }
                     @Html.DisplayFor(modelItem => item.rating)
                 </td>
                 <td>

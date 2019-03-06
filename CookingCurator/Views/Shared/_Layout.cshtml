@@ -25,7 +25,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <!-- <li>@Html.ActionLink("About", "About", "Home")</li> -->
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
                         <li>@Html.ActionLink("Contact Us", "ContactUs", "Profile")</li>
                         <li>@Html.ActionLink("User Dashboard", "UserDashboard", "Profile")</li>
                         @if (this.User.IsInRole("Admin"))
@@ -35,6 +35,16 @@
                         }
                         <li>@Html.ActionLink("Recipe Listing", "Index", "Recipe")</li>
                         <li>@Html.ActionLink("Search Recipes", "Search", "Search")</li>
+                        <li>@Html.ActionLink("Log Out", "Logout", "Home")</li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Register", "Register", "Home")</li>
+                        <li>@Html.ActionLink("Login", "Login", "Home")</li>
                     </ul>
                 </div>
             }
