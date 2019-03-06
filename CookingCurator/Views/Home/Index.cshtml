@@ -1,7 +1,7 @@
 ﻿@{
-                /**/
+    /**/
 
-                ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home Page";
 }
 
 @if (User.Identity.IsAuthenticated)
@@ -18,7 +18,7 @@
                 <img src="~/Content/images/CookingCuratorLogo.jpg" />
             </div>
         </div>
-     </div>
+    </div>
 
     <div class="row">
         <div class="col-md-6">
@@ -42,7 +42,7 @@
                 <p>@Html.ActionLink("Search for a user", "Search", "User", null, new { @class = "btn btn-default" })</p>
             </div>
         }
-        </div>
+    </div>
 }
 else
 {
@@ -52,21 +52,24 @@ else
 
             <div class="row">
                 <div class="col-md-8">
-                    <p>This website is a recipe storage application and is free to use.</p>
-                     <ul>
-                        <li>Search through recipes from our catalogue.</li>
-                        <li>Find recipes by title, author, or ingredients!</li>
-                        <li>Bookmark your favourites for easy access!</li>
-                        <li>Upload your own recipes to share with other users!</li>
-                        <li>And more!</li>
-                    </ul>
-                    <br />
-                    <p>@Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
-                </div>
-                <div class="col-md-4">
-                    <img src="~/Content/images/CookingCuratorLogo.jpg" />
-                </div>
-            </div>
+        <p>This website is a recipe storage application and is free to use.</p>
+        <ul>
+            <li>Search through recipes from our catalogue.</li>
+            <li>Find recipes by title, author, or ingredients!</li>
+            <li>Bookmark your favourites for easy access!</li>
+            <li>Upload your own recipes to share with other users!</li>
+            <li>And more!</li>
+        </ul>
+        <br />
+        <p><button> @Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" }) </button></p>
+    </div>
+    <div class="col-md-4">
+        <img src="~/Content/images/CookingCuratorLogo.jpg" />
+    </div>
+    </div>
+
+
 
     </div>
+
 }
