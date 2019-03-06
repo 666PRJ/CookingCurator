@@ -25,5 +25,7 @@ namespace CookingCurator.Models
         public string source_Link { get; set; }
         public string country { get; set; }
         public string mealTimeType { get; set; }
+        public byte[] Content { get; set; }
+        public string Content_Type { get; set; }
     }
 }

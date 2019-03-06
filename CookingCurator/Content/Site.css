@@ -22,3 +22,28 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#imgDiv{
+    width: 350px;
+    height: 300px;
+    overflow: hidden;
+}
+
+#imgDiv img{
+    width: 100%;
+    position: relative;
+}
+
+
+section {
+  float: left;
+  width: 60%;
+}
+aside {
+  float: right;
+  width: 40%;
+}
+footer {
+  clear: both;
+  margin-bottom: 0;
+}

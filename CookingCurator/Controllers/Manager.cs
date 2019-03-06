@@ -82,6 +82,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<DietDescViewModel, DIET>();
 
+                cfg.CreateMap<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>();
+
             });
 
             mapper = config.CreateMapper();
@@ -300,22 +302,24 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeEdit(Recipe_IngredViewModel recipeIng)
         {
-            var recipeUpdate = ds.Recipes.Find(recipeIng.recipe.recipe_Id);
+            var recipeUpdate = ds.Recipes.Find(recipeIng.recipe_Id);
             if (recipeUpdate == null)
             {
                 return null;
             }
-            recipeUpdate.title = recipeIng.recipe.title;
-            recipeUpdate.instructions = recipeIng.recipe.instructions;
+            recipeUpdate.title = recipeIng.title;
+            recipeUpdate.instructions = recipeIng.instructions;
             recipeUpdate.lastUpdated = DateTime.Now;
-            recipeUpdate.author = recipeIng.recipe.author;
-            recipeUpdate.source_Link = recipeIng.recipe.source_Link;
-            recipeUpdate.country = recipeIng.recipe.country;
-            recipeUpdate.mealTimeType = recipeIng.recipe.mealTimeType;
+            recipeUpdate.author = recipeIng.author;
+            recipeUpdate.source_Link = recipeIng.source_Link;
+            recipeUpdate.country = recipeIng.country;
+            recipeUpdate.mealTimeType = recipeIng.mealTimeType;
+            recipeUpdate.Content = recipeIng.Content;
+            recipeUpdate.Content_Type = recipeIng.Content_Type;
             ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
 
-            deleteIngredients(recipeIng.recipe.recipe_Id);
-            addIngredientsForRecipes(recipeIng.recipe.recipe_Id, recipeIng.selectedIngredsId);
+            deleteIngredients(recipeIng.recipe_Id);
+            addIngredientsForRecipes(recipeIng.recipe_Id, recipeIng.selectedIngredsId);
             // Attempt to save the edited recipe.
             ds.SaveChanges();
 

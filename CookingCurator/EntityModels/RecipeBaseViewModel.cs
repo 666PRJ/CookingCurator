@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Web.Mvc;
 
 namespace CookingCurator.EntityModels
 {
@@ -28,6 +29,12 @@ namespace CookingCurator.EntityModels
         }
 
         public IEnumerable<IngredientBaseViewModel> ingreds { get; set; }
+
+        public byte[] Content { get; set; }
+
+        public string Content_Type { get; set; }
+
+        public string fileResult { get; set; }
     }
 
 }
