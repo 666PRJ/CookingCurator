@@ -5,12 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Recipe Details</h2>
-
-<div>
+<header>
+    <h2>Recipe Details</h2>
     <h4>Detailed Recipe Information</h4>
     <h5> @Html.ActionLink("Bookmark this recipe", "BookmarkRecipe", new { id = Model.recipe_Id })</h5>
     <hr />
+</header>
+
+<section>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.title)
@@ -95,14 +97,6 @@
         <dd>
             @Html.DisplayFor(model => model.mealTimeType)
         </dd>
-        @if(!String.IsNullOrEmpty(Model.fileResult)){
-            <dt>
-                Recipe Image
-            </dt>
-            <dd>
-                <img src="@Model.fileResult" alt="Recipe Image" />
-            </dd>
-        }
         <dt>
             Ingredients
         </dt>
@@ -115,12 +109,29 @@
         </dd>
 
     </dl>
-</div>
-<p>
-    @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
+</section>
+
+<aside>
+    @if (!String.IsNullOrEmpty(Model.fileResult))
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
-        @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
+        <div id="imgDiv" class="col-lg-offset-1">
+            <img src="@Model.fileResult" alt="Recipe Image" />
+        </div>
+
     }
-    @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
-</p>
+</aside>
+
+<footer>
+    <p>
+        @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
+        {
+            @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
+            @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
+        }
+        @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
+    </p>
+</footer>
+
+
+
+
