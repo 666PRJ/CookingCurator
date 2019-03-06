@@ -50,6 +50,12 @@ namespace CookingCurator.EntityModels
         [DisplayName("Meal Type")]
         public string mealTimeType { get; set; }
 
+        [HiddenInput]
+        public byte[] Content { get; set; }
+
+        [HiddenInput]
+        public string Content_Type { get; set; }
+
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 
@@ -132,6 +138,12 @@ namespace CookingCurator.EntityModels
         [Required]
         [DisplayName("Meal Type")]
         public string mealTimeType { get; set; }
+
+        [HiddenInput]
+        public byte[] Content { get; set; }
+
+        [HiddenInput]
+        public string Content_Type { get; set; }
 
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
