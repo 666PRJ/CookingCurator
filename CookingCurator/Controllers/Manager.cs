@@ -151,6 +151,14 @@ namespace CookingCurator.Controllers
             if (duplicateFound.Count() > 0) {
                 return false;
             }
+
+            var userRecipe = ds.Recipes.Where(e => e.author == newUsername.userName);
+
+            foreach (var item in userRecipe) {
+                item.author = newUsername.userName;
+                ds.Entry(item).State = System.Data.Entity.EntityState.Modified;
+            }
+
             user.userName = newUsername.userName;
             ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
 
