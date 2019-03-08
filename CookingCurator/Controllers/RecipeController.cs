@@ -172,6 +172,19 @@ namespace CookingCurator.Controllers
                 newItem.lastUpdated = DateTime.Now;
                 if(file != null && file.ContentLength > 0)
                 {
+                    if (file.ContentLength / 1024 > 50)
+                    {
+                        var form = new RecipeVerifiedAddViewModel();
+                        form.author = newItem.author;
+                        form.country = newItem.country;
+                        form.mealTimeType = newItem.mealTimeType;
+                        form.instructions = newItem.instructions;
+                        form.title = newItem.title;
+                        form.ingredients = m.IngredientGetAll();
+                        form.selectedIngredsId = new string[0];
+                        ModelState.AddModelError("", "Image size should be less than 50kb");
+                        return View(form);
+                    }
                     newItem.Content_Type = file.ContentType;
                     using(var reader = new System.IO.BinaryReader(file.InputStream))
                     {
@@ -210,6 +223,19 @@ namespace CookingCurator.Controllers
                 newItem.lastUpdated = DateTime.Now;
                 if (file != null && file.ContentLength > 0)
                 {
+                    if (file.ContentLength / 1024 > 50)
+                    {
+                        var form = new RecipeVerifiedAddViewModel();
+                        form.author = newItem.author;
+                        form.country = newItem.country;
+                        form.mealTimeType = newItem.mealTimeType;
+                        form.instructions = newItem.instructions;
+                        form.title = newItem.title;
+                        form.ingredients = m.IngredientGetAll();
+                        form.selectedIngredsId = new string[0];
+                        ModelState.AddModelError("", "Image size should be less than 50kb");
+                        return View(form);
+                    }
                     newItem.Content_Type = file.ContentType;
                     using (var reader = new System.IO.BinaryReader(file.InputStream))
                     {
@@ -264,15 +290,35 @@ namespace CookingCurator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Recipe_IngredViewModel recipes, HttpPostedFileBase file)
         {
+            Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(recipes.recipe_Id));
+            IEnumerable<IngredientBaseViewModel> ingredients = m.IngredientGetAll();
+            String[] selectedIngreds = m.ingredsForRecipe(recipes.recipe_Id).ToArray();
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+            recipe.ingredients = ingredients;
+            recipe.selectedIngredsId = selectedIngreds;
+            if (recipe.Content != null && recipe.Content_Type != null)
+            {
+                string base64 = Convert.ToBase64String(recipe.Content);
+                recipe.fileResult = String.Format("data:{0};base64,{1}", recipe.Content_Type, base64);
+            }
             if (!ModelState.IsValid)
             {
-                return View(recipes);
+                ModelState.AddModelError("", "Error while submitting the form. Please check the values submitted");
+                return View(recipe);
             }
 
             try
             {
                 if(file != null && file.ContentLength > 0)
                 {
+                    if(file.ContentLength / 1024 > 50)
+                    {
+                        ModelState.AddModelError("", "Image size should be less than 50kb");
+                        return View(recipe);
+                    }
                     recipes.Content_Type = file.ContentType;
                     using (var reader = new System.IO.BinaryReader(file.InputStream))
                     {
@@ -283,7 +329,8 @@ namespace CookingCurator.Controllers
 
                 if (editedrecipe == null)
                 {
-                    return View(recipes);
+                    ModelState.AddModelError("", "Error while editing a recipe. Please try again");
+                    return View(recipe);
                 }
                 else
                 {
@@ -292,7 +339,8 @@ namespace CookingCurator.Controllers
             }
             catch
             {
-                return View(recipes);
+                ModelState.AddModelError("", "Error while editing a recipe. Please try again");
+                return View(recipe);
             }
         }
 
