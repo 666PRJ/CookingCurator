@@ -20,7 +20,7 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
         {
-            var recipes = m.RecipeGetAll();
+            var recipes = m.RecipeGetAllWithImages();
 
             ViewBag.Username = m.GetCurrentUsername();
 
@@ -38,7 +38,7 @@ namespace CookingCurator.Controllers
                 }
                 else if (!string.IsNullOrEmpty(mealType))
                 {
-                     recipes = m.FilterRecipesByCountry(countryName);
+                     recipes = m.FilterRecipesByMealType(mealType);
                 }
             }
             if (!string.IsNullOrEmpty(verified))
