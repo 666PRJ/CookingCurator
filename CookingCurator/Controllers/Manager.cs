@@ -152,7 +152,7 @@ namespace CookingCurator.Controllers
                 return false;
             }
 
-            var userRecipe = ds.Recipes.Where(e => e.author == newUsername.userName);
+            var userRecipe = ds.Recipes.Where(e => e.author == user.userName);
 
             foreach (var item in userRecipe) {
                 item.author = newUsername.userName;
