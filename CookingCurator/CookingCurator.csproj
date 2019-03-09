@@ -381,7 +381,6 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
-    <Compile Include="Controllers\ReportRecipeViewModel.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
@@ -399,6 +398,7 @@
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
     <Compile Include="EntityModels\RecoverViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
+    <Compile Include="EntityModels\ReportRecipeViewModel.cs" />
     <Compile Include="EntityModels\SearchViewModel.cs" />
     <Compile Include="EntityModels\UserAcceptWaiverViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />

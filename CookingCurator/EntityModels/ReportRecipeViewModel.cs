@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace CookingCurator.Controllers
+namespace CookingCurator.EntityModels
 {
     public class ReportRecipeViewModel
     {
