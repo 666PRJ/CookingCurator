@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool checkEmpty = Model.diets.Any();
 }
 
 <header>
@@ -108,7 +109,24 @@
             }
         </dd>
 
+        @if (checkEmpty)
+        {
+            <dt>
+                Applicable Diets:
+            </dt>
+
+            <dd>
+
+                @foreach (var d in Model.diets)
+                {
+                    <span>@d.dietName</span><br />
+                }
+
+            </dd>
+        }
+
     </dl>
+
 </section>
 
 <aside>

@@ -63,6 +63,14 @@
     </div>
 
     <div class="form-group">
+        @Html.LabelFor(model => model.selectedDietsId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <p>User 'control + left click' to select mutiple</p>
+            @Html.ListBoxFor(model => model.selectedDietsId, new MultiSelectList(Model.diets, "diet_ID", "dietName"), new { id = "multiSelect", multiple = "multiple" })
+        </div>
+    </div>
+
+    <div class="form-group">
         @Html.Label("Recipe Image", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <input type="file" id="file" name="file" style="margin-bottom:5px" />

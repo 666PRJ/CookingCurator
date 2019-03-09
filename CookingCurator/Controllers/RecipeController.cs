@@ -64,6 +64,7 @@ namespace CookingCurator.Controllers
         {
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
+            recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
             if(recipe.Content != null && recipe.Content_Type != null)
             {
                 string base64 = Convert.ToBase64String(recipe.Content);
@@ -140,6 +141,10 @@ namespace CookingCurator.Controllers
 
             form.ingredients = m.IngredientGetAll();
             form.selectedIngredsId = new string[0];
+
+            form.diets = m.DietGetAll();
+            form.selectedDietsId = new string[0];
+
             return View(form);
         }
 
@@ -151,6 +156,9 @@ namespace CookingCurator.Controllers
 
             form.ingredients = m.IngredientGetAll();
             form.selectedIngredsId = new string[0];
+
+            form.diets = m.DietGetAll();
+            form.selectedDietsId = new string[0];
 
             return View(form);
         }
@@ -182,6 +190,8 @@ namespace CookingCurator.Controllers
                         form.title = newItem.title;
                         form.ingredients = m.IngredientGetAll();
                         form.selectedIngredsId = new string[0];
+                        form.diets = m.DietGetAll();
+                        form.selectedDietsId = new string[0];
                         ModelState.AddModelError("", "Image size should be less than 50kb");
                         return View(form);
                     }
@@ -233,6 +243,8 @@ namespace CookingCurator.Controllers
                         form.title = newItem.title;
                         form.ingredients = m.IngredientGetAll();
                         form.selectedIngredsId = new string[0];
+                        form.diets = m.DietGetAll();
+                        form.selectedDietsId = new string[0];
                         ModelState.AddModelError("", "Image size should be less than 50kb");
                         return View(form);
                     }
@@ -268,15 +280,25 @@ namespace CookingCurator.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(id));
+
             IEnumerable<IngredientBaseViewModel> ingredients = m.IngredientGetAll();
             String[] selectedIngreds = m.ingredsForRecipe(id).ToArray();
+
+            IEnumerable<DietDescViewModel> diets = m.DietGetAll();
+            String[] selectedDiets = m.dietsForRecipe(id).ToArray();
+
             if (recipe == null)
             {
                 return HttpNotFound();
             }
+
             recipe.ingredients = ingredients;
             recipe.selectedIngredsId = selectedIngreds;
+            recipe.diets = diets;
+            recipe.selectedDietsId = selectedDiets;
+
             if (recipe.Content != null && recipe.Content_Type != null)
             {
                 string base64 = Convert.ToBase64String(recipe.Content);
@@ -291,14 +313,22 @@ namespace CookingCurator.Controllers
         public ActionResult Edit(Recipe_IngredViewModel recipes, HttpPostedFileBase file)
         {
             Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(recipes.recipe_Id));
+
             IEnumerable<IngredientBaseViewModel> ingredients = m.IngredientGetAll();
             String[] selectedIngreds = m.ingredsForRecipe(recipes.recipe_Id).ToArray();
+            IEnumerable<DietDescViewModel> diets = m.DietGetAll();
+            String[] selectedDiets = m.dietsForRecipe(recipes.recipe_Id).ToArray();
+
             if (recipe == null)
             {
                 return HttpNotFound();
             }
+
             recipe.ingredients = ingredients;
             recipe.selectedIngredsId = selectedIngreds;
+            recipe.diets = diets;
+            recipe.selectedDietsId = selectedDiets;
+
             if (recipe.Content != null && recipe.Content_Type != null)
             {
                 string base64 = Convert.ToBase64String(recipe.Content);
