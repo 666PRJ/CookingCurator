@@ -84,6 +84,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeWithImagesViewModel>();
+
             });
 
             mapper = config.CreateMapper();
@@ -213,6 +215,13 @@ namespace CookingCurator.Controllers
             // The ds object is the data store
             // It has a collection for each entity it manages
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes);
+        }
+
+        public IEnumerable<RecipeWithImagesViewModel> RecipeGetAllWithImages()
+        {
+            // The ds object is the data store
+            // It has a collection for each entity it manages
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes);
         }
 
         public RecipeBaseViewModel RecipeGetById(int? id)
@@ -936,33 +945,33 @@ namespace CookingCurator.Controllers
             ds.SaveChanges();
         }
           
-        public IEnumerable<RecipeBaseViewModel> FilterRecipesByCountry(string countryName)
+        public IEnumerable<RecipeWithImagesViewModel> FilterRecipesByCountry(string countryName)
         {
-            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.country.Contains(countryName)));
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.Where(r => r.country.Contains(countryName)));
         }
 
-        public IEnumerable<RecipeBaseViewModel> FilterRecipesByMealType(string mealType)
+        public IEnumerable<RecipeWithImagesViewModel> FilterRecipesByMealType(string mealType)
         {
-            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.mealTimeType.Contains(mealType)));
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.Where(r => r.mealTimeType.Contains(mealType)));
         }
 
-        public IEnumerable<RecipeBaseViewModel> FilterRecipesByMealTypeAndCountry(string mealType, string countryName)
+        public IEnumerable<RecipeWithImagesViewModel> FilterRecipesByMealTypeAndCountry(string mealType, string countryName)
         {
             var recipes = ds.Recipes.Where(r => r.country.Contains(countryName));
-            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(recipes.Where(r => r.mealTimeType.Contains(mealType)));
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(recipes.Where(r => r.mealTimeType.Contains(mealType)));
         }
 
-        public IEnumerable<RecipeBaseViewModel> FilterVerifiedRecipes(string verified, IEnumerable<RecipeBaseViewModel> recipes)
+        public IEnumerable<RecipeWithImagesViewModel> FilterVerifiedRecipes(string verified, IEnumerable<RecipeWithImagesViewModel> recipes)
         {
             if(recipes == null)
             {
                 if (verified.Equals("1"))
                 {
-                    return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.verified == true));
+                    return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.Where(r => r.verified == true));
                 }
                 else
                 {
-                    return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.Where(r => r.verified == false));
+                    return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.Where(r => r.verified == false));
                 }
             }
             else
@@ -1054,48 +1063,48 @@ namespace CookingCurator.Controllers
             return ingredients == null ? null : mapper.Map<IEnumerable<INGRED>, IEnumerable<IngredBase>>(ingredients);
         }
 
-        public IEnumerable<RecipeBaseViewModel> SortRecipes(string sortOrder, IEnumerable<RecipeBaseViewModel> recipes)
+        public IEnumerable<RecipeWithImagesViewModel> SortRecipes(string sortOrder, IEnumerable<RecipeWithImagesViewModel> recipes)
         {
-            IEnumerable<RecipeBaseViewModel> Sortedrecipes;
+            IEnumerable<RecipeWithImagesViewModel> Sortedrecipes;
             if(recipes == null)
             {
                 switch (sortOrder)
                 {
                     case "title_desc":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.title));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.title));
                         break;
                     case "ratings_desc":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.rating));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.rating));
                         break;
                     case "ratings":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.rating));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.rating));
                         break;
                     case "author_desc":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.author));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.author));
                         break;
                     case "author":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.author));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.author));
                         break;
                     case "sourceId_desc":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.source_ID));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.source_ID));
                         break;
                     case "sourceId":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
                         break;
                     case "country_desc":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
                         break;
                     case "country":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.country));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.country));
                         break;
                     case "mealTimeType_desc":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderByDescending(r => r.mealTimeType));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.mealTimeType));
                         break;
                     case "mealTimeType":
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.mealTimeType));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.mealTimeType));
                         break;
                     default:
-                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(ds.Recipes.OrderBy(r => r.title));
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.title));
                         break;
                 }
             }
