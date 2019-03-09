@@ -60,19 +60,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.source_ID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.source_ID)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.source_Link)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.source_Link)
+            <a href="@Html.DisplayFor(model => model.source_Link)" target="_blank">@Html.DisplayFor(model => model.source_Link)</a>
         </dd>
 
         <dt>
