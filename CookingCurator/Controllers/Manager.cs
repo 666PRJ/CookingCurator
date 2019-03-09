@@ -333,7 +333,10 @@ namespace CookingCurator.Controllers
             ds.Entry(recipeUpdate).State = System.Data.Entity.EntityState.Modified;
 
             deleteIngredients(recipeIng.recipe_Id);
-            addIngredientsForRecipes(recipeIng.recipe_Id, recipeIng.selectedIngredsId);
+            if (recipeIng.selectedIngredsId != null)
+            {
+                addIngredientsForRecipes(recipeIng.recipe_Id, recipeIng.selectedIngredsId);
+            }
             // Attempt to save the edited recipe.
             ds.SaveChanges();
 

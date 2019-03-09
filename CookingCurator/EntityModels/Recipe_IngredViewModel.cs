@@ -9,12 +9,18 @@ using System.Web.Mvc;
 
 namespace CookingCurator.EntityModels
 {
-    public class Recipe_IngredViewModel : RecipeWithIngredBaseViewModel
+    public class Recipe_IngredViewModel : RecipeBaseViewModel
     { 
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 
         public IEnumerable<IngredientBaseViewModel> ingredients;
+
+        public byte[] Content { get; set; }
+
+        public string Content_Type { get; set; }
+
+        public string fileResult { get; set; }
 
     }
 }
