@@ -28,6 +28,8 @@ namespace CookingCurator.EntityModels
             ingreds = new List<IngredientBaseViewModel>();
         }
 
+        public IEnumerable<RecipeBaseViewModel> recommended { get; set; }
+
         public IEnumerable<IngredientBaseViewModel> ingreds { get; set; }
 
         public byte[] Content { get; set; }

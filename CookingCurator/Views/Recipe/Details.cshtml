@@ -109,6 +109,47 @@
         </dd>
 
     </dl>
+
+    <p>Recommended Recipes</p>
+
+    <table class="table">
+
+        @foreach (var item in Model.recommended)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @if (item.rating > 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                    }
+                    else if (item.rating < 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-hand-right"></span>
+                    }
+                    @Html.DisplayFor(modelItem => item.rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mealTimeType)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
 </section>
 
 <aside>

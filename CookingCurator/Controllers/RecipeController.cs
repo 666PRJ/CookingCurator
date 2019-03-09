@@ -64,7 +64,8 @@ namespace CookingCurator.Controllers
         {
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
-            if(recipe.Content != null && recipe.Content_Type != null)
+            recipe.recommended = m.giveRecommendations(m.ingredsForRecipe(id.GetValueOrDefault()), id.GetValueOrDefault());
+            if (recipe.Content != null && recipe.Content_Type != null)
             {
                 string base64 = Convert.ToBase64String(recipe.Content);
                 recipe.fileResult = String.Format("data:{0};base64,{1}", recipe.Content_Type, base64);
