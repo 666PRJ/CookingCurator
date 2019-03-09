@@ -151,6 +151,13 @@ namespace CookingCurator.Controllers
             if (duplicateFound.Count() > 0) {
                 return false;
             }
+            
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(newUsername.userName))
+            {
+	            return false;
+            }
+            
             user.userName = newUsername.userName;
             ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
 
