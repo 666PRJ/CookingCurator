@@ -142,7 +142,6 @@ namespace CookingCurator.Controllers
         }
 
         public bool ChangeUsername(ChangeUsernameViewModel newUsername) {
-            //var user = ds.Users.SingleOrDefault(e => e.user_ID == newUsername.user_ID);
             var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
             var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
             if (user == null) {
@@ -151,6 +150,12 @@ namespace CookingCurator.Controllers
             if (duplicateFound.Count() > 0) {
                 return false;
             }
+          
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(newUsername.userName))
+            {
+	            return false;
+            }
 
             var userRecipe = ds.Recipes.Where(e => e.author == user.userName);
 
@@ -158,6 +163,7 @@ namespace CookingCurator.Controllers
                 item.author = newUsername.userName;
                 ds.Entry(item).State = System.Data.Entity.EntityState.Modified;
             }
+
 
             user.userName = newUsername.userName;
             ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
