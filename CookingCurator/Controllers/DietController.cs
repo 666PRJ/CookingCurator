@@ -14,6 +14,7 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            m.isUserBanned();
             var d = m.DietGetAll();
             return View(d);
         }

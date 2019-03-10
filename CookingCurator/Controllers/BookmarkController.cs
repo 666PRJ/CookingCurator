@@ -12,12 +12,14 @@ namespace CookingCurator.Controllers
         // GET: Bookmark
         public ActionResult Index()
         {
+            m.isUserBanned();
             return View(m.GetAllBookmarks());
         }
 
         // GET: Bookmark/Details/5
         public ActionResult Details(int iD)
         {
+            m.isUserBanned();
             return RedirectToAction("Details", "Recipe", new { id = iD} );
         }
 

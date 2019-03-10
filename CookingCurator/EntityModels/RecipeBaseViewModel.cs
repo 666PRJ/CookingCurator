@@ -40,4 +40,13 @@ namespace CookingCurator.EntityModels
         public string fileResult { get; set; }
     }
 
+    public class RecipeWithImagesViewModel : RecipeBaseViewModel
+    {
+        public byte[] Content { get; set; }
+
+        public string Content_Type { get; set; }
+
+        public string fileResult { get; set; }
+    }
+
 }
