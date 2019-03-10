@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CookingCurator.EntityModels.RecipeBaseViewModel>
+﻿@model IEnumerable<CookingCurator.EntityModels.RecipeWithImagesViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -13,11 +13,11 @@
         @using (Html.BeginForm("Index", "Recipe", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
         {
             <div class="form-group">
-                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "search by country name" })
+                @Html.TextBox("countryName", null, new { @class = "form-control", @size = "80", placeholder = "Search By Country Name" })
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
-                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "search by meal time type" })
+                @Html.TextBox("mealType", null, new { @class = "form-control", @size = "100", placeholder = "Search By Meal Time Type" })
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
@@ -47,7 +47,7 @@ else
     <table class="table">
         <tr>
             <th>
-               @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort })
+                @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort })
             </th>
             <th>
                 @Html.ActionLink("User rating", "Index", new { sortOrder = ViewBag.rateSort })
@@ -65,56 +65,80 @@ else
                 @Html.ActionLink("Source ID #", "Index", new { sortOrder = ViewBag.sourceIdSort })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.source_Link)
-            </th>
-            <th>
                 @Html.ActionLink("Country of Origin", "Index", new { sortOrder = ViewBag.countrySort })
             </th>
             <th>
                 @Html.ActionLink("Meal Type", "Index", new { sortOrder = ViewBag.mealTimeTypeSort })
+            </th>
+            <th>
+                Recipe Image
             </th>
             <th></th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @if (item.rating > 0)
+                {
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                }
+                else if (item.rating < 0)
+                {
+                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-hand-right"></span>
+                }
+                @Html.DisplayFor(modelItem => item.rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.verified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.source_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mealTimeType)
+            </td>
+            @if (item.Content != null && item.Content_Type != null)
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.title)
+                    <div id="divImg" style="display:block;margin-left:auto;margin-right:auto;height:150px;width:150px;margin-bottom:5px">
+                        <img class="img-responsive thumbnail" style="height:150px" src="@Html.Raw("data:" + item.Content_Type + ";base64," + Convert.ToBase64String(item.Content))" alt="RecipeImage">
+                    </div>
                 </td>
+            }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.rating)
+                    No Recipe Image
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.lastUpdated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.author)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.verified)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.source_ID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.source_Link)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.country)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.mealTimeType)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
-                    @if (ViewBag.Admin == true || ViewBag.Username == item.author)
-                    {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
-                        @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
-                    }
-                </td>
-            </tr>
+            }
+
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
+                @if (ViewBag.Admin == true || ViewBag.Username == item.author)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
+                    @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
+                }
+            </td>
+        </tr>
         }
 
     </table>
