@@ -249,12 +249,10 @@ namespace CookingCurator.Controllers
         {
             var diet_num = ds.Diets.SingleOrDefault(d => d.dietName == diet_Name);
 
-            IEnumerable<RECIPE> recipes = ds.Recipes.SqlQuery("Select * FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
+            var recipes = ds.Recipes.SqlQuery("Select recipe_Id, title, rating, instructions, lastUpdated, author, verified, source_ID, source_Link, country, mealTimeType, content, 'Content-Type' AS 'Content_Type' FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
 
             return recipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(recipes);
         }
-
-
 
 
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
