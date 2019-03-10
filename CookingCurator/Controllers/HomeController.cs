@@ -95,9 +95,12 @@ namespace CookingCurator.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("AcceptWaiver", new { id = Id});
+                        return RedirectToAction("AcceptWaiver", new { id = Id });
                     }
-                    
+
+                } else if (m.isBanned(loginModel.userEmail)) {
+                    ModelState.AddModelError("", "User is banned");
+                    return View();
                 }
                 else
                 {
