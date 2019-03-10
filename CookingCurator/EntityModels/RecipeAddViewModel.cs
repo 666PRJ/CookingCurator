@@ -12,6 +12,7 @@ namespace CookingCurator.EntityModels
     {
         public int recipe_ID { get; set; }
         public int ingred_ID { get; set; }
+        public int diet_ID { get; set; }
     }
 
     public class RecipeAddViewForm
@@ -50,10 +51,21 @@ namespace CookingCurator.EntityModels
         [DisplayName("Meal Type")]
         public string mealTimeType { get; set; }
 
+        [HiddenInput]
+        public byte[] Content { get; set; }
+
+        [HiddenInput]
+        public string Content_Type { get; set; }
+
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 
         public IEnumerable<IngredientBaseViewModel> ingredients;
+
+        [DisplayName("Diet Types")]
+        public string[] selectedDietsId { get; set; }
+
+        public IEnumerable<DietDescViewModel> diets;
     }
 
     public class RecipeAddViewModel
@@ -133,9 +145,20 @@ namespace CookingCurator.EntityModels
         [DisplayName("Meal Type")]
         public string mealTimeType { get; set; }
 
+        [HiddenInput]
+        public byte[] Content { get; set; }
+
+        [HiddenInput]
+        public string Content_Type { get; set; }
+
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 
         public IEnumerable<IngredientBaseViewModel> ingredients;
+
+        [DisplayName("Diet Types")]
+        public string[] selectedDietsId { get; set; }
+
+        public IEnumerable<DietDescViewModel> diets;
     }
 }

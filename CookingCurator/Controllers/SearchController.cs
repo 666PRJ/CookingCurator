@@ -15,6 +15,7 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Search()
         {
+            m.isUserBanned();
             SearchViewModel search = new SearchViewModel();
             int[] ids = { 1, 2 };
             string[] stringSelection = { "Search By Ingred", "Search By Title" };
@@ -31,6 +32,18 @@ namespace CookingCurator.Controllers
         [HttpPost]
         public ActionResult Search(SearchViewModel searchModel)
         {
+            if (String.IsNullOrWhiteSpace(searchModel.searchString)) {
+                string[] stringSelection = { "Search By Ingred", "Search By Title" };
+                searchModel.list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text = "Search By Ingred", Value = "1", Selected = true },
+                new SelectListItem{ Text = "Search By Title", Value = "2" }
+            };
+                searchModel.searchSelection = stringSelection;
+                ViewBag.NoText = "Please input text";
+                return View("Search",searchModel);
+            }
+
             if (searchModel.searchSelection[0] == "1")
             {
                 var recipes = m.searchForRecipe(searchModel);

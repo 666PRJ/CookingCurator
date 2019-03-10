@@ -14,11 +14,13 @@ namespace CookingCurator.Controllers
 
         public ActionResult Index()
         {
+            m.isUserBanned();
             return View();
         }
 
         public ActionResult About()
         {
+            m.isUserBanned();
             return View();
         }
 
@@ -93,9 +95,12 @@ namespace CookingCurator.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("AcceptWaiver", new { id = Id});
+                        return RedirectToAction("AcceptWaiver", new { id = Id });
                     }
-                    
+
+                } else if (m.isBanned(loginModel.userEmail)) {
+                    ModelState.AddModelError("", "User is banned");
+                    return View();
                 }
                 else
                 {

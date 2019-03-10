@@ -20,8 +20,10 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
         {
-            var recipes = m.RecipeGetAll();
+            m.isUserBanned();
 
+            var recipes = m.RecipeGetAllWithImages();
+            
             ViewBag.Username = m.GetCurrentUsername();
 
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
@@ -38,7 +40,7 @@ namespace CookingCurator.Controllers
                 }
                 else if (!string.IsNullOrEmpty(mealType))
                 {
-                     recipes = m.FilterRecipesByCountry(countryName);
+                     recipes = m.FilterRecipesByMealType(mealType);
                 }
             }
             if (!string.IsNullOrEmpty(verified))
@@ -64,11 +66,15 @@ namespace CookingCurator.Controllers
         {
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
-
+            recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
+            if(recipe.Content != null && recipe.Content_Type != null)
+            {
+                string base64 = Convert.ToBase64String(recipe.Content);
+                recipe.fileResult = String.Format("data:{0};base64,{1}", recipe.Content_Type, base64);
+            }
             ViewBag.Username = m.GetCurrentUsername();
-
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
-
+            
             if (recipe == null)
                 return HttpNotFound();
             else
@@ -137,6 +143,10 @@ namespace CookingCurator.Controllers
 
             form.ingredients = m.IngredientGetAll();
             form.selectedIngredsId = new string[0];
+
+            form.diets = m.DietGetAll();
+            form.selectedDietsId = new string[0];
+
             return View(form);
         }
 
@@ -149,24 +159,95 @@ namespace CookingCurator.Controllers
             form.ingredients = m.IngredientGetAll();
             form.selectedIngredsId = new string[0];
 
+            form.diets = m.DietGetAll();
+            form.selectedDietsId = new string[0];
+
             return View(form);
         }
 
         //CreateVerified will be only avilable to admin
         // POST: Recipe/Create
         [HttpPost]
-        public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem)
+        public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem, HttpPostedFileBase file)
         {
             // Validate the input
             if (!ModelState.IsValid)
+            {
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
                 return View(newItem);
+            }
+
 
             try
             {
+
+                //Check for Diet conflict
+                bool compatDiet = true;
+
+                if (newItem.selectedDietsId.Length > 1)
+                {
+                    for (int i = 0; i < newItem.selectedDietsId.Length; i++)
+                    {
+                        //None apply cannot be selected with anything else
+                        if (newItem.selectedDietsId[i] == "10")
+                        {
+                            compatDiet = false;
+                        }
+
+                        //Vegan and Vegetarian shouldn't have meat
+                        if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
+                        {
+                            for (int j = 0; j < newItem.selectedDietsId.Length; j++)
+                            {
+                                if (newItem.selectedDietsId[j] != "6" && newItem.selectedDietsId[j] != "5" && newItem.selectedDietsId[j] != "8")
+                                {
+                                    compatDiet = false;
+                                }
+                            }
+                        }
+                    }
+
+                    if (compatDiet == false)
+                    {
+                        ModelState.AddModelError("", "Incompatable Diets Selected");
+                        newItem.ingredients = m.IngredientGetAll();
+                        newItem.selectedIngredsId = new string[0];
+                        newItem.diets = m.DietGetAll();
+                        newItem.selectedDietsId = new string[0];
+                        return View(newItem);
+                    }
+                }
+
                 // Process the input
                 newItem.verified = true;
                 newItem.rating = 0;
                 newItem.lastUpdated = DateTime.Now;
+                if(file != null && file.ContentLength > 0)
+                {
+                    if (file.ContentLength / 1024 > 50)
+                    {
+                        var form = new RecipeVerifiedAddViewModel();
+                        form.author = newItem.author;
+                        form.country = newItem.country;
+                        form.mealTimeType = newItem.mealTimeType;
+                        form.instructions = newItem.instructions;
+                        form.title = newItem.title;
+                        form.ingredients = m.IngredientGetAll();
+                        form.selectedIngredsId = new string[0];
+                        form.diets = m.DietGetAll();
+                        form.selectedDietsId = new string[0];
+                        ModelState.AddModelError("", "Image size should be less than 50kb");
+                        return View(form);
+                    }
+                    newItem.Content_Type = file.ContentType;
+                    using(var reader = new System.IO.BinaryReader(file.InputStream))
+                    {
+                        newItem.Content = reader.ReadBytes(file.ContentLength);
+                    }
+                }
                 var addedItem = m.RecipeVerifiedAdd(newItem);
 
                 addedItem = m.RecipeIDUpdate(addedItem);
@@ -185,18 +266,85 @@ namespace CookingCurator.Controllers
 
         // POST: Recipe/Create
         [HttpPost]
-        public ActionResult Create(RecipeAddViewForm newItem)
+        public ActionResult Create(RecipeAddViewForm newItem, HttpPostedFileBase file)
         {
             // Validate the input
             if (!ModelState.IsValid)
+            {
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
                 return View(newItem);
+            }
+                
 
             try
             {
+                //Check for Diet conflict
+                bool compatDiet = true;
+
+                if (newItem.selectedDietsId.Length > 1)
+                {
+                    for (int i = 0; i < newItem.selectedDietsId.Length; i++)
+                    {
+                        //None apply cannot be selected with anything else
+                        if (newItem.selectedDietsId[i] == "10")
+                        {
+                            compatDiet = false;
+                        }
+
+                        //Vegan and Vegetarian shouldn't have meat
+                        if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
+                        {
+                            for (int j = 0; j < newItem.selectedDietsId.Length; j++)
+                            {
+                                if (newItem.selectedDietsId[j] != "6" && newItem.selectedDietsId[j] != "5" && newItem.selectedDietsId[j] != "8")
+                                {
+                                    compatDiet = false;
+                                }
+                            }
+                        }
+                    }
+
+                    if (compatDiet == false)
+                    {
+                        ModelState.AddModelError("", "Incompatable Diets Selected");
+                        newItem.ingredients = m.IngredientGetAll();
+                        newItem.selectedIngredsId = new string[0];
+                        newItem.diets = m.DietGetAll();
+                        newItem.selectedDietsId = new string[0];
+                        return View(newItem);
+                    }
+                }
+
                 // Process the input
                 newItem.verified = false;
                 newItem.rating = 0;
                 newItem.lastUpdated = DateTime.Now;
+                if (file != null && file.ContentLength > 0)
+                {
+                    if (file.ContentLength / 1024 > 50)
+                    {
+                        var form = new RecipeVerifiedAddViewModel();
+                        form.author = newItem.author;
+                        form.country = newItem.country;
+                        form.mealTimeType = newItem.mealTimeType;
+                        form.instructions = newItem.instructions;
+                        form.title = newItem.title;
+                        form.ingredients = m.IngredientGetAll();
+                        form.selectedIngredsId = new string[0];
+                        form.diets = m.DietGetAll();
+                        form.selectedDietsId = new string[0];
+                        ModelState.AddModelError("", "Image size should be less than 50kb");
+                        return View(form);
+                    }
+                    newItem.Content_Type = file.ContentType;
+                    using (var reader = new System.IO.BinaryReader(file.InputStream))
+                    {
+                        newItem.Content = reader.ReadBytes(file.ContentLength);
+                    }
+                }
                 var addedItem = m.RecipeAdd(newItem);
 
                 addedItem = m.RecipeIDUpdate(addedItem);
@@ -219,44 +367,113 @@ namespace CookingCurator.Controllers
             if (!m.CanUserEdit(id.GetValueOrDefault())) {
                 return RedirectToAction("Index");
             }
-
-            Recipe_IngredViewModel recipes = new Recipe_IngredViewModel();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RecipeBaseViewModel recipe = m.RecipeGetById(id);
+
+            Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(id));
+
             IEnumerable<IngredientBaseViewModel> ingredients = m.IngredientGetAll();
             String[] selectedIngreds = m.ingredsForRecipe(id).ToArray();
+
+            IEnumerable<DietDescViewModel> diets = m.DietGetAll();
+            String[] selectedDiets = m.dietsForRecipe(id).ToArray();
+
             if (recipe == null)
             {
                 return HttpNotFound();
             }
-            recipes.recipe = recipe;
-            recipes.ingredients = ingredients;
-            recipes.selectedIngredsId = selectedIngreds;
-            return View(recipes);
+
+            recipe.ingredients = ingredients;
+            recipe.selectedIngredsId = selectedIngreds;
+            recipe.diets = diets;
+            recipe.selectedDietsId = selectedDiets;
+
+            if (recipe.Content != null && recipe.Content_Type != null)
+            {
+                string base64 = Convert.ToBase64String(recipe.Content);
+                recipe.fileResult = String.Format("data:{0};base64,{1}", recipe.Content_Type, base64);
+            }
+            return View(recipe);
         }
 
         // POST: Recipe/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Recipe_IngredViewModel recipes)
+        public ActionResult Edit(Recipe_IngredViewModel recipes, HttpPostedFileBase file)
         {
+            Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(recipes.recipe_Id));
+
+            IEnumerable<IngredientBaseViewModel> ingredients = m.IngredientGetAll();
+            String[] selectedIngreds = m.ingredsForRecipe(recipes.recipe_Id).ToArray();
+            IEnumerable<DietDescViewModel> diets = m.DietGetAll();
+            String[] selectedDiets = m.dietsForRecipe(recipes.recipe_Id).ToArray();
+
+            recipe.ingredients = ingredients;
+            recipe.selectedIngredsId = selectedIngreds;
+            recipe.diets = diets;
+            recipe.selectedDietsId = selectedDiets;
+
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (recipe.Content != null && recipe.Content_Type != null)
+            {
+                string base64 = Convert.ToBase64String(recipe.Content);
+                recipe.fileResult = String.Format("data:{0};base64,{1}", recipe.Content_Type, base64);
+            }
             if (!ModelState.IsValid)
             {
-                return View(recipes);
+                ModelState.AddModelError("", "Error while submitting the form. Please check the values submitted");
+                return View(recipe);
             }
 
             try
             {
 
+                //Check for Diet conflict
+                bool compatDiet = true;
+
+                if (recipes.selectedDietsId.Length > 1)
+                {
+                    for (int i = 0; i < recipes.selectedDietsId.Length; i++)
+                    {
+                        if (recipes.selectedDietsId[i] == "10")
+                        {
+                            compatDiet = false;
+                        }
+                    }
+
+                    if (compatDiet == false)
+                    {
+                        ModelState.AddModelError("", "Incompatable Diets Selected");
+                        return View(recipe);
+                    }
+                }
+                if (file != null && file.ContentLength > 0)
+                {
+                    if(file.ContentLength / 1024 > 50)
+                    {
+                        ModelState.AddModelError("", "Image size should be less than 50kb");
+                        return View(recipe);
+                    }
+                    recipes.Content_Type = file.ContentType;
+                    using (var reader = new System.IO.BinaryReader(file.InputStream))
+                    {
+                        recipes.Content = reader.ReadBytes(file.ContentLength);
+                    }
+                }
                 var editedrecipe = m.RecipeEdit(recipes);
 
                 if (editedrecipe == null)
                 {
-                    return View(recipes);
+                    ModelState.AddModelError("", "Error while editing a recipe. Please try again");
+                    return View(recipe);
                 }
+
                 else
                 {
                     return RedirectToAction("Details", new { id = editedrecipe.recipe_Id });
@@ -264,7 +481,8 @@ namespace CookingCurator.Controllers
             }
             catch
             {
-                return View(recipes);
+                ModelState.AddModelError("", "Error while editing a recipe. Please try again");
+                return View(recipe);
             }
         }
 

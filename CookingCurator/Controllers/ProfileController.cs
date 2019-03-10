@@ -29,24 +29,28 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult UserDashboard()
         {
+            m.isUserBanned();
             return View();
         }
 
         [Authorize]
         public ActionResult UserDoc()
         {
+            m.isUserBanned();
             return View();
         }
 
         [Authorize]
         public ActionResult ContactUs()
         {
+            m.isUserBanned();
             return View();
         }
 
         [Authorize]
         public ActionResult ChangeUsername()
         {
+            m.isUserBanned();
             ChangeUsernameViewModel username = new ChangeUsernameViewModel();
             username.userName = "";
             return View(username);
@@ -55,6 +59,7 @@ namespace CookingCurator.Controllers
         [HttpPost]
         public ActionResult ChangeUsername(ChangeUsernameViewModel newUsername)
         {
+            m.isUserBanned();
             if (!ModelState.IsValid)
             {
                 return View(newUsername);
