@@ -98,8 +98,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.selectedDietsId, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <p>User 'control + left click' to select mutiple</p>
-            @Html.ListBoxFor(model => model.selectedDietsId, new MultiSelectList(Model.diets, "diet_ID", "dietName"), new { id = "multiSelect", multiple = "multiple" })
+            @Html.ListBoxFor(model => model.selectedDietsId, new MultiSelectList(Model.diets, "diet_ID", "dietName"), new { id = "multiSelect2", multiple = "multiple" })
         </div>
     </div>
 
@@ -139,6 +138,11 @@
     <script>
         $(function () {
             $("#multiSelect").chosen({
+                width: "100%"
+            });
+        })
+        $(function () {
+            $("#multiSelect2").chosen({
                 width: "100%"
             });
         })
