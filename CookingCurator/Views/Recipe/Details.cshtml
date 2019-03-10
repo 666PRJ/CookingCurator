@@ -3,10 +3,11 @@
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var count = 0;
 }
 
 <header>
-    <h2>Recipe Details</h2>
+    <h2> @Html.DisplayFor(model => model.title)</h2>
     <h4>Detailed Recipe Information</h4>
     <h5> @Html.ActionLink("Bookmark this recipe", "BookmarkRecipe", new { id = Model.recipe_Id })</h5>
     <hr />
@@ -14,14 +15,6 @@
 
 <section>
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.title)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.rating)
         </dt>
@@ -47,7 +40,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.lastUpdated)
+            @Html.DisplayFor(model => model.lastUpdated.Day)/@Html.DisplayFor(model => model.lastUpdated.Month)/@Html.DisplayFor(model => model.lastUpdated.Year)
         </dd>
 
         <dt>
@@ -67,19 +60,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.source_ID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.source_ID)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.source_Link)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.source_Link)
+            <a href="@Html.DisplayFor(model => model.source_Link)" target="_blank">@Html.DisplayFor(model => model.source_Link)</a>
         </dd>
 
         <dt>
@@ -100,14 +85,22 @@
         <dt>
             Ingredients
         </dt>
-
         <dd>
-            @foreach (var p in Model.ingreds)
-            {
-                <span>@p.ingred_Name</span><br />
-            }
+            <ul class="list-group" style="margin-top:10px">
+                @foreach (var item in Model.ingreds)
+                {
+                    if (count % 2 == 0)
+                    {
+                        <li class="list-group-item" style="background-color:#E8E8E8">@Html.DisplayFor(modelItem => item.ingred_Name)</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">@Html.DisplayFor(modelItem => item.ingred_Name)</li>
+                    }
+                    count++;
+                }
+            </ul>
         </dd>
-
     </dl>
 </section>
 
@@ -122,14 +115,15 @@
 </aside>
 
 <footer>
-    <p>
-        @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
-        {
-            @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
-            @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
-        }
-        @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
-    </p>
+   
+        <p>
+            @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
+                @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
+            }
+            @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
+        </p>
 </footer>
 
 
