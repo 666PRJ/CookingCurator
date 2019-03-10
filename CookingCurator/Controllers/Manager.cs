@@ -112,6 +112,29 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
+        public bool isBanned(string username) {
+            USER current = ds.Users.SingleOrDefault(e => e.userName == username);
+
+            return current.banUser;
+        }
+
+        public bool isUserBanned()
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+
+            if (String.IsNullOrEmpty(username)) {
+                return false;
+            }
+
+            USER current = ds.Users.SingleOrDefault(e => e.userName == username);
+
+            if (current.banUser) {
+                FormsAuthentication.SignOut();
+            }
+
+            return current.banUser;
+        }
+
         public ChangeUsernameViewModel GetUsername()
         {
             string username = HttpContext.Current.User.Identity.Name;

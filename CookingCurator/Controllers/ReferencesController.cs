@@ -12,6 +12,7 @@ namespace CookingCurator.Controllers
         // GET: References
         public ActionResult Index()
         {
+            m.isUserBanned();
             var t = m.RecipeSourceGetAll();
             return View(t);
         }
