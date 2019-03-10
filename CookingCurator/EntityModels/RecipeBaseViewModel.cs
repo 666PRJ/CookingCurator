@@ -26,9 +26,12 @@ namespace CookingCurator.EntityModels
         public RecipeWithIngredBaseViewModel()
         {
             ingreds = new List<IngredientBaseViewModel>();
+            diets = new List<DietDescViewModel>();
         }
 
         public IEnumerable<IngredientBaseViewModel> ingreds { get; set; }
+
+        public IEnumerable<DietDescViewModel> diets { get; set; }
 
         public byte[] Content { get; set; }
 

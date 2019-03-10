@@ -281,22 +281,25 @@ namespace CookingCurator.Controllers
         {
             var diet_num = ds.Diets.SingleOrDefault(d => d.dietName == diet_Name);
 
-            IEnumerable<RECIPE> recipes = ds.Recipes.SqlQuery("Select * FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
+            var recipes = ds.Recipes.SqlQuery("Select recipe_Id, title, rating, instructions, lastUpdated, author, verified, source_ID, source_Link, country, mealTimeType, content, 'Content-Type' AS 'Content_Type' FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID = " + diet_num.diet_ID + ")");
 
             return recipes == null ? null : mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeBaseViewModel>>(recipes);
         }
 
 
-
-
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
             recipe.author = HttpContext.Current.User.Identity.Name;
-            // Attempt to add the new item.
-            // Notice how we map the incoming data to the Customer design model class.
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
+
+            //Ingredient management
             deleteIngredients(addedItem.recipe_ID);
             addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
+
+            //Diet management
+            deleteDiets(addedItem.recipe_ID);
+            addDietsForRecipes(addedItem.recipe_ID, recipe.selectedDietsId);
+
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -318,11 +321,17 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)
         {
-            // Attempt to add the new item.
-            // Notice how we map the incoming data to the Customer design model class.
+
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
+
+            //Ingredient management
             deleteIngredients(addedItem.recipe_ID);
             addIngredientsForRecipes(addedItem.recipe_ID, recipe.selectedIngredsId);
+
+            //Diet management
+            deleteDiets(addedItem.recipe_ID);
+            addDietsForRecipes(addedItem.recipe_ID, recipe.selectedDietsId);
+
             ds.SaveChanges();
 
             // If successful, return the added item (mapped to a view model class).
@@ -369,6 +378,12 @@ namespace CookingCurator.Controllers
             {
                 addIngredientsForRecipes(recipeIng.recipe_Id, recipeIng.selectedIngredsId);
             }
+            deleteDiets(recipeIng.recipe_Id);
+            if (recipeIng.selectedDietsId != null)
+            {
+                addDietsForRecipes(recipeIng.recipe_Id, recipeIng.selectedDietsId);
+            }
+
             // Attempt to save the edited recipe.
             ds.SaveChanges();
 
@@ -379,6 +394,7 @@ namespace CookingCurator.Controllers
         public void RecipeDelete(int id)
         {
             deleteIngredients(id);
+            deleteDiets(id);
             var recipe = ds.Recipes.Find(id);
             ds.Recipes.Remove(recipe);
             ds.SaveChanges();
@@ -495,6 +511,51 @@ namespace CookingCurator.Controllers
             ds.Database.ExecuteSqlCommand("delete from RECIPE_INGREDS where recipe_Id = " + id);
             ds.SaveChanges();
         }
+
+        public void deleteDiets(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from DIET_RECIPES where recipe_Id = " + id);
+            ds.SaveChanges();
+        }
+
+        public void addDietsForRecipes(int id, String[] selectedIds)
+        {
+            for (int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO DIET_RECIPES (recipe_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public List<String> dietsForRecipe(int? id)
+        {
+            List<String> selectedDiets = new List<string>();
+            IEnumerable<DIET_RECIPES> diets = ds.Diet_Recipes.SqlQuery("Select * from DIET_RECIPES where recipe_Id = " + id);
+            foreach (var item in diets)
+            {
+                selectedDiets.Add(item.diet_ID.ToString());
+            }
+            return selectedDiets;
+        }
+
+        public IEnumerable<DietDescViewModel> dietsForRecipeViewModel(int? id)
+        {
+            List<int> selectedDiets = new List<int>();
+            IEnumerable<DIET_RECIPES> diets = ds.Diet_Recipes.SqlQuery("Select * from DIET_RECIPES where recipe_Id = " + id);
+            foreach (var item in diets)
+            {
+                selectedDiets.Add(item.diet_ID);
+            }
+
+            List<DIET> baseDiets = new List<DIET>();
+            foreach (var item in selectedDiets)
+            {
+                baseDiets.Add(ds.Diets.SingleOrDefault(e => e.diet_ID == item));
+            }
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(baseDiets);
+        }
+
 
         public IEnumerable<UserBaseViewModel> UserFindAll()
         {

@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool checkEmpty = Model.diets.Any();
     var count = 0;
 }
 
@@ -101,7 +102,25 @@
                 }
             </ul>
         </dd>
+
+        @if (checkEmpty)
+        {
+            <dt>
+                Applicable Diets:
+            </dt>
+
+            <dd>
+                <ul class="list-group" style="margin-top:10px">
+                    @foreach (var d in Model.diets)
+                    {
+                        <li class="list-group-item" style="background-color:#E8E8E8">@d.dietName</li>
+                    }
+                </ul>
+            </dd>
+        }
+
     </dl>
+
 </section>
 
 <aside>

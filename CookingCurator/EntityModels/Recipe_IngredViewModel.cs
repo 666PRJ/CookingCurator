@@ -22,5 +22,10 @@ namespace CookingCurator.EntityModels
 
         public string fileResult { get; set; }
 
+        [DisplayName("Diet Types")]
+        public string[] selectedDietsId { get; set; }
+
+        public IEnumerable<DietDescViewModel> diets;
+
     }
 }

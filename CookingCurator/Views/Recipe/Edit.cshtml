@@ -93,22 +93,29 @@
         <div class="col-md-10">
             @Html.ListBoxFor(model => model.selectedIngredsId, new MultiSelectList(Model.ingredients, "ingred_ID", "ingred_Name"), new { id = "multiSelect", multiple = "multiple" })
         </div>
-
     </div>
 
-    @if(!String.IsNullOrEmpty(@Model.fileResult)){
     <div class="form-group">
-        @Html.Label("Recipe Image", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10" id="divImg" style="height:200px;width:200px;">
-            <img src="@Model.fileResult" style="height:200px" alt="Recipe Image" />
+        @Html.LabelFor(model => model.selectedDietsId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(model => model.selectedDietsId, new MultiSelectList(Model.diets, "diet_ID", "dietName"), new { id = "multiSelect2", multiple = "multiple" })
         </div>
     </div>
+
+    @if (!String.IsNullOrEmpty(@Model.fileResult))
+    {
+        <div class="form-group">
+            @Html.Label("Recipe Image", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" id="divImg" style="height:200px;width:200px;">
+                <img src="@Model.fileResult" style="height:200px" alt="Recipe Image" />
+            </div>
+        </div>
     }
 
     <div class="form-group">
         @Html.Label("Alter Image", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="file" id="file" name="file" style="margin-bottom:5px"/>
+            <input type="file" id="file" name="file" style="margin-bottom:5px" />
             <span style="color:#989898">Note: Image size should be less than 50kb.</span>
         </div>
     </div>
@@ -131,6 +138,11 @@
     <script>
         $(function () {
             $("#multiSelect").chosen({
+                width: "100%"
+            });
+        })
+        $(function () {
+            $("#multiSelect2").chosen({
                 width: "100%"
             });
         })
