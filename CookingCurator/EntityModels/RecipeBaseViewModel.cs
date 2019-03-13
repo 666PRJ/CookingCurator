@@ -21,6 +21,11 @@ namespace CookingCurator.EntityModels
 
     }
 
+    public class RecipeMatchViewModel : RecipeBaseViewModel
+    {
+        public IEnumerable<string> matchIngreds { get; set; }
+    }
+
     public class RecipeWithIngredBaseViewModel : RecipeBaseViewModel
     {
         public RecipeWithIngredBaseViewModel()

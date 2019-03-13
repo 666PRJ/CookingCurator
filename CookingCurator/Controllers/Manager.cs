@@ -42,6 +42,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<RECIPE, RecipeWithIngredBaseViewModel>();
 
+                cfg.CreateMap<RECIPE, RecipeMatchViewModel>();
+
                 cfg.CreateMap<RecipeBaseViewModel, RECIPE>();
 
                 cfg.CreateMap<RECIPE, RecipeSourceViewModel>();
@@ -113,7 +115,7 @@ namespace CookingCurator.Controllers
         // ProductDelete()
 
 
-        public List<RecipeBaseViewModel> giveRecommendations(List<String> ingreds, int id)
+        public List<RecipeMatchViewModel> giveRecommendations(List<String> ingreds, int id)
         {
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
@@ -134,8 +136,22 @@ namespace CookingCurator.Controllers
 
             recipes = recipes.Where(x => x.recipe_ID != id).ToList();
 
-            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
+            //ingredsForRecipeViewModel
+
+            List<RecipeMatchViewModel> convertRecipes = mapper.Map<List<RECIPE>, List<RecipeMatchViewModel>>(recipes);
+            foreach (var item in convertRecipes) {
+                var stuff = ingredsForRecipeViewModel(item.recipe_Id);
+                List<String> ingredForNew = new List<String>();
+                foreach (var newIngred in stuff) {
+                    ingredForNew.Add(newIngred.ingred_Name);
+                }
+                item.matchIngreds = ingreds.ToArray().Intersect(ingredForNew.ToArray());
+            }
+
+            return mapper.Map<List<RECIPE>, List<RecipeMatchViewModel>>(recipes);
         }
+
+
 
         public bool isBanned(string username) {
             USER current = ds.Users.SingleOrDefault(e => e.userName == username);
