@@ -166,6 +166,15 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool IsUsernameSpace(string username) {
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(username))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool ChangeUsername(ChangeUsernameViewModel newUsername) {
             var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
             var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
@@ -174,12 +183,6 @@ namespace CookingCurator.Controllers
             }
             if (duplicateFound.Count() > 0) {
                 return false;
-            }
-          
-            Regex r = new Regex("^[a-zA-Z0-9_]*$");
-            if (!r.IsMatch(newUsername.userName))
-            {
-	            return false;
             }
 
             var userRecipe = ds.Recipes.Where(e => e.author == user.userName);
