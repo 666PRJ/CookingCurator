@@ -115,7 +115,12 @@ namespace CookingCurator.Controllers
         public bool isBanned(string username) {
             USER current = ds.Users.SingleOrDefault(e => e.userName == username);
 
-            return current.banUser;
+            if (current != null) {
+                return current.banUser;
+            }
+
+            return false;
+
         }
 
         public bool isUserBanned()
