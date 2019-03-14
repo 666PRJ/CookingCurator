@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -115,7 +116,12 @@ namespace CookingCurator.Controllers
         public bool isBanned(string username) {
             USER current = ds.Users.SingleOrDefault(e => e.userName == username);
 
-            return current.banUser;
+            if (current != null) {
+                return current.banUser;
+            }
+
+            return false;
+
         }
 
         public bool isUserBanned()
@@ -166,6 +172,15 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool IsUsernameSpace(string username) {
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(username))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool ChangeUsername(ChangeUsernameViewModel newUsername) {
             var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
             var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
@@ -174,12 +189,6 @@ namespace CookingCurator.Controllers
             }
             if (duplicateFound.Count() > 0) {
                 return false;
-            }
-          
-            Regex r = new Regex("^[a-zA-Z0-9_]*$");
-            if (!r.IsMatch(newUsername.userName))
-            {
-	            return false;
             }
 
             var userRecipe = ds.Recipes.Where(e => e.author == user.userName);
@@ -207,8 +216,8 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
-
-            if (user.password != newPassword.OldPassword)
+            var pass = HashPasswordLogin(newPassword.OldPassword, user.salt);
+            if (user.password != pass)
             {
                 return false;
             }
@@ -223,9 +232,9 @@ namespace CookingCurator.Controllers
                 return false;
             }
 
-            user.password = newPassword.password;
-            ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
-
+            var hashedPw = HashPasswordLogin(newPassword.password, user.salt);
+            String query = "UPDATE USERS SET password = \"" + hashedPw + "\" WHERE userEmail = \"" + user.userEmail + "\"";
+            ds.Database.ExecuteSqlCommand(query);
             ds.SaveChanges();
 
             FormsAuthentication.SignOut();
@@ -700,32 +709,100 @@ namespace CookingCurator.Controllers
             }
 
         }
-
+        private List<String> HashPasswordRegister(string password)
+        {
+            List<String> passwordAndSalt = new List<string>();
+            RNGCryptoServiceProvider salt = new RNGCryptoServiceProvider();
+            byte[] saltBytes = new byte[20];
+            salt.GetBytes(saltBytes);
+            var sal = Convert.ToBase64String(saltBytes);
+            var hasPassword = password + sal;
+            HashAlgorithm hashAlg = new SHA256CryptoServiceProvider();
+            byte[] hashBytes = Encoding.UTF8.GetBytes(hasPassword);
+            byte[] hashed = hashAlg.ComputeHash(hashBytes);
+            passwordAndSalt.Add(Convert.ToBase64String(saltBytes));
+            passwordAndSalt.Add(Convert.ToBase64String(hashed));
+            return passwordAndSalt;
+        }
+        private String HashPasswordLogin(string password, string salt)
+        {
+            var hashedPassword = password + salt;
+            HashAlgorithm hashAlg = new SHA256CryptoServiceProvider();
+            byte[] hashBytes = Encoding.UTF8.GetBytes(hashedPassword);
+            byte[] hashed = hashAlg.ComputeHash(hashBytes);
+            return Convert.ToBase64String(hashed);
+        }
         public bool LoginUser(LoginViewModel loginModel)
         {
-            var loggedInUserName = ds.Users.Where(x => x.userName == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
-
-            if (loggedInUserName != null)
+            var loggedInUserName = ds.Users.Where(x => x.userName == loginModel.userEmail).FirstOrDefault();
+            if(loggedInUserName != null)
             {
-                if (loggedInUserName.banUser == true)
+                if(loggedInUserName.salt.Length < 4)
+                {
+                    if(loggedInUserName.password == loginModel.password)
+                    {
+                        List<String> hash = HashPasswordRegister(loginModel.password);
+                        String query = "UPDATE USERS SET password='" + hash.ElementAt(1) + "', salt='" + hash.ElementAt(0) + "' WHERE userName = '" + loggedInUserName.userName + "'";
+                        ds.Database.ExecuteSqlCommand(query);
+                        ds.SaveChanges();
+                        FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                var hashedPassword = HashPasswordLogin(loginModel.password, loggedInUserName.salt);
+                if(loggedInUserName.password == hashedPassword)
+                {
+                    if (loggedInUserName.banUser == true)
+                    {
+                        return true;
+                    }
+                    FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
+                    return false;
+                }
+                else
                 {
                     return true;
                 }
-                FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
-                return false;
             }
 
-            var loggedInEmail = ds.Users.Where(x => x.userEmail == loginModel.userEmail && x.password == loginModel.password).FirstOrDefault();
+            var loggedInEmail = ds.Users.Where(x => x.userEmail == loginModel.userEmail).FirstOrDefault();
             if (loggedInEmail != null)
             {
-                if (loggedInEmail.banUser == true)
+                if (loggedInEmail.salt == null)
+                {
+                    if (loggedInEmail.password == loginModel.password)
+                    {
+                        List<String> hash = HashPasswordRegister(loggedInEmail.password);
+                        String query = "UPDATE USERS SET password='" + hash.ElementAt(1) + "', salt='" + hash.ElementAt(0) + "' WHERE userEmail = '" + loggedInEmail.userEmail + "'";
+                        ds.Database.ExecuteSqlCommand(query);
+                        ds.SaveChanges();
+                        FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                var hashedPassword = HashPasswordLogin(loginModel.password, loggedInEmail.salt);
+                if (loggedInEmail.password == hashedPassword)
+                {
+                    if (loggedInEmail.banUser == true)
+                    {
+                        return true;
+                    }
+                    FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
+                    return false;
+                }
+                else
                 {
                     return true;
                 }
-                FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
-                return false;
             }
-
             return true;
         }
 
@@ -763,6 +840,7 @@ namespace CookingCurator.Controllers
                 return true;
             }
 
+            List<String> hashPassword = HashPasswordRegister(registerModel.password);
             registerModel.acceptWaiver = false;
             registerModel.banUser = false;
             registerModel.email_Verified = false;
@@ -772,6 +850,9 @@ namespace CookingCurator.Controllers
             ds.SaveChanges();
             if (addedItem != null)
             {
+                String query = "UPDATE USERS SET password='" + hashPassword.ElementAt(1) + "', salt='" + hashPassword.ElementAt(0) +"' WHERE userEmail = '" + addedItem.userEmail + "'";
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
                 FormsAuthentication.SetAuthCookie(addedItem.userName, false);
                 bool verifyEmailSent = SendEmailVerification(registerModel.GUID, registerModel.userEmail);
                 if (verifyEmailSent)
@@ -809,7 +890,7 @@ namespace CookingCurator.Controllers
 
             try
             {
-                String query = "UPDATE USERS SET GUID = \"" + recoverModel.GUID + "\" WHERE userEmail = \"" + recoverModel.userEmail + "\"";
+                String query = "UPDATE USERS SET GUID = \"" + recoverModel.GUID + "\" WHERE userEmail = '" + recoverModel.userEmail + "'";
                 ds.Database.ExecuteSqlCommand(query);
                 ds.SaveChanges();
             }
@@ -830,12 +911,8 @@ namespace CookingCurator.Controllers
 
         public void AccountVerification(string id)
         {
-            var user = ds.Users.Where(a => a.GUID.Equals(id)).FirstOrDefault();
-            if (user != null)
-            {
-                user.email_Verified = true;
-                ds.SaveChanges();
-            }
+            String query = "UPDATE USERS SET email_Verified = 1 WHERE GUID = '" + id + "'";
+            ds.Database.ExecuteSqlCommand(query);
         }
 
         public bool logoutUser()
@@ -965,9 +1042,11 @@ namespace CookingCurator.Controllers
 
         public bool ChangePW(RecoverViewModel resetPW)
         {
+            var user = ds.Users.Where(u => u.GUID == resetPW.GUID).FirstOrDefault();
+            var hashedPw = HashPasswordLogin(resetPW.password, user.salt);
             try
             {
-                String query = "UPDATE USERS SET password = \"" + resetPW.password + "\" WHERE GUID = \"" + resetPW.GUID + "\"";
+                String query = "UPDATE USERS SET password = \"" + hashedPw + "\" WHERE GUID = \"" + resetPW.GUID + "\"";
                 ds.Database.ExecuteSqlCommand(query);
                 ds.SaveChanges();
                 return true;
