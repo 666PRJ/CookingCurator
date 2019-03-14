@@ -34,6 +34,12 @@ namespace CookingCurator.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!m.IsUsernameSpace(registerModel.userName))
+                {
+                    ModelState.AddModelError("", "No spaces in Username");
+                    return View();
+                }
+
                 bool error = m.RegisterUser(registerModel);
                 if (!error)
                 {

@@ -65,6 +65,12 @@ namespace CookingCurator.Controllers
                 return View(newUsername);
             }
 
+            if (!m.IsUsernameSpace(newUsername.userName))
+            {
+                newUsername.ErrorMessage = "No spaces in username";
+                return View(newUsername);
+            }
+
             bool isDup = m.IsDupUserName(newUsername);
 
             if (isDup == false) {
