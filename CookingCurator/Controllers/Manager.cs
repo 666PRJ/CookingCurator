@@ -740,6 +740,8 @@ namespace CookingCurator.Controllers
                         String query = "UPDATE USERS SET password='" + hash.ElementAt(1) + "', salt='" + hash.ElementAt(0) + "' WHERE userName = '" + loggedInUserName.userName + "'";
                         ds.Database.ExecuteSqlCommand(query);
                         ds.SaveChanges();
+                        FormsAuthentication.SetAuthCookie(loggedInUserName.userName, false);
+                        return false;
                     }
                     else
                     {
@@ -773,6 +775,8 @@ namespace CookingCurator.Controllers
                         String query = "UPDATE USERS SET password='" + hash.ElementAt(1) + "', salt='" + hash.ElementAt(0) + "' WHERE userEmail = '" + loggedInEmail.userEmail + "'";
                         ds.Database.ExecuteSqlCommand(query);
                         ds.SaveChanges();
+                        FormsAuthentication.SetAuthCookie(loggedInEmail.userName, false);
+                        return false;
                     }
                     else
                     {
