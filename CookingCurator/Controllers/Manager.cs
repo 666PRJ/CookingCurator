@@ -113,6 +113,31 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
+
+        public List<RecipeBaseViewModel> giveRecommendations(List<String> ingreds, int id)
+        {
+            List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
+            List<RECIPE> recipes = new List<RECIPE>();
+            foreach (var item in ingreds)
+            {
+                IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item);
+                recipesIngreds.AddRange(bridge);
+
+            }
+
+            foreach (var item in recipesIngreds)
+            {
+                IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
+                recipes.AddRange(derp);
+            }
+
+            recipes = recipes.Distinct().ToList();
+
+            recipes = recipes.Where(x => x.recipe_ID != id).ToList();
+
+            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
+        }
+
         public bool isBanned(string username) {
             USER current = ds.Users.SingleOrDefault(e => e.userName == username);
 
