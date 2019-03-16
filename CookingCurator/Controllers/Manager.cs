@@ -737,7 +737,7 @@ namespace CookingCurator.Controllers
             //no duplicate email
             var loggedInUserEmail = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
 
-            var loggedInUserName = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+            var loggedInUserName = ds.Users.Where(x => x.userName == registerModel.userName).Count();
 
             if (loggedInUserEmail > 0)
             {
