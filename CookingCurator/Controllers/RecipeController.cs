@@ -62,8 +62,9 @@ namespace CookingCurator.Controllers
 
         // GET: Recipe/Details/5
         [Authorize]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string bookMarkError)
         {
+            
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
             recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
@@ -80,6 +81,10 @@ namespace CookingCurator.Controllers
                 return HttpNotFound();
             else
             {
+                if (!String.IsNullOrEmpty(bookMarkError))
+                {
+                    ViewBag.error = bookMarkError;
+                }
                 return View(recipe);
             }
                 
@@ -577,6 +582,10 @@ namespace CookingCurator.Controllers
             if(ID == null)
             {
                 return View("Details", new { id = ID});
+            }
+            if(m.GetAllBookmarks().Count() >= 50)
+            {
+                return RedirectToAction("Details", new { id = ID, bookMarkError = "You can only Bookmark 50 Recipes, please delete some bookmarks and try again." });
             }
             var error = m.BookMarkRecipe(ID.GetValueOrDefault());
             if(error == 0)

@@ -644,6 +644,15 @@ namespace CookingCurator.Controllers
             return user.userName;
         }
 
+        public string GetCurrentUserEmail()
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var user = ds.Users.SingleOrDefault(u => u.userName == username);
+
+            return user.userEmail;
+        }
+
         public UserBaseViewModel GetUserById(int? id)
         {
             //Find user from their unique ID number

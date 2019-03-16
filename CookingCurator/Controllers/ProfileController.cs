@@ -44,7 +44,10 @@ namespace CookingCurator.Controllers
         public ActionResult ContactUs()
         {
             m.isUserBanned();
-            return View();
+            String email = m.GetCurrentUserEmail();
+            ContactUsViewModel model = new ContactUsViewModel();
+            model.emailAddress = email;
+            return View(model);
         }
 
         [Authorize]
@@ -110,7 +113,6 @@ namespace CookingCurator.Controllers
         public ActionResult ChangePassword()
         {
             ChangePasswordViewModel model = new ChangePasswordViewModel();
-
             model.ErrorMessage = "";
 
             return View(model);
