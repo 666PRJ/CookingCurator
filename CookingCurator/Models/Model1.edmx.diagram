@@ -16,6 +16,8 @@
         <EntityTypeShape EntityType="prj666_191a03Model.RECIPE_INGREDS" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="prj666_191a03Model.RECIPE_USERS" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="prj666_191a03Model.DIET_RECIPES" Width="1.5" PointX="3.375" PointY="8.75" />
+        <EntityTypeShape EntityType="prj666_191a03Model.USER_ALLERGIES" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="prj666_191a03Model.USER_DIETS" Width="1.5" PointX="0.75" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
