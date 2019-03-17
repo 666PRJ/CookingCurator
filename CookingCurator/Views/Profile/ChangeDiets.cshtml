@@ -1,0 +1,68 @@
+﻿@model CookingCurator.EntityModels.ChangeDietsViewModel
+
+@{
+    ViewBag.Title = "Change Diets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool checkEmpty = Model.chosenDiets.Any();
+}
+
+<h2>Change Diets</h2>
+
+<p>Choose diets you follow and you will only see recipes that fit your selected diets in our application!</p>
+<p>You can select multiple diets.</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <dt>
+        Your Diets:
+    </dt>
+
+    <dd class="col">
+        @if (checkEmpty)
+        {
+            <ul class="list-group" style="margin-top:10px">
+
+                @foreach (var d in Model.chosenDiets)
+                {
+                    <li class="list-group-item" style="background-color:#E8E8E8">@d.dietName</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>You have selected no diets!</p>
+        }
+
+    </dd>
+    <br />
+    <dt>
+
+    </dt>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.selectedDietsId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(model => model.selectedDietsId, new MultiSelectList(Model.allDiets, "diet_ID", "dietName"), new { id = "multiSelect", multiple = "multiple" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Change Diets" class="btn btn-default" style="margin-top:10px" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to User Dashboard", "UserDashboard")
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $("#multiSelect").chosen({
+                width: "100%"
+            });
+        })
+    </script>
+}

@@ -552,11 +552,43 @@ namespace CookingCurator.Controllers
             ds.SaveChanges();
         }
 
+        public void DeleteDietsForUser(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from USER_DIETS where user_Id = " + id);
+            ds.SaveChanges();
+        }
+
+        public void DeleteAllergiesForUser(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from USER_ALLERGIES where user_Id = " + id);
+            ds.SaveChanges();
+        }
+
         public void addDietsForRecipes(int id, String[] selectedIds)
         {
             for (int i = 0; i < selectedIds.Length; i++)
             {
                 String query = "INSERT INTO DIET_RECIPES (recipe_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public void UpdateDietsForUser(int id, String[] selectedIds)
+        {
+            for (int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO USER_DIETS (user_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public void UpdateAllergiesForUser(int id, String[] selectedIds)
+        {
+            for (int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO USER_ALLERGIES (user_ID, allergy_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
                 ds.Database.ExecuteSqlCommand(query);
             }
             ds.SaveChanges();
@@ -571,6 +603,69 @@ namespace CookingCurator.Controllers
                 selectedDiets.Add(item.diet_ID.ToString());
             }
             return selectedDiets;
+        }
+
+        public IEnumerable<DietDescViewModel> DietsForChangeScreen()
+        {
+            List<String> selectedDiets = new List<string>();
+            IEnumerable<DIET> diets = ds.Diets.SqlQuery("Select * from DIETS where diet_Id!=10");
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(diets);
+        }
+
+        public List<String> DietsForUser(int? id)
+        {
+            List<String> selectedDiets = new List<string>();
+            IEnumerable<USER_DIETS> diets = ds.User_Diets.SqlQuery("Select * from USER_DIETS where user_Id = " + id);
+            foreach (var item in diets)
+            {
+                selectedDiets.Add(item.diet_Id.ToString());
+            }
+            return selectedDiets;
+        }
+
+        public List<String> AllergiesForUser(int? id)
+        {
+            List<String> selectedAllergies = new List<string>();
+            IEnumerable<USER_ALLERGIES> allergies = ds.User_Allergies.SqlQuery("Select * from USER_ALLERGIES where user_Id = " + id);
+            foreach (var item in allergies)
+            {
+                selectedAllergies.Add(item.allergy_Id.ToString());
+            }
+            return selectedAllergies;
+        }
+
+        public IEnumerable<DietDescViewModel> DietsForUserProfile(int? id)
+        {
+            List<int> selectedDiets = new List<int>();
+            IEnumerable<USER_DIETS> diets = ds.User_Diets.SqlQuery("Select * from USER_DIETS where user_Id = " + id);
+            foreach (var item in diets)
+            {
+                selectedDiets.Add(item.diet_Id);
+            }
+
+            List<DIET> baseDiets = new List<DIET>();
+            foreach (var item in selectedDiets)
+            {
+                baseDiets.Add(ds.Diets.SingleOrDefault(e => e.diet_ID == item));
+            }
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(baseDiets);
+        }
+
+        public IEnumerable<AllergyViewModel> AllergiesForUserProfile(int? id)
+        {
+            List<int> selectedAllergies = new List<int>();
+            IEnumerable<USER_ALLERGIES> allergies = ds.User_Allergies.SqlQuery("Select * from USER_ALLERGIES where user_Id = " + id);
+            foreach (var item in allergies)
+            {
+                selectedAllergies.Add(item.allergy_Id);
+            }
+
+            List<ALLERGY> baseAllergies = new List<ALLERGY>();
+            foreach (var item in selectedAllergies)
+            {
+                baseAllergies.Add(ds.Allergies.SingleOrDefault(e => e.allergy_ID == item));
+            }
+            return mapper.Map<IEnumerable<ALLERGY>, IEnumerable<AllergyViewModel>>(baseAllergies);
         }
 
         public IEnumerable<DietDescViewModel> dietsForRecipeViewModel(int? id)
