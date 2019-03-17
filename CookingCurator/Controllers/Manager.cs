@@ -276,9 +276,14 @@ namespace CookingCurator.Controllers
 
         public IEnumerable<RecipeWithImagesViewModel> RecipeGetAllWithImages()
         {
-            // The ds object is the data store
-            // It has a collection for each entity it manages
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes);
+        }
+
+        public IEnumerable<RecipeWithImagesViewModel> RecipeGetFilteredByDietWithImages(int idNum)
+        {
+            var recipes = ds.Recipes.SqlQuery("Select recipe_Id, title, rating, instructions, lastUpdated, author, verified, source_ID, source_Link, country, mealTimeType, content, 'Content-Type' AS 'Content_Type' FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID IN (SELECT diet_Id FROM USER_DIETS WHERE user_Id =" + idNum + "))");
+
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(recipes);
         }
 
         public RecipeBaseViewModel RecipeGetById(int? id)
