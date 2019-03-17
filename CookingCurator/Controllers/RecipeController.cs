@@ -22,6 +22,10 @@ namespace CookingCurator.Controllers
         {
             m.isUserBanned();
 
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var recipes = m.RecipeGetAllWithImages();
             
             ViewBag.Username = m.GetCurrentUsername();
@@ -64,7 +68,10 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Details(int? id, string bookMarkError)
         {
-            
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
             recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
@@ -145,6 +152,10 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var form = new RecipeAddViewForm();
 
             form.ingredients = m.IngredientGetAll();
@@ -516,50 +527,22 @@ namespace CookingCurator.Controllers
             {
                 m.RecipeDelete(id);
             }
-            catch (DbEntityValidationException vex)
-            {
-                foreach (var error in vex.EntityValidationErrors)
-                {
-                    foreach (var errorMsg in error.ValidationErrors)
-                    {
-                        // logging service based on NLog
-                        Console.WriteLine($"Error trying to save EF changes - {errorMsg.ErrorMessage}");
-                    }
-                }
-
-                throw;
-            }
-            catch (DbUpdateException dbu)
-            {
-                var exception = HandleDbUpdateException(dbu);
-                throw exception;
-            }
-            return RedirectToAction("Index");
-        }
-        private Exception HandleDbUpdateException(DbUpdateException dbu)
-        {
-            var builder = new StringBuilder("A DbUpdateException was caught while saving changes. ");
-
-            try
-            {
-                foreach (var result in dbu.Entries)
-                {
-                    builder.AppendFormat("Type: {0} was part of the problem. ", result.Entity.GetType().Name);
-                }
-            }
             catch (Exception e)
             {
-                builder.Append("Error parsing DbUpdateException: " + e.ToString());
+                ModelState.AddModelError("", "Error deleting recipe... Please try again");
+                return View(id);
             }
-
-            string message = builder.ToString();
-            return new Exception(message, dbu);
+            return RedirectToAction("Index");
         }
 
         [Authorize]
         [Route("User/AuthorProfile")]
         public ActionResult Authors(string authorName)
         {
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var r = m.RecipesByAuthor(authorName);
             return View(r);
         }

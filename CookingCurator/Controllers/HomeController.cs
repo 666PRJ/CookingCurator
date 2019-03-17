@@ -136,8 +136,12 @@ namespace CookingCurator.Controllers
         }
 
         [HttpGet]
-        public ActionResult AcceptWaiver(String Id)
+        public ActionResult AcceptWaiver(String Id, String error)
         {
+            if (!String.IsNullOrEmpty(error))
+            {
+                ViewBag.error = error;
+            }
             int id = Convert.ToInt32(Id);
             UserBaseViewModel user = m.GetUserById(id);
             UserAcceptWaiverViewModel acceptWaiverUser = m.mapper.Map<UserBaseViewModel, UserAcceptWaiverViewModel>(user);

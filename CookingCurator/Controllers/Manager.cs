@@ -1058,6 +1058,26 @@ namespace CookingCurator.Controllers
             }
         }
 
+        public bool waiverAccepted()
+        {
+            var username = GetCurrentUsername();
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            if (user.acceptWaiver)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetCurrentUserId()
+        {
+            var username = GetCurrentUsername();
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            return user.user_ID;
+        }
         public bool AcceptWaiverByUser(UserAcceptWaiverViewModel user)
         {
             try

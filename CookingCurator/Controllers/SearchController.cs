@@ -16,6 +16,10 @@ namespace CookingCurator.Controllers
         public ActionResult Search()
         {
             m.isUserBanned();
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             SearchViewModel search = new SearchViewModel();
             int[] ids = { 1, 2 };
             string[] stringSelection = { "Search By Ingred", "Search By Title" };
