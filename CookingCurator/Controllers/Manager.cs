@@ -113,6 +113,31 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
+
+        public List<RecipeBaseViewModel> giveRecommendations(List<String> ingreds, int id)
+        {
+            List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
+            List<RECIPE> recipes = new List<RECIPE>();
+            foreach (var item in ingreds)
+            {
+                IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item);
+                recipesIngreds.AddRange(bridge);
+
+            }
+
+            foreach (var item in recipesIngreds)
+            {
+                IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
+                recipes.AddRange(derp);
+            }
+
+            recipes = recipes.Distinct().ToList();
+
+            recipes = recipes.Where(x => x.recipe_ID != id).ToList();
+
+            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
+        }
+
         public bool isBanned(string username) {
             USER current = ds.Users.SingleOrDefault(e => e.userName == username);
 
@@ -251,9 +276,14 @@ namespace CookingCurator.Controllers
 
         public IEnumerable<RecipeWithImagesViewModel> RecipeGetAllWithImages()
         {
-            // The ds object is the data store
-            // It has a collection for each entity it manages
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes);
+        }
+
+        public IEnumerable<RecipeWithImagesViewModel> RecipeGetFilteredByDietWithImages(int idNum)
+        {
+            var recipes = ds.Recipes.SqlQuery("Select recipe_Id, title, rating, instructions, lastUpdated, author, verified, source_ID, source_Link, country, mealTimeType, content, 'Content-Type' AS 'Content_Type' FROM RECIPES WHERE recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID IN (SELECT diet_Id FROM USER_DIETS WHERE user_Id =" + idNum + "))");
+
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(recipes);
         }
 
         public RecipeBaseViewModel RecipeGetById(int? id)
@@ -527,11 +557,43 @@ namespace CookingCurator.Controllers
             ds.SaveChanges();
         }
 
+        public void DeleteDietsForUser(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from USER_DIETS where user_Id = " + id);
+            ds.SaveChanges();
+        }
+
+        public void DeleteAllergiesForUser(int id)
+        {
+            ds.Database.ExecuteSqlCommand("delete from USER_ALLERGIES where user_Id = " + id);
+            ds.SaveChanges();
+        }
+
         public void addDietsForRecipes(int id, String[] selectedIds)
         {
             for (int i = 0; i < selectedIds.Length; i++)
             {
                 String query = "INSERT INTO DIET_RECIPES (recipe_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public void UpdateDietsForUser(int id, String[] selectedIds)
+        {
+            for (int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO USER_DIETS (user_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                ds.Database.ExecuteSqlCommand(query);
+            }
+            ds.SaveChanges();
+        }
+
+        public void UpdateAllergiesForUser(int id, String[] selectedIds)
+        {
+            for (int i = 0; i < selectedIds.Length; i++)
+            {
+                String query = "INSERT INTO USER_ALLERGIES (user_ID, allergy_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
                 ds.Database.ExecuteSqlCommand(query);
             }
             ds.SaveChanges();
@@ -546,6 +608,69 @@ namespace CookingCurator.Controllers
                 selectedDiets.Add(item.diet_ID.ToString());
             }
             return selectedDiets;
+        }
+
+        public IEnumerable<DietDescViewModel> DietsForChangeScreen()
+        {
+            List<String> selectedDiets = new List<string>();
+            IEnumerable<DIET> diets = ds.Diets.SqlQuery("Select * from DIETS where diet_Id!=10");
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(diets);
+        }
+
+        public List<String> DietsForUser(int? id)
+        {
+            List<String> selectedDiets = new List<string>();
+            IEnumerable<USER_DIETS> diets = ds.User_Diets.SqlQuery("Select * from USER_DIETS where user_Id = " + id);
+            foreach (var item in diets)
+            {
+                selectedDiets.Add(item.diet_Id.ToString());
+            }
+            return selectedDiets;
+        }
+
+        public List<String> AllergiesForUser(int? id)
+        {
+            List<String> selectedAllergies = new List<string>();
+            IEnumerable<USER_ALLERGIES> allergies = ds.User_Allergies.SqlQuery("Select * from USER_ALLERGIES where user_Id = " + id);
+            foreach (var item in allergies)
+            {
+                selectedAllergies.Add(item.allergy_Id.ToString());
+            }
+            return selectedAllergies;
+        }
+
+        public IEnumerable<DietDescViewModel> DietsForUserProfile(int? id)
+        {
+            List<int> selectedDiets = new List<int>();
+            IEnumerable<USER_DIETS> diets = ds.User_Diets.SqlQuery("Select * from USER_DIETS where user_Id = " + id);
+            foreach (var item in diets)
+            {
+                selectedDiets.Add(item.diet_Id);
+            }
+
+            List<DIET> baseDiets = new List<DIET>();
+            foreach (var item in selectedDiets)
+            {
+                baseDiets.Add(ds.Diets.SingleOrDefault(e => e.diet_ID == item));
+            }
+            return mapper.Map<IEnumerable<DIET>, IEnumerable<DietDescViewModel>>(baseDiets);
+        }
+
+        public IEnumerable<AllergyViewModel> AllergiesForUserProfile(int? id)
+        {
+            List<int> selectedAllergies = new List<int>();
+            IEnumerable<USER_ALLERGIES> allergies = ds.User_Allergies.SqlQuery("Select * from USER_ALLERGIES where user_Id = " + id);
+            foreach (var item in allergies)
+            {
+                selectedAllergies.Add(item.allergy_Id);
+            }
+
+            List<ALLERGY> baseAllergies = new List<ALLERGY>();
+            foreach (var item in selectedAllergies)
+            {
+                baseAllergies.Add(ds.Allergies.SingleOrDefault(e => e.allergy_ID == item));
+            }
+            return mapper.Map<IEnumerable<ALLERGY>, IEnumerable<AllergyViewModel>>(baseAllergies);
         }
 
         public IEnumerable<DietDescViewModel> dietsForRecipeViewModel(int? id)
@@ -617,6 +742,15 @@ namespace CookingCurator.Controllers
             var user = ds.Users.SingleOrDefault(u => u.userName == username);
 
             return user.userName;
+        }
+
+        public string GetCurrentUserEmail()
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var user = ds.Users.SingleOrDefault(u => u.userName == username);
+
+            return user.userEmail;
         }
 
         public UserBaseViewModel GetUserById(int? id)
@@ -811,7 +945,7 @@ namespace CookingCurator.Controllers
             //no duplicate email
             var loggedInUserEmail = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
 
-            var loggedInUserName = ds.Users.Where(x => x.userEmail == registerModel.userEmail).Count();
+            var loggedInUserName = ds.Users.Where(x => x.userName == registerModel.userName).Count();
 
             if (loggedInUserEmail > 0)
             {
@@ -1024,6 +1158,26 @@ namespace CookingCurator.Controllers
             }
         }
 
+        public bool waiverAccepted()
+        {
+            var username = GetCurrentUsername();
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            if (user.acceptWaiver)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetCurrentUserId()
+        {
+            var username = GetCurrentUsername();
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            return user.user_ID;
+        }
         public bool AcceptWaiverByUser(UserAcceptWaiverViewModel user)
         {
             try

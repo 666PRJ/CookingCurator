@@ -21,11 +21,12 @@
             </div> <span>&nbsp; &nbsp; &nbsp; </span>
 
             <div class="form-group">
-                <select class="form-control" id="verified" name="verified" width="100">
-                    <option value="0">Select Verified or User Recipes</option>
-                    <option value="1">Verified Recipes</option>
-                    <option value="2">User's Recipes</option>
-                </select>
+                @Html.DropDownList("verified", new List<SelectListItem>{
+                    new SelectListItem{ Text="Select Verified or User Recipes", Value="0"},
+                    new SelectListItem{ Text="Verified Recipes", Value="1"},
+                    new SelectListItem{ Text="User's Recipes", Value="2"},
+                }, htmlAttributes: new { @class = "form-control" })
+
             </div> <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
             <button type="submit" value="Search" class="btn btn-success">Search</button>
         }
@@ -47,28 +48,76 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort })
+                @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort})
+                @if (ViewBag.titleSort == "")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.titleSort == "title_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 @Html.ActionLink("User rating", "Index", new { sortOrder = ViewBag.rateSort })
+                @if (ViewBag.rateSort == "ratings")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.rateSort == "ratings_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.lastUpdated)
             </th>
             <th>
                 @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.authorSort })
+                @if (ViewBag.authorSort == "author")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.authorSort == "author_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.verified)
             </th>
             <th>
                 @Html.ActionLink("Source ID #", "Index", new { sortOrder = ViewBag.sourceIdSort })
+                @if (ViewBag.sourceIdSort == "sourceId")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.sourceIdSort == "sourceId_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 @Html.ActionLink("Country of Origin", "Index", new { sortOrder = ViewBag.countrySort })
+                @if (ViewBag.countrySort == "country")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.countrySort == "country_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 @Html.ActionLink("Meal Type", "Index", new { sortOrder = ViewBag.mealTimeTypeSort })
+                @if (ViewBag.mealTimeTypeSort == "mealTimeType")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.mealTimeTypeSort == "mealTimeType_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 Recipe Image
@@ -78,67 +127,67 @@ else
 
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @if (item.rating > 0)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @if (item.rating > 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                    }
+                    else if (item.rating < 0)
+                    {
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-hand-right"></span>
+                    }
+                    @Html.DisplayFor(modelItem => item.rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastUpdated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.verified)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.source_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mealTimeType)
+                </td>
+                @if (item.Content != null && item.Content_Type != null)
                 {
-                    <span class="glyphicon glyphicon-thumbs-up"></span>
-                }
-                else if (item.rating < 0)
-                {
-                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                    <td>
+                        <div id="divImg" style="display:block;margin-left:auto;margin-right:auto;height:150px;width:150px;margin-bottom:5px">
+                            <img class="img-responsive thumbnail" style="height:150px" src="@Html.Raw("data:" + item.Content_Type + ";base64," + Convert.ToBase64String(item.Content))" alt="RecipeImage">
+                        </div>
+                    </td>
                 }
                 else
                 {
-                    <span class="glyphicon glyphicon-hand-right"></span>
+                    <td>
+                        No Recipe Image
+                    </td>
                 }
-                @Html.DisplayFor(modelItem => item.rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.lastUpdated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.author)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.verified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.source_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mealTimeType)
-            </td>
-            @if (item.Content != null && item.Content_Type != null)
-            {
-                <td>
-                    <div id="divImg" style="display:block;margin-left:auto;margin-right:auto;height:150px;width:150px;margin-bottom:5px">
-                        <img class="img-responsive thumbnail" style="height:150px" src="@Html.Raw("data:" + item.Content_Type + ";base64," + Convert.ToBase64String(item.Content))" alt="RecipeImage">
-                    </div>
-                </td>
-            }
-            else
-            {
-                <td>
-                    No Recipe Image
-                </td>
-            }
 
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
-                @if (ViewBag.Admin == true || ViewBag.Username == item.author)
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
-                    @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
-                }
-            </td>
-        </tr>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
+                    @if (ViewBag.Admin == true || ViewBag.Username == item.author)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
+                        @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
+                    }
+                </td>
+            </tr>
         }
 
     </table>

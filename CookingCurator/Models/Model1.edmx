@@ -102,6 +102,22 @@ warning 6002: The table/view 'def.prj666_191a03.DIET_INGREDS' does not have a pr
           <Property Name="Content" Type="varbinary" MaxLength="60000" />
           <Property Name="Content-Type" Type="varchar" MaxLength="30" />
         </EntityType>
+        <EntityType Name="USER_ALLERGIES">
+          <Key>
+            <PropertyRef Name="user_Id" />
+            <PropertyRef Name="allergy_Id" />
+          </Key>
+          <Property Name="user_Id" Type="int" Nullable="false" />
+          <Property Name="allergy_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USER_DIETS">
+          <Key>
+            <PropertyRef Name="user_Id" />
+            <PropertyRef Name="diet_Id" />
+          </Key>
+          <Property Name="user_Id" Type="int" Nullable="false" />
+          <Property Name="diet_Id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="USERS">
           <Key>
             <PropertyRef Name="user_ID" />
@@ -127,6 +143,8 @@ warning 6002: The table/view 'def.prj666_191a03.DIET_INGREDS' does not have a pr
           <EntitySet Name="RECIPE_INGREDS" EntityType="Self.RECIPE_INGREDS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="RECIPES" EntityType="Self.RECIPES" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="USER_ALLERGIES" EntityType="Self.USER_ALLERGIES" Schema="prj666_191a03" store:Type="Tables" />
+          <EntitySet Name="USER_DIETS" EntityType="Self.USER_DIETS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="prj666_191a03" store:Type="Tables" />
           <EntitySet Name="DIET_INGREDS" EntityType="Self.DIET_INGREDS" store:Type="Tables" store:Schema="prj666_191a03">
             <DefiningQuery>SELECT
@@ -253,6 +271,8 @@ FROM `DIET_INGREDS` AS `DIET_INGREDS`</DefiningQuery>
           <EntitySet Name="RECIPE_INGREDS" EntityType="Self.RECIPE_INGREDS" />
           <EntitySet Name="RECIPE_USERS" EntityType="Self.RECIPE_USERS" />
           <EntitySet Name="DIET_RECIPES" EntityType="prj666_191a03Model.DIET_RECIPES" />
+          <EntitySet Name="USER_ALLERGIES" EntityType="prj666_191a03Model.USER_ALLERGIES" />
+          <EntitySet Name="USER_DIETS" EntityType="prj666_191a03Model.USER_DIETS" />
         </EntityContainer>
         <EntityType Name="DIET_RECIPES">
           <Key>
@@ -261,6 +281,22 @@ FROM `DIET_INGREDS` AS `DIET_INGREDS`</DefiningQuery>
           </Key>
           <Property Name="recipe_ID" Type="Int32" Nullable="false" />
           <Property Name="diet_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USER_ALLERGIES">
+          <Key>
+            <PropertyRef Name="user_Id" />
+            <PropertyRef Name="allergy_Id" />
+          </Key>
+          <Property Name="user_Id" Type="Int32" Nullable="false" />
+          <Property Name="allergy_Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USER_DIETS">
+          <Key>
+            <PropertyRef Name="user_Id" />
+            <PropertyRef Name="diet_Id" />
+          </Key>
+          <Property Name="user_Id" Type="Int32" Nullable="false" />
+          <Property Name="diet_Id" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -381,6 +417,22 @@ FROM `DIET_INGREDS` AS `DIET_INGREDS`</DefiningQuery>
               <MappingFragment StoreEntitySet="DIET_RECIPES">
                 <ScalarProperty Name="diet_ID" ColumnName="diet_ID" />
                 <ScalarProperty Name="recipe_ID" ColumnName="recipe_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USER_ALLERGIES">
+            <EntityTypeMapping TypeName="prj666_191a03Model.USER_ALLERGIES">
+              <MappingFragment StoreEntitySet="USER_ALLERGIES">
+                <ScalarProperty Name="allergy_Id" ColumnName="allergy_Id" />
+                <ScalarProperty Name="user_Id" ColumnName="user_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USER_DIETS">
+            <EntityTypeMapping TypeName="prj666_191a03Model.USER_DIETS">
+              <MappingFragment StoreEntitySet="USER_DIETS">
+                <ScalarProperty Name="diet_Id" ColumnName="diet_Id" />
+                <ScalarProperty Name="user_Id" ColumnName="user_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -381,11 +381,12 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\ReferencesController.cs" />
-    <Compile Include="Controllers\ReportRecipeViewModel.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
+    <Compile Include="EntityModels\ChangeAllergiesViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
+    <Compile Include="EntityModels\ChangeDietsViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
     <Compile Include="EntityModels\DietDescViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
@@ -399,6 +400,7 @@
     <Compile Include="EntityModels\Recipe_IngredViewModel.cs" />
     <Compile Include="EntityModels\RecoverViewModel.cs" />
     <Compile Include="EntityModels\RegisterViewModel.cs" />
+    <Compile Include="EntityModels\ReportRecipeViewModel.cs" />
     <Compile Include="EntityModels\SearchViewModel.cs" />
     <Compile Include="EntityModels\UserAcceptWaiverViewModel.cs" />
     <Compile Include="EntityModels\UserBaseViewModel.cs" />
@@ -458,6 +460,12 @@
     <Compile Include="Models\USER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\USER_ALLERGIES.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\USER_DIETS.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -466,6 +474,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\CookingCuratorLogo.jpg" />
+    <Content Include="Content\Images\down-arrow.png" />
+    <Content Include="Content\Images\up-arrow.png" />
     <Content Include="Content\MultiSelect\chosen-sprite.png" />
     <Content Include="Content\MultiSelect\chosen.min.css" />
     <Content Include="favicon.ico" />
@@ -558,6 +568,9 @@
     <Content Include="Views\Diet\Index.cshtml" />
     <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
     <Content Include="Views\Recipe\ReportRecipe.cshtml" />
+    <Content Include="Views\Profile\ChangeDiets.cshtml" />
+    <Content Include="Views\Profile\ChangeAllergies.cshtml" />
+    <Content Include="Views\Shared\_AcceptWaiver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

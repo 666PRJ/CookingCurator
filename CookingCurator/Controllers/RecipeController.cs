@@ -18,14 +18,28 @@ namespace CookingCurator.Controllers
         private Manager m = new Manager();
 
         [Authorize]
+        [HttpGet]
         public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
         {
             m.isUserBanned();
 
-            var recipes = m.RecipeGetAllWithImages();
-            
-            ViewBag.Username = m.GetCurrentUsername();
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
 
+            ViewBag.Username = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(ViewBag.Username);
+
+            IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
+
+            var recipes = m.RecipeGetAllWithImages();
+
+            if (checkDiets.Any())
+            {
+               recipes = m.RecipeGetFilteredByDietWithImages(idNum);
+            }
+            
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
 
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
@@ -62,12 +76,17 @@ namespace CookingCurator.Controllers
 
         // GET: Recipe/Details/5
         [Authorize]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string bookMarkError)
         {
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
             recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
-            if(recipe.Content != null && recipe.Content_Type != null)
+            recipe.recommended = m.giveRecommendations(m.ingredsForRecipe(id.GetValueOrDefault()), id.GetValueOrDefault());
+            if (recipe.Content != null && recipe.Content_Type != null)
             {
                 string base64 = Convert.ToBase64String(recipe.Content);
                 recipe.fileResult = String.Format("data:{0};base64,{1}", recipe.Content_Type, base64);
@@ -79,6 +98,10 @@ namespace CookingCurator.Controllers
                 return HttpNotFound();
             else
             {
+                if (!String.IsNullOrEmpty(bookMarkError))
+                {
+                    ViewBag.error = bookMarkError;
+                }
                 return View(recipe);
             }
                 
@@ -139,6 +162,10 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var form = new RecipeAddViewForm();
 
             form.ingredients = m.IngredientGetAll();
@@ -510,50 +537,22 @@ namespace CookingCurator.Controllers
             {
                 m.RecipeDelete(id);
             }
-            catch (DbEntityValidationException vex)
-            {
-                foreach (var error in vex.EntityValidationErrors)
-                {
-                    foreach (var errorMsg in error.ValidationErrors)
-                    {
-                        // logging service based on NLog
-                        Console.WriteLine($"Error trying to save EF changes - {errorMsg.ErrorMessage}");
-                    }
-                }
-
-                throw;
-            }
-            catch (DbUpdateException dbu)
-            {
-                var exception = HandleDbUpdateException(dbu);
-                throw exception;
-            }
-            return RedirectToAction("Index");
-        }
-        private Exception HandleDbUpdateException(DbUpdateException dbu)
-        {
-            var builder = new StringBuilder("A DbUpdateException was caught while saving changes. ");
-
-            try
-            {
-                foreach (var result in dbu.Entries)
-                {
-                    builder.AppendFormat("Type: {0} was part of the problem. ", result.Entity.GetType().Name);
-                }
-            }
             catch (Exception e)
             {
-                builder.Append("Error parsing DbUpdateException: " + e.ToString());
+                ModelState.AddModelError("", "Error deleting recipe... Please try again");
+                return View(id);
             }
-
-            string message = builder.ToString();
-            return new Exception(message, dbu);
+            return RedirectToAction("Index");
         }
 
         [Authorize]
         [Route("User/AuthorProfile")]
         public ActionResult Authors(string authorName)
         {
+            if (!m.waiverAccepted())
+            {
+                return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
+            }
             var r = m.RecipesByAuthor(authorName);
             return View(r);
         }
@@ -576,6 +575,10 @@ namespace CookingCurator.Controllers
             if(ID == null)
             {
                 return View("Details", new { id = ID});
+            }
+            if(m.GetAllBookmarks().Count() >= 50)
+            {
+                return RedirectToAction("Details", new { id = ID, bookMarkError = "You can only Bookmark 50 Recipes, please delete some bookmarks and try again." });
             }
             var error = m.BookMarkRecipe(ID.GetValueOrDefault());
             if(error == 0)
