@@ -644,6 +644,15 @@ namespace CookingCurator.Controllers
             return user.userName;
         }
 
+        public string GetCurrentUserEmail()
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var user = ds.Users.SingleOrDefault(u => u.userName == username);
+
+            return user.userEmail;
+        }
+
         public UserBaseViewModel GetUserById(int? id)
         {
             //Find user from their unique ID number
@@ -1049,6 +1058,26 @@ namespace CookingCurator.Controllers
             }
         }
 
+        public bool waiverAccepted()
+        {
+            var username = GetCurrentUsername();
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            if (user.acceptWaiver)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetCurrentUserId()
+        {
+            var username = GetCurrentUsername();
+            var user = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            return user.user_ID;
+        }
         public bool AcceptWaiverByUser(UserAcceptWaiverViewModel user)
         {
             try

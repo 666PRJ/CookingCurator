@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "AcceptWaiver";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var error = ViewBag.error;
 }
 
 @using (Html.BeginForm())
@@ -10,6 +11,7 @@
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
+
     <center><h2>Terms and Conditions</h2></center>
 
     <div class="form-group-lg">
@@ -18,20 +20,20 @@
     Before you may access any features of the Cooking Curator application, you must read and agreed to the following conditions.  Access will not be granted 
     until this is completed.  Please review everything carefully.
 
-    <strong>Privacy:</strong>
-        <b>1)</b> You accept that Cooking Curator will have access to your email address and will be able to contact you through it.  You also accept that 
+            <strong>Privacy:</strong>
+            <b>1)</b> You accept that Cooking Curator will have access to your email address and will be able to contact you through it.  You also accept that 
         other users of the cooking curator application will be able to contact that email address.  Cooking curator will not release email addresses of 
         users to any third parties.  No other personal information from you is required to use this application.  
 
-        <b>2)</b> You accept that recipes you upload will be viewable to all other cooking curator users.
+            <b>2)</b> You accept that recipes you upload will be viewable to all other cooking curator users.
 
-        <b>3)</b> You agree to provide the source of any recipe you upload that isn’t of your own creation
+            <b>3)</b> You agree to provide the source of any recipe you upload that isn’t of your own creation
 
-    <b>Content:</b>
+            <b>Content:</b>
         This application allows users to share and bookmark recipes.  Content unrelated to recipes, diets and allergies is not allowed on this site.  
         The recipes in this application are either user created or obtained from credible sources.  All recipes belong to their original authors.
 
-    <b>Termination of Accounts:</b>
+            <b>Termination of Accounts:</b>
         All users must have a valid email address.  Failure to validate an email address in a 24 period will result in the locking of the account until
         it is verified.
 
@@ -46,18 +48,18 @@
             <b>7)</b> Sharing an account with another person
             <b>8)</b> Creating multiple accounts to bypass systems
 
-    <b>You agree to not perform any of the actions listed above.</b>
+            <b>You agree to not perform any of the actions listed above.</b>
 
     All users have the ability to delete their own accounts.  This can not be reversed, and you accept that all recipes tied to your account 
     will also be deleted.
     If a user sees any suspicious content or user behaviour, they should contact the Cooking Curator via the “Contact Us” page immediately. 
     Abuse of any reporting system will result in the termination of the cooking curator account.
 
-    <b>Links to outside sites:</b>
+            <b>Links to outside sites:</b>
         We are not responsible for any content on other web sites linked to through our application.
         You agree to not post inappropriate or malicious links anywhere in your recipes.
 
-    <b>Waiver:</b>
+            <b>Waiver:</b>
         The administrators of Cooking Curator are not responsible for anything that may occur while using any recipe available through this application.  
         Users are responsible for reviewing all ingredients and instructions beforehand, using sound judgement when following steps.  
         The user is responsible for any actions they take when following a recipe, including any variations they choose to make.
@@ -68,14 +70,19 @@
             </pre>
         </p>
     </div>
-    
+
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.user_ID)
-
+    @if (!String.IsNullOrEmpty(error))
+    {
+        <div class="alert alert-danger">
+            <p>@error</p>
+        </div>
+    }
     <div class="form-group">
         <center>
-            <input type="radio"  name="accept" id="accept" value="Accept" /> <b>Accept the terms and conditions</b> <hr />
-            <input type="submit"  value="Save" class="btn btn-default" />
+            <input type="radio" name="accept" id="accept" value="Accept" /> <b>Accept the terms and conditions</b> <hr />
+            <input type="submit" value="Save" class="btn btn-default" />
         </center>
     </div>
 </div>

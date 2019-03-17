@@ -5,14 +5,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     bool checkEmpty = Model.diets.Any();
     var count = 0;
+    var error = ViewBag.error;
 }
 
 <header>
     <h2> @Html.DisplayFor(model => model.title)</h2>
     <h4>Detailed Recipe Information</h4>
     <h5> @Html.ActionLink("Bookmark this recipe", "BookmarkRecipe", new { id = Model.recipe_Id })</h5>
-    <hr />
-</header>
+    @if (!String.IsNullOrEmpty(error))
+    {
+        <div class="alert alert-danger"><span>@ViewBag.error</span></div>
+            
+    }
+            <hr />
+    </header>
 
 <section>
     <dl class="dl-horizontal">
