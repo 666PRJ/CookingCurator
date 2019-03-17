@@ -136,5 +136,81 @@ namespace CookingCurator.Controllers
             }
 
         }
+
+        // GET: Profile/ChangeDiets
+        [Authorize]
+        public ActionResult ChangeDiets()
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            IEnumerable<DietDescViewModel> diets = m.DietsForUserProfile(idNum);
+            String[] selectedDiets = m.DietsForUser(idNum).ToArray();
+
+            ChangeDietsViewModel dietChange = new ChangeDietsViewModel();
+
+            dietChange.allDiets = m.DietsForChangeScreen();
+            dietChange.chosenDiets = diets;
+            dietChange.selectedDietsId = selectedDiets;
+
+            return View(dietChange);
+        }
+
+        // POST: Profile/ChangeDiets
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeDiets(ChangeDietsViewModel updateDiets)
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            m.DeleteDietsForUser(idNum);
+            if (updateDiets.selectedDietsId != null)
+            {
+                m.UpdateDietsForUser(idNum, updateDiets.selectedDietsId);
+            }
+
+            updateDiets.allDiets = m.DietsForChangeScreen();
+            updateDiets.chosenDiets = m.DietsForUserProfile(idNum);
+            return View(updateDiets);
+        }
+
+        // GET: Profile/ChangeAllergies
+        [Authorize]
+        public ActionResult ChangeAllergies()
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            IEnumerable<AllergyViewModel> allergies = m.AllergiesForUserProfile(idNum);
+            String[] selectedAllergies = m.AllergiesForUser(idNum).ToArray();
+
+            ChangeAllergiesViewModel allergyChange = new ChangeAllergiesViewModel();
+
+            allergyChange.allAllergies = m.AllergyGetAll();
+            allergyChange.chosenAllergies = allergies;
+            allergyChange.selectedAllergiesId = selectedAllergies;
+
+            return View(allergyChange);
+        }
+
+        // POST: Profile/ChangeAllergies
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeAllergies(ChangeAllergiesViewModel updateAllergies)
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            m.DeleteAllergiesForUser(idNum);
+            if (updateAllergies.selectedAllergiesId != null)
+            {
+                m.UpdateAllergiesForUser(idNum, updateAllergies.selectedAllergiesId);
+            }
+
+            updateAllergies.allAllergies = m.AllergyGetAll();
+            updateAllergies.chosenAllergies = m.AllergiesForUserProfile(idNum);
+            return View(updateAllergies);
+        }
     }
 }

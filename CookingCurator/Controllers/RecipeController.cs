@@ -27,10 +27,19 @@ namespace CookingCurator.Controllers
             {
                 return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
             }
-            var recipes = m.RecipeGetAllWithImages();
-            
-            ViewBag.Username = m.GetCurrentUsername();
 
+            ViewBag.Username = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(ViewBag.Username);
+
+            IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
+
+            var recipes = m.RecipeGetAllWithImages();
+
+            if (checkDiets.Any())
+            {
+               recipes = m.RecipeGetFilteredByDietWithImages(idNum);
+            }
+            
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
 
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))

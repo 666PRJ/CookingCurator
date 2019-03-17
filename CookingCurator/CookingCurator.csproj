@@ -384,7 +384,9 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
+    <Compile Include="EntityModels\ChangeAllergiesViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
+    <Compile Include="EntityModels\ChangeDietsViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
     <Compile Include="EntityModels\DietDescViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
@@ -566,6 +568,8 @@
     <Content Include="Views\Diet\Index.cshtml" />
     <Content Include="Views\Recipe\ReportedRecipe.cshtml" />
     <Content Include="Views\Recipe\ReportRecipe.cshtml" />
+    <Content Include="Views\Profile\ChangeDiets.cshtml" />
+    <Content Include="Views\Profile\ChangeAllergies.cshtml" />
     <Content Include="Views\Shared\_AcceptWaiver.cshtml" />
   </ItemGroup>
   <ItemGroup>
