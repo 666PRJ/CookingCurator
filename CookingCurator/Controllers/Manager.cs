@@ -206,6 +206,36 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool IsUsernameDup(string username)
+        {
+            var duplicateFound = ds.Users.Where(f => f.userName == username);
+            if (duplicateFound == null)
+            {
+                return false;
+            }
+            if (duplicateFound.Count() > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsEmailDup(string email)
+        {
+            var duplicateFound = ds.Users.Where(f => f.userEmail == email);
+            if (duplicateFound == null)
+            {
+                return false;
+            }
+            if (duplicateFound.Count() > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool ChangeUsername(ChangeUsernameViewModel newUsername) {
             var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
             var duplicateFound = ds.Users.Where(f => f.userName == newUsername.userName);
