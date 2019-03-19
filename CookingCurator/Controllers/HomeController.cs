@@ -85,6 +85,22 @@ namespace CookingCurator.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult DeleteAccount()
+        {
+            string username = m.GetUsername().userName;
+            UserFindViewModel stuff = new UserFindViewModel();
+            stuff.userName = username;
+            return View(stuff);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAccount(UserFindViewModel id)
+        {
+            var result = m.AccountDelete();
+            return RedirectToAction("Login");
+        }
+
         [HttpPost]
         public ActionResult Login(LoginViewModel loginModel, string returnUrl)
         {
