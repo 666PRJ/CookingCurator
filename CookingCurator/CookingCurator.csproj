@@ -549,7 +549,6 @@
     <Content Include="Views\Home\VerifyAccount.cshtml" />
     <Content Include="Views\Home\RegisterationSuccess.cshtml" />
     <Content Include="Views\Home\AcceptWaiver.cshtml" />
-    <Content Include="Views\Home\TestAcc.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
     <Content Include="Views\Home\Forgot.cshtml" />
     <Content Include="Views\Home\Reset.cshtml" />
