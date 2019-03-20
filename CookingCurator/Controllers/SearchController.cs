@@ -22,11 +22,11 @@ namespace CookingCurator.Controllers
             }
             SearchViewModel search = new SearchViewModel();
             int[] ids = { 1, 2 };
-            string[] stringSelection = { "Search By Ingred", "Search By Title" };
+            string[] stringSelection = { "Ingred", "Title" };
             search.list = new List<SelectListItem>
             {
-                new SelectListItem{ Text = "Search By Ingred", Value = "1" },
-                new SelectListItem{ Text = "Search By Title", Value = "2" }
+                new SelectListItem{ Text = "Ingred", Value = "1" },
+                new SelectListItem{ Text = "Title", Value = "2" }
             };
 
             search.searchSelection = stringSelection;
@@ -37,25 +37,26 @@ namespace CookingCurator.Controllers
         public ActionResult Search(SearchViewModel searchModel)
         {
             if (String.IsNullOrWhiteSpace(searchModel.searchString)) {
-                string[] stringSelection = { "Search By Ingred", "Search By Title" };
+                string[] stringSelection = { "Ingred", "Title" };
                 searchModel.list = new List<SelectListItem>
             {
-                new SelectListItem{ Text = "Search By Ingred", Value = "1", Selected = true },
-                new SelectListItem{ Text = "Search By Title", Value = "2" }
+                new SelectListItem{ Text = "Ingred", Value = "1", Selected = true },
+                new SelectListItem{ Text = "Title", Value = "2" }
             };
                 searchModel.searchSelection = stringSelection;
-                ViewBag.NoText = "Please input text";
+                ModelState.AddModelError("", "Please input text");
+                //ViewBag.NoText = "Please input text";
                 return View("Search",searchModel);
             }
 
             if (searchModel.searchSelection[0] == "1")
             {
                 var recipes = m.searchForRecipe(searchModel);
-                string[] stringSelection = { "Search By Ingred", "Search By Title" };
+                string[] stringSelection = { "Ingred", "Title" };
                 recipes.list = new List<SelectListItem>
             {
-                new SelectListItem{ Text = "Search By Ingred", Value = "1", Selected = true },
-                new SelectListItem{ Text = "Search By Title", Value = "2" }
+                new SelectListItem{ Text = "Ingred", Value = "1", Selected = true },
+                new SelectListItem{ Text = "Title", Value = "2" }
             };
                 recipes.searchSelection = stringSelection;
                 return View("Search", recipes);
@@ -63,11 +64,11 @@ namespace CookingCurator.Controllers
             else
             {
                 var recipes = m.searchByTitle(searchModel);
-                string[] stringSelection = { "Search By Ingred", "Search By Title" };
+                string[] stringSelection = { "Ingred", "Title" };
                 recipes.list = new List<SelectListItem>
             {
-                new SelectListItem{ Text = "Search By Ingred", Value = "1" },
-                new SelectListItem{ Text = "Search By Title", Value = "2", Selected = true }
+                new SelectListItem{ Text = "Ingred", Value = "1" },
+                new SelectListItem{ Text = "Title", Value = "2", Selected = true }
             };
                 recipes.searchSelection = stringSelection;
 
