@@ -39,7 +39,7 @@ namespace CookingCurator.Controllers
                     return View();
                 }
 
-                if (!m.IsEmailDup(registerModel.userName))
+                if (!m.IsEmailDup(registerModel.userEmail))
                 {
                     ModelState.AddModelError("", "Email in Use");
                     return View();
