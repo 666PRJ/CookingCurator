@@ -113,6 +113,24 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
+        public bool AccountDelete() {
+            var ItemToDelete = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
+
+            if (ItemToDelete == null)
+            {
+                return false;
+            }
+            else {
+                FormsAuthentication.SignOut();
+                ds.Database.ExecuteSqlCommand("delete from RECIPE_USERS where user_ID = " + ItemToDelete.user_ID);
+                ds.Database.ExecuteSqlCommand("delete from USER_ALLERGIES where user_Id = " + ItemToDelete.user_ID);
+                ds.Database.ExecuteSqlCommand("delete from USER_DIETS where user_Id = " + ItemToDelete.user_ID);
+                ds.Users.Remove(ItemToDelete);
+                ds.SaveChanges();
+                return true;
+            }
+
+        }
 
         public List<RecipeBaseViewModel> giveRecommendations(List<String> ingreds, int id)
         {
