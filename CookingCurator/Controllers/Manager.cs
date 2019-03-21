@@ -118,6 +118,7 @@ namespace CookingCurator.Controllers
         {
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
+            List<RECIPE> finalRecipes = new List<RECIPE>();
             foreach (var item in ingreds)
             {
                 IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item);
@@ -135,7 +136,11 @@ namespace CookingCurator.Controllers
 
             recipes = recipes.Where(x => x.recipe_ID != id).ToList();
 
-            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
+            for (int i = 0; i < 3; i++) {
+                finalRecipes.Add(recipes[i]);
+            }
+
+            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(finalRecipes);
         }
 
         public bool isBanned(string username) {
