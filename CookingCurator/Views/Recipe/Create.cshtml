@@ -1,4 +1,5 @@
 ﻿@model CookingCurator.EntityModels.RecipeAddViewForm
+<script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 
 @{
     ViewBag.Title = "Create";
@@ -26,11 +27,11 @@
     <div class="form-group">
         @Html.LabelFor(model => model.instructions, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextAreaFor(model => model.instructions, 5, 50, new { htmlAttributes = new { @class = "form-control"} })
+            @Html.TextAreaFor(model => model.instructions, new { htmlAttributes = new { @class = "form-control", @rows = "8"} })
             @Html.ValidationMessageFor(model => model.instructions, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    <script>CKEDITOR.replace('instructions', { startupFocus: true });</script>
     <div class="form-group">
         @Html.LabelFor(model => model.source_Link, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">

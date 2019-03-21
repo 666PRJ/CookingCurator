@@ -186,6 +186,7 @@ namespace CookingCurator.Controllers
         //CreateVerified will be only avilable to admin
         // POST: Recipe/Create
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem, HttpPostedFileBase file)
         {
             // Validate the input
@@ -284,6 +285,7 @@ namespace CookingCurator.Controllers
 
         // POST: Recipe/Create
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Create(RecipeAddViewForm newItem, HttpPostedFileBase file)
         {
             // Validate the input
@@ -419,6 +421,7 @@ namespace CookingCurator.Controllers
         // POST: Recipe/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Edit(Recipe_IngredViewModel recipes, HttpPostedFileBase file)
         {
             Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(recipes.recipe_Id));
