@@ -51,6 +51,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<USER, UserBaseViewModel>();
 
+                cfg.CreateMap<USER, DeleteAccountViewModel>();
+
                 cfg.CreateMap<RecipeAddViewForm, RECIPE>();
 
                 cfg.CreateMap<RecipeIngred, RECIPE>();
@@ -113,8 +115,25 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
-        public bool AccountDelete() {
+        public bool AccountDelete(DeleteAccountViewModel user) {
+
+            if (user.password != user.ConfirmPassword) {
+                return false;
+            }
+
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(user.password))
+            {
+                return false;
+            }
+
             var ItemToDelete = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
+
+            var pass = HashPasswordLogin(user.password, ItemToDelete.salt);
+            if (ItemToDelete.password != pass)
+            {
+                return false;
+            }
 
             if (ItemToDelete == null)
             {
@@ -122,6 +141,10 @@ namespace CookingCurator.Controllers
             }
             else {
                 FormsAuthentication.SignOut();
+                //need to have a if statement checking for recipes
+                if (ds.Recipes.Where(a => a.author == ItemToDelete.userName).Count() > 0) {
+                    ds.Database.ExecuteSqlCommand("delete from RECIPES where author = " + ItemToDelete.userName);
+                }
                 ds.Database.ExecuteSqlCommand("delete from RECIPE_USERS where user_ID = " + ItemToDelete.user_ID);
                 ds.Database.ExecuteSqlCommand("delete from USER_ALLERGIES where user_Id = " + ItemToDelete.user_ID);
                 ds.Database.ExecuteSqlCommand("delete from USER_DIETS where user_Id = " + ItemToDelete.user_ID);
