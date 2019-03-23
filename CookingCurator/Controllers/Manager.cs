@@ -156,6 +156,7 @@ namespace CookingCurator.Controllers
         {
             List<RECIPE_INGREDS> recipesIngreds = new List<RECIPE_INGREDS>();
             List<RECIPE> recipes = new List<RECIPE>();
+            List<RECIPE> finalRecipes = new List<RECIPE>();
             foreach (var item in ingreds)
             {
                 IEnumerable<RECIPE_INGREDS> bridge = ds.Recipe_Ingreds.SqlQuery("Select * from RECIPE_INGREDS where ingred_Id = " + item);
@@ -172,6 +173,8 @@ namespace CookingCurator.Controllers
             recipes = recipes.Distinct().ToList();
 
             recipes = recipes.Where(x => x.recipe_ID != id).ToList();
+
+            recipes = recipes.Take(3).ToList();
 
             return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
         }
