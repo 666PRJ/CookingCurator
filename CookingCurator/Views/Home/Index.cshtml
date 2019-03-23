@@ -23,6 +23,7 @@
     <div class="row">
         <div class="col-md-6">
             <p>@Html.ActionLink("About this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
+            <p>@Html.ActionLink("User Doc", "UserDoc", "Profile", null, new { @class = "btn btn-default" })</p>
             <h2>Recipes</h2>
             <p>Getting started creating recipes using the links below: </p>
             <p>@Html.ActionLink("Add User Recipe", "Create", "Recipe", null, new { @class = "btn btn-default" })</p>
@@ -40,6 +41,7 @@
                 <h2>Users</h2>
                 <p>Search through the list of users in the application:</p>
                 <p>@Html.ActionLink("Search for a user", "Search", "User", null, new { @class = "btn btn-default" })</p>
+                <p>@Html.ActionLink("Admin Doc", "AdminDoc", "Profile", null, new { @class = "btn btn-default" })</p>
             </div>
         }
     </div>
@@ -61,7 +63,7 @@ else
             <li>And more!</li>
         </ul>
         <br />
-        <p><button> @Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" }) </button></p>
+        <p>@Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
     </div>
     <div class="col-md-4">
         <img src="~/Content/images/CookingCuratorLogo.jpg" />
