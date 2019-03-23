@@ -28,17 +28,26 @@ namespace CookingCurator.Controllers
         [Authorize]
         public ActionResult DeleteAccount()
         {
-            //string username = m.GetUsername().userName;
-            //UserFindViewModel user = new UserFindViewModel();
-            //user.userName = username;
             return View();
         }
 
         [HttpPost]
         public ActionResult DeleteAccount(DeleteAccountViewModel user)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
             var result = m.AccountDelete(user);
-            return RedirectToAction("Login","Home");
+            if (result)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid Password");
+                return View(user);
+            }
         }
 
         //For Non-Admins 

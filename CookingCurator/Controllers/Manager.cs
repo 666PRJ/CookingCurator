@@ -142,9 +142,10 @@ namespace CookingCurator.Controllers
             else {
                 FormsAuthentication.SignOut();
                 //need to have a if statement checking for recipes
-                if (ds.Recipes.Where(a => a.author == ItemToDelete.userName).Count() > 0) {
-                    ds.Database.ExecuteSqlCommand("delete from RECIPES where author = " + ItemToDelete.userName);
-                }
+                ds.Recipes.RemoveRange(ds.Recipes.Where(e => e.author == ItemToDelete.userName));
+                //if (ds.Recipes.Where(a => a.author == ItemToDelete.userName).Count() > 0) {
+                    //ds.Database.ExecuteSqlCommand("delete from RECIPES where author = \"" + ItemToDelete.userName + "\"");
+                //}
                 ds.Database.ExecuteSqlCommand("delete from RECIPE_USERS where user_ID = " + ItemToDelete.user_ID);
                 ds.Database.ExecuteSqlCommand("delete from USER_ALLERGIES where user_Id = " + ItemToDelete.user_ID);
                 ds.Database.ExecuteSqlCommand("delete from USER_DIETS where user_Id = " + ItemToDelete.user_ID);
