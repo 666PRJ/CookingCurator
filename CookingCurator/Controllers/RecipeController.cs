@@ -193,7 +193,7 @@ namespace CookingCurator.Controllers
         }
 
         //CreateVerified will be only avilable to admin
-        // POST: Recipe/Create
+        // POST: Recipe/CreateVerified
         [HttpPost]
         public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem, HttpPostedFileBase file)
         {
@@ -207,14 +207,13 @@ namespace CookingCurator.Controllers
                 return View(newItem);
             }
 
-
             try
             {
 
                 //Check for Diet conflict
                 bool compatDiet = true;
 
-                if (newItem.selectedDietsId.Length > 1)
+                if (newItem.selectedDietsId != null)
                 {
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
@@ -287,6 +286,10 @@ namespace CookingCurator.Controllers
             }
             catch
             {
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
                 return View(newItem);
             }
         }
@@ -304,14 +307,14 @@ namespace CookingCurator.Controllers
                 newItem.selectedDietsId = new string[0];
                 return View(newItem);
             }
-                
+
 
             try
             {
                 //Check for Diet conflict
                 bool compatDiet = true;
 
-                if (newItem.selectedDietsId.Length > 1)
+                if (newItem.selectedDietsId != null)
                 {
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
@@ -377,13 +380,18 @@ namespace CookingCurator.Controllers
                 addedItem = m.RecipeIDUpdate(addedItem);
                 // If the item was not added, return the user to the Create page
                 // otherwise redirect them to the Details page.
-                if (addedItem == null)
+                if (addedItem == null) { 
                     return View(newItem);
+                }
                 else
                     return RedirectToAction("Details", new { id = addedItem.recipe_Id });
             }
             catch
             {
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
                 return View(newItem);
             }
         }
@@ -464,7 +472,7 @@ namespace CookingCurator.Controllers
                 //Check for Diet conflict
                 bool compatDiet = true;
 
-                if (recipes.selectedDietsId.Length > 1)
+                if (recipes.selectedDietsId != null)
                 {
                     for (int i = 0; i < recipes.selectedDietsId.Length; i++)
                     {

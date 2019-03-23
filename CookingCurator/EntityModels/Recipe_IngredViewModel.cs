@@ -10,7 +10,8 @@ using System.Web.Mvc;
 namespace CookingCurator.EntityModels
 {
     public class Recipe_IngredViewModel : RecipeBaseViewModel
-    { 
+    {
+        [Required]
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 
