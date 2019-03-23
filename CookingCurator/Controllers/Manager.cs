@@ -136,11 +136,9 @@ namespace CookingCurator.Controllers
 
             recipes = recipes.Where(x => x.recipe_ID != id).ToList();
 
-            for (int i = 0; i < 3; i++) {
-                finalRecipes.Add(recipes[i]);
-            }
+            recipes = recipes.Take(3).ToList();
 
-            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(finalRecipes);
+            return mapper.Map<List<RECIPE>, List<RecipeBaseViewModel>>(recipes);
         }
 
         public bool isBanned(string username) {
