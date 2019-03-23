@@ -51,6 +51,8 @@ namespace CookingCurator.Controllers
 
                 cfg.CreateMap<USER, UserBaseViewModel>();
 
+                cfg.CreateMap<USER, DeleteAccountViewModel>();
+
                 cfg.CreateMap<RecipeAddViewForm, RECIPE>();
 
                 cfg.CreateMap<RecipeIngred, RECIPE>();
@@ -113,6 +115,42 @@ namespace CookingCurator.Controllers
         // ProductEdit()
         // ProductDelete()
 
+        public bool AccountDelete(DeleteAccountViewModel user) {
+
+            if (user.password != user.ConfirmPassword) {
+                return false;
+            }
+
+            Regex r = new Regex("^[a-zA-Z0-9_]*$");
+            if (!r.IsMatch(user.password))
+            {
+                return false;
+            }
+
+            var ItemToDelete = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
+
+            var pass = HashPasswordLogin(user.password, ItemToDelete.salt);
+            if (ItemToDelete.password != pass)
+            {
+                return false;
+            }
+
+            if (ItemToDelete == null)
+            {
+                return false;
+            }
+            else {
+                FormsAuthentication.SignOut();
+                ds.Recipes.RemoveRange(ds.Recipes.Where(e => e.author == ItemToDelete.userName));
+                ds.Database.ExecuteSqlCommand("delete from RECIPE_USERS where user_ID = " + ItemToDelete.user_ID);
+                ds.Database.ExecuteSqlCommand("delete from USER_ALLERGIES where user_Id = " + ItemToDelete.user_ID);
+                ds.Database.ExecuteSqlCommand("delete from USER_DIETS where user_Id = " + ItemToDelete.user_ID);
+                ds.Users.Remove(ItemToDelete);
+                ds.SaveChanges();
+                return true;
+            }
+
+        }
 
         public List<RecipeBaseViewModel> giveRecommendations(List<String> ingreds, int id)
         {
