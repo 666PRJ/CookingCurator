@@ -57,6 +57,7 @@ namespace CookingCurator.EntityModels
         [HiddenInput]
         public string Content_Type { get; set; }
 
+        [Required]
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 
@@ -151,6 +152,7 @@ namespace CookingCurator.EntityModels
         [HiddenInput]
         public string Content_Type { get; set; }
 
+        [Required]
         [DisplayName("Ingredient Selection")]
         public string[] selectedIngredsId { get; set; }
 

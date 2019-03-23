@@ -601,11 +601,15 @@ namespace CookingCurator.Controllers
 
         public void addDietsForRecipes(int id, String[] selectedIds)
         {
-            for (int i = 0; i < selectedIds.Length; i++)
+            if(selectedIds != null)
             {
-                String query = "INSERT INTO DIET_RECIPES (recipe_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
-                ds.Database.ExecuteSqlCommand(query);
+                for (int i = 0; i < selectedIds.Length; i++)
+                {
+                    String query = "INSERT INTO DIET_RECIPES (recipe_ID, diet_ID) VALUES (" + id + "," + Int32.Parse(selectedIds[i]) + ")";
+                    ds.Database.ExecuteSqlCommand(query);
+                }
             }
+
             ds.SaveChanges();
         }
 
