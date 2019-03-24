@@ -32,14 +32,23 @@ namespace CookingCurator.Controllers
             int idNum = m.FetchUserId(ViewBag.Username);
 
             IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
+            IEnumerable<AllergyViewModel> checkAllergies = m.AllergiesForUserProfile(idNum);
 
             var recipes = m.RecipeGetAllWithImages();
 
-            if (checkDiets.Any())
+            if(checkDiets.Any() && checkAllergies.Any())
+            {
+                recipes = m.RecipeGetFilteredByBothWithImages(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any())
             {
                recipes = m.RecipeGetFilteredByDietWithImages(idNum);
             }
-            
+            else if (!checkDiets.Any() && checkAllergies.Any())
+            {
+                recipes = m.RecipeGetFilteredByAllergiesWithImages(idNum);
+            }
+
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
 
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
@@ -193,8 +202,9 @@ namespace CookingCurator.Controllers
         }
 
         //CreateVerified will be only avilable to admin
-        // POST: Recipe/Create
+        // POST: Recipe/CreateVerified
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem, HttpPostedFileBase file)
         {
             // Validate the input
@@ -207,14 +217,13 @@ namespace CookingCurator.Controllers
                 return View(newItem);
             }
 
-
             try
             {
 
                 //Check for Diet conflict
                 bool compatDiet = true;
 
-                if (newItem.selectedDietsId.Length > 1)
+                if (newItem.selectedDietsId != null)
                 {
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
@@ -287,12 +296,17 @@ namespace CookingCurator.Controllers
             }
             catch
             {
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
                 return View(newItem);
             }
         }
 
         // POST: Recipe/Create
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Create(RecipeAddViewForm newItem, HttpPostedFileBase file)
         {
             // Validate the input
@@ -304,14 +318,14 @@ namespace CookingCurator.Controllers
                 newItem.selectedDietsId = new string[0];
                 return View(newItem);
             }
-                
+
 
             try
             {
                 //Check for Diet conflict
                 bool compatDiet = true;
 
-                if (newItem.selectedDietsId.Length > 1)
+                if (newItem.selectedDietsId != null)
                 {
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
@@ -377,13 +391,18 @@ namespace CookingCurator.Controllers
                 addedItem = m.RecipeIDUpdate(addedItem);
                 // If the item was not added, return the user to the Create page
                 // otherwise redirect them to the Details page.
-                if (addedItem == null)
+                if (addedItem == null) { 
                     return View(newItem);
+                }
                 else
                     return RedirectToAction("Details", new { id = addedItem.recipe_Id });
             }
             catch
             {
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
                 return View(newItem);
             }
         }
@@ -428,6 +447,7 @@ namespace CookingCurator.Controllers
         // POST: Recipe/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Edit(Recipe_IngredViewModel recipes, HttpPostedFileBase file)
         {
             Recipe_IngredViewModel recipe = m.mapper.Map<RecipeWithIngredBaseViewModel, Recipe_IngredViewModel>(m.RecipeWithIngredGetById(recipes.recipe_Id));
@@ -464,7 +484,7 @@ namespace CookingCurator.Controllers
                 //Check for Diet conflict
                 bool compatDiet = true;
 
-                if (recipes.selectedDietsId.Length > 1)
+                if (recipes.selectedDietsId != null)
                 {
                     for (int i = 0; i < recipes.selectedDietsId.Length; i++)
                     {

@@ -388,6 +388,7 @@
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeDietsViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
+    <Compile Include="EntityModels\DeleteAccountViewModel.cs" />
     <Compile Include="EntityModels\DietDescViewModel.cs" />
     <Compile Include="EntityModels\IngredientBaseViewModel.cs" />
     <Compile Include="EntityModels\ContactUsViewModel.cs" />
@@ -551,7 +552,6 @@
     <Content Include="Views\Home\VerifyAccount.cshtml" />
     <Content Include="Views\Home\RegisterationSuccess.cshtml" />
     <Content Include="Views\Home\AcceptWaiver.cshtml" />
-    <Content Include="Views\Home\TestAcc.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
     <Content Include="Views\Home\Forgot.cshtml" />
     <Content Include="Views\Home\Reset.cshtml" />
@@ -571,6 +571,7 @@
     <Content Include="Views\Profile\ChangeDiets.cshtml" />
     <Content Include="Views\Profile\ChangeAllergies.cshtml" />
     <Content Include="Views\Shared\_AcceptWaiver.cshtml" />
+    <Content Include="Views\Profile\DeleteAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

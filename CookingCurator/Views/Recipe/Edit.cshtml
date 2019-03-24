@@ -1,5 +1,5 @@
 ﻿@model CookingCurator.EntityModels.Recipe_IngredViewModel
-
+<script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -39,7 +39,7 @@
             @Html.ValidationMessageFor(model => model.instructions, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    <script>CKEDITOR.replace('instructions', { startupFocus: true });</script>
     <div class="form-group">
         @Html.LabelFor(model => model.lastUpdated, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">

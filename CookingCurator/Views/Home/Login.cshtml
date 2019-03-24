@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Login</h2>                    <p class="text-right">@Html.ActionLink("*", "TestAcc", "Home")</p>
+<h2>Login</h2>
 
 
 @using (Html.BeginForm("Login", "Home", new { returnUrl = Request.QueryString["ReturnUrl"] }, FormMethod.Post))

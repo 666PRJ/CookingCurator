@@ -34,6 +34,17 @@ namespace CookingCurator.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!m.IsUsernameDup(registerModel.userName)) {
+                    ModelState.AddModelError("", "Username in Use");
+                    return View();
+                }
+
+                if (!m.IsEmailDup(registerModel.userEmail))
+                {
+                    ModelState.AddModelError("", "Email in Use");
+                    return View();
+                }
+
                 if (!m.IsUsernameSpace(registerModel.userName))
                 {
                     ModelState.AddModelError("", "No spaces in Username");
@@ -75,12 +86,6 @@ namespace CookingCurator.Controllers
         }
 
         public ActionResult Login()
-        {
-            return View();
-        }
-
-
-        public ActionResult TestAcc()
         {
             return View();
         }
