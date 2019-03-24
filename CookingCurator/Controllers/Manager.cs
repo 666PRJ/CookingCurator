@@ -357,6 +357,20 @@ namespace CookingCurator.Controllers
             return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(recipes);
         }
 
+        public IEnumerable<RecipeWithImagesViewModel> RecipeGetFilteredByAllergiesWithImages(int idNum)
+        {
+            var recipes = ds.Recipes.SqlQuery("Select recipe_Id, title, rating, instructions, lastUpdated, author, verified, source_ID, source_Link, country, mealTimeType, content, 'Content-Type' AS 'Content_Type' FROM RECIPES WHERE recipe_ID NOT IN (SELECT recipe_ID FROM RECIPE_INGREDS WHERE ingred_ID IN (SELECT ingred_ID FROM ALLERGY_INGREDS WHERE allergy_ID IN (SELECT allergy_Id FROM USER_ALLERGIES WHERE user_Id =" + idNum + ")))");
+
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(recipes);
+        }
+
+        public IEnumerable<RecipeWithImagesViewModel> RecipeGetFilteredByBothWithImages(int idNum)
+        {
+            var recipes = ds.Recipes.SqlQuery("Select recipe_Id, title, rating, instructions, lastUpdated, author, verified, source_ID, source_Link, country, mealTimeType, content, 'Content-Type' AS 'Content_Type' FROM RECIPES WHERE recipe_ID NOT IN (SELECT recipe_ID FROM RECIPE_INGREDS WHERE ingred_ID IN (SELECT ingred_ID FROM ALLERGY_INGREDS WHERE allergy_ID IN (SELECT allergy_Id FROM USER_ALLERGIES WHERE user_Id =" + idNum + "))) AND recipe_ID IN (SELECT recipe_ID FROM DIET_RECIPES WHERE diet_ID IN (SELECT diet_Id FROM USER_DIETS WHERE user_Id =" + idNum + "))");
+
+            return mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(recipes);
+        }
+
         public RecipeBaseViewModel RecipeGetById(int? id)
         {
             // Attempt to fetch the object.

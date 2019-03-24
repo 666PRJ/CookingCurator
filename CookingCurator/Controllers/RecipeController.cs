@@ -32,14 +32,23 @@ namespace CookingCurator.Controllers
             int idNum = m.FetchUserId(ViewBag.Username);
 
             IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
+            IEnumerable<AllergyViewModel> checkAllergies = m.AllergiesForUserProfile(idNum);
 
             var recipes = m.RecipeGetAllWithImages();
 
-            if (checkDiets.Any())
+            if(checkDiets.Any() && checkAllergies.Any())
+            {
+                recipes = m.RecipeGetFilteredByBothWithImages(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any())
             {
                recipes = m.RecipeGetFilteredByDietWithImages(idNum);
             }
-            
+            else if (!checkDiets.Any() && checkAllergies.Any())
+            {
+                recipes = m.RecipeGetFilteredByAllergiesWithImages(idNum);
+            }
+
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
 
             if (!string.IsNullOrEmpty(countryName) && !string.IsNullOrEmpty(mealType))
