@@ -1154,7 +1154,7 @@ namespace CookingCurator.Controllers
         private bool SendEmailVerification(string GUID, string emailID)
         {
             var verificationURL = "/Home/VerifyAccount/" + GUID;
-            var link = "http://localhost:5657" + verificationURL;
+            var link = "http://myvmlab.senecacollege.ca:6390" + verificationURL;
             try
             {
                 string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
@@ -1184,7 +1184,7 @@ namespace CookingCurator.Controllers
         private bool SendPasswordRecovery(string GUID, string emailID, string userName)
         {
             var verificationURL = "/Home/Reset/" + GUID;
-            var link = "http://localhost:5657" + verificationURL;
+            var link = "http://myvmlab.senecacollege.ca:6390" + verificationURL;
             try
             {
                 string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
@@ -1608,7 +1608,7 @@ namespace CookingCurator.Controllers
         private bool SendReportRecipeEmail(ReportRecipeViewModel reportedRecipe)
         {
             var URL = "/Recipe/Details/" + reportedRecipe.recipeId;
-            var link = "http://localhost:5657" + URL;
+            var link = "http://myvmlab.senecacollege.ca:6390" + URL;
             try
             {
                 string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
