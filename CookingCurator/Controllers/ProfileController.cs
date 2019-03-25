@@ -126,7 +126,7 @@ namespace CookingCurator.Controllers
 
             bool error = m.ChangePassword(newPassword);
             if (error == false) {
-                newPassword.ErrorMessage = "Error with Password";
+                ModelState.AddModelError("", "Error with Password");
                 return View(newPassword);
             }
             else {
@@ -138,7 +138,6 @@ namespace CookingCurator.Controllers
         public ActionResult ChangePassword()
         {
             ChangePasswordViewModel model = new ChangePasswordViewModel();
-            model.ErrorMessage = "";
 
             return View(model);
         }

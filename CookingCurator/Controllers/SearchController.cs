@@ -45,7 +45,6 @@ namespace CookingCurator.Controllers
             };
                 searchModel.searchSelection = stringSelection;
                 ModelState.AddModelError("", "Please input text");
-                //ViewBag.NoText = "Please input text";
                 return View("Search",searchModel);
             }
 
