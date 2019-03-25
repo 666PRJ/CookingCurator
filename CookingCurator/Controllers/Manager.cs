@@ -239,6 +239,9 @@ namespace CookingCurator.Controllers
         }
 
         public bool IsUsernameSpace(string username) {
+            if (String.IsNullOrWhiteSpace(username)) {
+                return false;
+            }
             Regex r = new Regex("^[a-zA-Z0-9_]*$");
             if (!r.IsMatch(username))
             {

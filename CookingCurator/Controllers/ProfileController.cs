@@ -93,22 +93,24 @@ namespace CookingCurator.Controllers
                 return View(newUsername);
             }
 
+
+
             if (!m.IsUsernameSpace(newUsername.userName))
             {
-                newUsername.ErrorMessage = "No spaces in username";
+                ModelState.AddModelError("", "No spaces/special characters in username");
                 return View(newUsername);
             }
 
             bool isDup = m.IsDupUserName(newUsername);
 
             if (isDup == false) {
-                newUsername.ErrorMessage = "Username taken";
+                ModelState.AddModelError("", "Username taken");
                 return View(newUsername);
             }
 
             bool error = m.ChangeUsername(newUsername);
             if (error == false) {
-                newUsername.ErrorMessage = "Error with username";
+                ModelState.AddModelError("", "Error with username");
                 return View(newUsername);
             }
             else {
