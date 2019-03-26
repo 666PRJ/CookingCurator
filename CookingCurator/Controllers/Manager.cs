@@ -380,6 +380,18 @@ namespace CookingCurator.Controllers
             return recipe == null ? null : mapper.Map<RECIPE, RecipeBaseViewModel>(recipe);
         }
 
+        public int UsernameToId(string username) {
+            var user = ds.Users.SingleOrDefault(e => e.userName == username);
+
+            if (user != null) {
+                return user.user_ID;
+            }
+            else {
+                return 0;
+            }
+
+        }
+
         public RecipeWithIngredBaseViewModel RecipeWithIngredGetById(int? id)
         {
             // Attempt to fetch the object.

@@ -44,7 +44,7 @@ namespace CookingCurator.Controllers
         }
 
         // GET: User/Details/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Details(int? id)
         {
             var u = m.GetUserById(id.GetValueOrDefault());

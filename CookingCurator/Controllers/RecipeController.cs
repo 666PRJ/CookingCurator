@@ -92,6 +92,7 @@ namespace CookingCurator.Controllers
                 return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
             }
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
+            recipe.userID = m.UsernameToId(recipe.author);
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
             recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
             recipe.recommended = m.giveRecommendations(m.ingredsForRecipe(id.GetValueOrDefault()), id.GetValueOrDefault());
