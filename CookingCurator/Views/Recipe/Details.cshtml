@@ -55,7 +55,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.author)
+            @if (Model.userID == 0)
+            {
+                @Html.DisplayFor(model => model.author)
+            }
+            else
+            {             
+                @Html.ActionLink(Model.author, "Details", "User", new { id = Model.userID }, null)
+            }
         </dd>
 
         <dt>
