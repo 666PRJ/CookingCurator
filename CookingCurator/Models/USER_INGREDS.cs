@@ -12,9 +12,9 @@ namespace CookingCurator.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DIET_INGREDS
+    public partial class USER_INGREDS
     {
-        public int diet_ID { get; set; }
+        public int user_ID { get; set; }
         public int ingred_ID { get; set; }
     }
 }
