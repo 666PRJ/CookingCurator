@@ -237,5 +237,43 @@ namespace CookingCurator.Controllers
             updateAllergies.chosenAllergies = m.AllergiesForUserProfile(idNum);
             return View(updateAllergies);
         }
+
+        // GET: Profile/ChangeRestrictions
+        [Authorize]
+        public ActionResult ChangeRestrictions()
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            IEnumerable<IngredientBaseViewModel> restrictions = m.IngredsForUserProfile(idNum);
+            String[] selectedRestrictions = m.IngredsForUser(idNum).ToArray();
+
+            ChangeRestrictionsViewModel resChange = new ChangeRestrictionsViewModel();
+
+            resChange.allIngredients = m.IngredGetAll();
+            resChange.chosenIngredients = restrictions;
+            resChange.selectedIngredientsId = selectedRestrictions;
+
+            return View(resChange);
+        }
+
+        // POST: Profile/ChangeRestrictions
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeRestrictions(ChangeRestrictionsViewModel updateRes)
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            m.DeleteIngredsForUser(idNum);
+            if (updateRes.selectedIngredientsId != null)
+            {
+                m.UpdateIngredsForUser(idNum, updateRes.selectedIngredientsId);
+            }
+
+            updateRes.allIngredients = m.IngredGetAll();
+            updateRes.chosenIngredients = m.IngredsForUserProfile(idNum);
+            return View(updateRes);
+        }
     }
 }

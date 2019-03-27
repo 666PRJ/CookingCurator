@@ -33,20 +33,44 @@ namespace CookingCurator.Controllers
 
             IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
             IEnumerable<AllergyViewModel> checkAllergies = m.AllergiesForUserProfile(idNum);
+            IEnumerable<IngredientBaseViewModel> checkRestrictions = m.IngredsForUserProfile(idNum);
 
             var recipes = m.RecipeGetAllWithImages();
 
-            if(checkDiets.Any() && checkAllergies.Any())
+            if (checkDiets.Any() && checkAllergies.Any() && checkRestrictions.Any())
             {
-                recipes = m.RecipeGetFilteredByBothWithImages(idNum);
+                //All 3 used
+                recipes = m.RecipeGetFilteredByAllThree(idNum);
             }
-            else if (checkDiets.Any() && !checkAllergies.Any())
+            else if(checkDiets.Any() && checkAllergies.Any() && !checkRestrictions.Any())
             {
+                //Diet and Allergies, no restrictions
+                recipes = m.RecipeGetFilteredByAllergyAndDiet(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Diets and restrictions, no allergies
+                recipes = m.RecipeGetFilteredByDietandRes(idNum);
+            }
+            else if (!checkDiets.Any() && checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Allergies and restrictions, no diets
+                recipes = m.RecipeGetFilteredByAllergyAndRes(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any() && !checkRestrictions.Any())
+            {
+               //Only diets selected
                recipes = m.RecipeGetFilteredByDietWithImages(idNum);
             }
-            else if (!checkDiets.Any() && checkAllergies.Any())
+            else if (!checkDiets.Any() && checkAllergies.Any() && !checkRestrictions.Any())
             {
+                //Only allergies selected
                 recipes = m.RecipeGetFilteredByAllergiesWithImages(idNum);
+            }
+            else if (!checkDiets.Any() && !checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Only restrictions selected
+                recipes = m.RecipeGetFilteredByRestrictions(idNum);
             }
 
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
