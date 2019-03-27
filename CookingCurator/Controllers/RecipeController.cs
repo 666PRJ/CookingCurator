@@ -33,20 +33,44 @@ namespace CookingCurator.Controllers
 
             IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
             IEnumerable<AllergyViewModel> checkAllergies = m.AllergiesForUserProfile(idNum);
+            IEnumerable<IngredientBaseViewModel> checkRestrictions = m.IngredsForUserProfile(idNum);
 
             var recipes = m.RecipeGetAllWithImages();
 
-            if(checkDiets.Any() && checkAllergies.Any())
+            if (checkDiets.Any() && checkAllergies.Any() && checkRestrictions.Any())
             {
-                recipes = m.RecipeGetFilteredByBothWithImages(idNum);
+                //All 3 used
+                recipes = m.RecipeGetFilteredByAllThree(idNum);
             }
-            else if (checkDiets.Any() && !checkAllergies.Any())
+            else if(checkDiets.Any() && checkAllergies.Any() && !checkRestrictions.Any())
             {
+                //Diet and Allergies, no restrictions
+                recipes = m.RecipeGetFilteredByAllergyAndDiet(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Diets and restrictions, no allergies
+                recipes = m.RecipeGetFilteredByDietandRes(idNum);
+            }
+            else if (!checkDiets.Any() && checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Allergies and restrictions, no diets
+                recipes = m.RecipeGetFilteredByAllergyAndRes(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any() && !checkRestrictions.Any())
+            {
+               //Only diets selected
                recipes = m.RecipeGetFilteredByDietWithImages(idNum);
             }
-            else if (!checkDiets.Any() && checkAllergies.Any())
+            else if (!checkDiets.Any() && checkAllergies.Any() && !checkRestrictions.Any())
             {
+                //Only allergies selected
                 recipes = m.RecipeGetFilteredByAllergiesWithImages(idNum);
+            }
+            else if (!checkDiets.Any() && !checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Only restrictions selected
+                recipes = m.RecipeGetFilteredByRestrictions(idNum);
             }
 
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
@@ -229,13 +253,13 @@ namespace CookingCurator.Controllers
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
                         //None apply cannot be selected with anything else
-                        if (newItem.selectedDietsId[i] == "10")
+                        if (newItem.selectedDietsId[i] == "10" && newItem.selectedDietsId.Length > 1)
                         {
                             compatDiet = false;
                         }
 
                         //Vegan and Vegetarian shouldn't have meat
-                        if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
+                        else if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
                         {
                             for (int j = 0; j < newItem.selectedDietsId.Length; j++)
                             {
@@ -331,13 +355,13 @@ namespace CookingCurator.Controllers
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
                         //None apply cannot be selected with anything else
-                        if (newItem.selectedDietsId[i] == "10")
+                        if (newItem.selectedDietsId[i] == "10" && newItem.selectedDietsId.Length > 1)
                         {
                             compatDiet = false;
                         }
 
                         //Vegan and Vegetarian shouldn't have meat
-                        if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
+                        else if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
                         {
                             for (int j = 0; j < newItem.selectedDietsId.Length; j++)
                             {
@@ -489,9 +513,20 @@ namespace CookingCurator.Controllers
                 {
                     for (int i = 0; i < recipes.selectedDietsId.Length; i++)
                     {
-                        if (recipes.selectedDietsId[i] == "10")
+                        if (recipes.selectedDietsId[i] == "10" && recipes.selectedDietsId.Length > 1)
                         {
                             compatDiet = false;
+                        }
+
+                        else if (recipes.selectedDietsId[i] == "8" || recipes.selectedDietsId[i] == "5")
+                        {
+                            for (int j = 0; j < recipes.selectedDietsId.Length; j++)
+                            {
+                                if (recipes.selectedDietsId[j] != "6" && recipes.selectedDietsId[j] != "5" && recipes.selectedDietsId[j] != "8")
+                                {
+                                    compatDiet = false;
+                                }
+                            }
                         }
                     }
 

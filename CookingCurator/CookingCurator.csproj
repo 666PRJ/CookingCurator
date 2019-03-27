@@ -385,6 +385,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
     <Compile Include="EntityModels\ChangeAllergiesViewModel.cs" />
+    <Compile Include="EntityModels\ChangeRestrictionsViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeDietsViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
@@ -572,6 +573,7 @@
     <Content Include="Views\Profile\ChangeAllergies.cshtml" />
     <Content Include="Views\Shared\_AcceptWaiver.cshtml" />
     <Content Include="Views\Profile\DeleteAccount.cshtml" />
+    <Content Include="Views\Profile\ChangeRestrictions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
