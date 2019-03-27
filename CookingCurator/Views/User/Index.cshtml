@@ -22,6 +22,9 @@
         <th>
             @Html.DisplayNameFor(model => model.banUser)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email_Verified)
+        </th>
         <th></th>
     </tr>
 
@@ -41,10 +44,11 @@
             @Html.DisplayFor(modelItem => item.banUser)
         </td>
         <td>
-            <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) | -->
+            @Html.DisplayFor(modelItem => item.email_Verified)
+        </td>
+        <td>
             @Html.ActionLink("Ban User", "BanUser", new { id = item.user_ID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.user_ID }) 
-            <!--| @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
+            @Html.ActionLink("Details", "Details", new { id = item.user_ID })
         </td>
     </tr>
 }
