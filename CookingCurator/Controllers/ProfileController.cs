@@ -93,8 +93,6 @@ namespace CookingCurator.Controllers
                 return View(newUsername);
             }
 
-
-
             if (!m.IsUsernameSpace(newUsername.userName))
             {
                 ModelState.AddModelError("", "No spaces/special characters in username");
