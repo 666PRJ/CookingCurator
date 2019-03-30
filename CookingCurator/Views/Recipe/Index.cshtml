@@ -147,7 +147,7 @@ else
                     @Html.DisplayFor(modelItem => item.rating)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.lastUpdated)
+                    @Html.DisplayFor(model => item.lastUpdated.Day)/@Html.DisplayFor(model => item.lastUpdated.Month)/@Html.DisplayFor(model => item.lastUpdated.Year)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.author)
