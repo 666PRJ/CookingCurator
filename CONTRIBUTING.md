@@ -17,9 +17,9 @@ You need approval from our team members to get your pull request merged into the
 Acceptable behaviour:
 
 * Being helpful and supportive to every team member
-* Using approriate and welcome language
+* Using appropriate and welcome language
 
 Unacceptable behaviour:
 
 * Derogatory, personal and insulting comments
-* Other inapproriate conduct
+* Other inappropriate conduct
