@@ -34,7 +34,7 @@ Example of how to deploy this project
 
 ### Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/666PRJ/CookingCurator/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/666PRJ/CookingCurator/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ### Contributors
 
