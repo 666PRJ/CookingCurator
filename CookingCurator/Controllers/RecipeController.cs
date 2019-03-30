@@ -344,7 +344,7 @@ namespace CookingCurator.Controllers
                 return View(newItem);
             }
 
-            if (m.IsUsernameSpace(newItem.title) == false && m.IsUsernameSpace(newItem.country) == false && m.IsUsernameSpace(newItem.mealTimeType) == false) {
+            if (m.IsUsernameSpace(newItem.title) == false || m.IsUsernameSpace(newItem.country) == false || m.IsUsernameSpace(newItem.mealTimeType) == false) {
                 ModelState.AddModelError("", "No Special Characters Allowed");
                 newItem.ingredients = m.IngredientGetAll();
                 newItem.selectedIngredsId = new string[0];
@@ -494,6 +494,12 @@ namespace CookingCurator.Controllers
             recipe.selectedIngredsId = selectedIngreds;
             recipe.diets = diets;
             recipe.selectedDietsId = selectedDiets;
+
+            if (m.IsUsernameSpace(recipes.title) == false || m.IsUsernameSpace(recipes.country) == false || m.IsUsernameSpace(recipes.mealTimeType) == false)
+            {
+                ModelState.AddModelError("", "No Special Characters Allowed");
+                return View(recipe);
+            }
 
             if (recipe == null)
             {
