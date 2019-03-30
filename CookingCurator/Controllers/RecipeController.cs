@@ -1,4 +1,5 @@
 ﻿using CookingCurator.EntityModels;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,7 +20,7 @@ namespace CookingCurator.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
+        public ActionResult Index(string countryName, string mealType, string verified, string sortOrder, int? pageNo)
         {
             m.isUserBanned();
 
@@ -104,7 +105,7 @@ namespace CookingCurator.Controllers
             ViewBag.countrySort = sortOrder == "country" ? "country_desc" : "country";
             ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
             recipes = m.SortRecipes(sortOrder, recipes);
-            return View(recipes);
+            return View(recipes.ToList().ToPagedList(pageNo ?? 1, 10));
         }
 
         // GET: Recipe/Details/5

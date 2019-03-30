@@ -1,4 +1,6 @@
-﻿@model IEnumerable<CookingCurator.EntityModels.RecipeWithImagesViewModel>
+﻿@model IPagedList<CookingCurator.EntityModels.RecipeWithImagesViewModel>
+@using PagedList;
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -48,7 +50,7 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort})
+                @Html.ActionLink("Recipe Title", "Index", new { sortOrder = ViewBag.titleSort })
                 @if (ViewBag.titleSort == "")
                 {
                     <i class="glyphicon glyphicon-triangle-top"></i>
@@ -70,7 +72,7 @@ else
                 }
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.lastUpdated)
+                @Html.DisplayNameFor(model => model.First().lastUpdated)
             </th>
             <th>
                 @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.authorSort })
@@ -84,7 +86,7 @@ else
                 }
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.verified)
+                @Html.DisplayNameFor(model => model.First().verified)
             </th>
             <th>
                 @Html.ActionLink("Source ID #", "Index", new { sortOrder = ViewBag.sourceIdSort })
@@ -191,5 +193,6 @@ else
         }
 
     </table>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { countryName= Request.QueryString["countryName"], mealType = Request.QueryString["mealType"], verified = Request.QueryString["verified"], sortOrder = Request.QueryString["sortOrder"], pageNo = page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
 }
 
