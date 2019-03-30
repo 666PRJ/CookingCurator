@@ -57,10 +57,10 @@
         <dd>
             @if (Model.userID == 0)
             {
-                @Html.DisplayFor(model => model.author)
+                @Html.ActionLink(Model.author, "Authors", "Recipe", new { authorName = Model.author }, null)
             }
             else
-            {             
+            {
                 @Html.ActionLink(Model.author, "Details", "User", new { id = Model.userID }, null)
             }
         </dd>
