@@ -109,7 +109,7 @@ namespace CookingCurator.Controllers
 
         // GET: Recipe/Details/5
         [Authorize]
-        public ActionResult Details(int? id, string bookMarkError)
+        public ActionResult Details(int? id, string bookMarkError, string bookmark)
         {
             if (!m.waiverAccepted())
             {
@@ -136,6 +136,10 @@ namespace CookingCurator.Controllers
                 {
                     ViewBag.error = bookMarkError;
                 }
+                if (!String.IsNullOrEmpty(bookmark))
+                {
+                    ViewBag.bookMark = bookmark;
+                }   
                 return View(recipe);
             }
                 
@@ -653,13 +657,11 @@ namespace CookingCurator.Controllers
             var error = m.BookMarkRecipe(ID.GetValueOrDefault());
             if(error == 0)
             {
-                ViewBag.MyString = 0;
-                return View();
+                return RedirectToAction("Details", new { id = ID, bookmark = "0" });
             }
             else
             {
-                ViewBag.MyString = 1;
-                return View();
+                return RedirectToAction("Details", new { id = ID, bookmark = "1" });
             }
         }
 
