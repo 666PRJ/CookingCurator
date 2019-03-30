@@ -178,10 +178,9 @@ namespace CookingCurator.Controllers
 
             var u = m.GetUserByEmail(recoverModel.userEmail);
 
-            //Vague message to prevent guessing emails
             if(u == null)
             {
-                ModelState.AddModelError("", "An email has been sent to the specified email, provided it was used to make a Cooking Curator Account");
+                ModelState.AddModelError("", "Invalid Email: No account found with the specified email");
                 return View();
             }
 
@@ -192,14 +191,14 @@ namespace CookingCurator.Controllers
             bool error = m.RecoverUser(recoverModel);
             if (!error)
             {
-                ModelState.AddModelError("", "An email has been sent to the specified email, provided it was used to make a Cooking Curator Account");
+                ViewBag.success = "An email has been sent to the specified email, provided it was used to make a Cooking Curator Account";
                 u.GUID = recoverModel.GUID;
                 return View();
             }
             else
             {
                 //Account is banned or email was never verified
-                ModelState.AddModelError("", "The account beloning to the specified email address can not be recovered.");
+                ModelState.AddModelError("", "You cannot recover this account, either your email isn't verified or you are banned");
                 return View();
             }
 
