@@ -41,6 +41,7 @@ namespace CookingCurator.EntityModels
         public Nullable<int> source_ID { get; set; }
 
         [DisplayName("Source Link")]
+        [DataType(DataType.Url)]
         public string source_Link { get; set; }
 
         [Required]
@@ -135,6 +136,7 @@ namespace CookingCurator.EntityModels
         public Nullable<int> source_ID { get; set; }
 
         [Required]
+        [DataType(DataType.Url)]
         [DisplayName("Source Link")]
         public string source_Link { get; set; }
 
