@@ -158,7 +158,8 @@ namespace CookingCurator.Controllers
             }
             else
             {
-                return RedirectToAction("UserDashboard");
+                ViewBag.success = "An email is sent to the administrator. Thanks for contacting us, we will get back to you!";
+                return View();
             }
 
         }
