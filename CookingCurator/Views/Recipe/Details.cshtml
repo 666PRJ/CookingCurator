@@ -15,10 +15,24 @@
     @if (!String.IsNullOrEmpty(error))
     {
         <div class="alert alert-danger"><span>@ViewBag.error</span></div>
-            
+
     }
-            <hr />
-    </header>
+    @if (ViewBag.bookmark == "0")
+    {
+        <div class="alert alert-success">
+            <p> <b>Success!</b> This recipe has been bookmarked successfully</p>
+            <p> Click here to view all @Html.ActionLink("Recipes", "Index", "Recipe") </p>
+        </div>
+    }
+    else if(ViewBag.bookmark == "1")
+    {
+        <div class="alert alert-danger">
+            <p> <b>Error!</b> This recipe is already bookmarked. All bookmarked recipe can be viewed from Dashboard page.</p>
+            <p> Click here to view all your @Html.ActionLink("Bookmarks", "Index", "Bookmark") </p>
+        </div>
+    }
+    <hr />
+</header>
 
 <section>
     <dl class="dl-horizontal">
@@ -55,7 +69,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.author)
+            @if (Model.userID == 0)
+            {
+                @Html.ActionLink(Model.author, "Authors", "Recipe", new { authorName = Model.author }, null)
+            }
+            else
+            {
+                @Html.ActionLink(Model.author, "Details", "User", new { id = Model.userID }, null)
+            }
         </dd>
 
         <dt>
@@ -193,6 +214,10 @@
             }
             @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
         </p>
+
+        <p class="text-danger"> Warning: Cooking Curator always advises users to carefully examine all contents of any recipe before use!
+        </p>
+
 </footer>
 
 

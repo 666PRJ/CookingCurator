@@ -20,5 +20,8 @@ namespace CookingCurator.EntityModels
 
         [DisplayName(("Ban User/Unban User"))]
         public bool banUser { get; set; }
+
+        [DisplayName(("Email Verified"))]
+        public bool email_Verified { get; set; }
     }
 }

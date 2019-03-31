@@ -1,4 +1,5 @@
 ﻿using CookingCurator.EntityModels;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,7 +20,7 @@ namespace CookingCurator.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult Index(string countryName, string mealType, string verified, string sortOrder)
+        public ActionResult Index(string countryName, string mealType, string verified, string sortOrder, int? pageNo)
         {
             m.isUserBanned();
 
@@ -33,20 +34,44 @@ namespace CookingCurator.Controllers
 
             IEnumerable<DietDescViewModel> checkDiets = m.DietsForUserProfile(idNum);
             IEnumerable<AllergyViewModel> checkAllergies = m.AllergiesForUserProfile(idNum);
+            IEnumerable<IngredientBaseViewModel> checkRestrictions = m.IngredsForUserProfile(idNum);
 
             var recipes = m.RecipeGetAllWithImages();
 
-            if(checkDiets.Any() && checkAllergies.Any())
+            if (checkDiets.Any() && checkAllergies.Any() && checkRestrictions.Any())
             {
-                recipes = m.RecipeGetFilteredByBothWithImages(idNum);
+                //All 3 used
+                recipes = m.RecipeGetFilteredByAllThree(idNum);
             }
-            else if (checkDiets.Any() && !checkAllergies.Any())
+            else if(checkDiets.Any() && checkAllergies.Any() && !checkRestrictions.Any())
             {
+                //Diet and Allergies, no restrictions
+                recipes = m.RecipeGetFilteredByAllergyAndDiet(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Diets and restrictions, no allergies
+                recipes = m.RecipeGetFilteredByDietandRes(idNum);
+            }
+            else if (!checkDiets.Any() && checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Allergies and restrictions, no diets
+                recipes = m.RecipeGetFilteredByAllergyAndRes(idNum);
+            }
+            else if (checkDiets.Any() && !checkAllergies.Any() && !checkRestrictions.Any())
+            {
+               //Only diets selected
                recipes = m.RecipeGetFilteredByDietWithImages(idNum);
             }
-            else if (!checkDiets.Any() && checkAllergies.Any())
+            else if (!checkDiets.Any() && checkAllergies.Any() && !checkRestrictions.Any())
             {
+                //Only allergies selected
                 recipes = m.RecipeGetFilteredByAllergiesWithImages(idNum);
+            }
+            else if (!checkDiets.Any() && !checkAllergies.Any() && checkRestrictions.Any())
+            {
+                //Only restrictions selected
+                recipes = m.RecipeGetFilteredByRestrictions(idNum);
             }
 
             ViewBag.Admin = m.IsUserAdmin(ViewBag.Username);
@@ -80,18 +105,19 @@ namespace CookingCurator.Controllers
             ViewBag.countrySort = sortOrder == "country" ? "country_desc" : "country";
             ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
             recipes = m.SortRecipes(sortOrder, recipes);
-            return View(recipes);
+            return View(recipes.ToList().ToPagedList(pageNo ?? 1, 10));
         }
 
         // GET: Recipe/Details/5
         [Authorize]
-        public ActionResult Details(int? id, string bookMarkError)
+        public ActionResult Details(int? id, string bookMarkError, string bookmark)
         {
             if (!m.waiverAccepted())
             {
                 return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
             }
             var recipe = m.RecipeWithIngredGetById(id.GetValueOrDefault());
+            recipe.userID = m.UsernameToId(recipe.author);
             recipe.ingreds = m.ingredsForRecipeViewModel(id.GetValueOrDefault());
             recipe.diets = m.dietsForRecipeViewModel(id.GetValueOrDefault());
             recipe.recommended = m.giveRecommendations(m.ingredsForRecipe(id.GetValueOrDefault()), id.GetValueOrDefault());
@@ -111,6 +137,10 @@ namespace CookingCurator.Controllers
                 {
                     ViewBag.error = bookMarkError;
                 }
+                if (!String.IsNullOrEmpty(bookmark))
+                {
+                    ViewBag.bookMark = bookmark;
+                }   
                 return View(recipe);
             }
                 
@@ -217,6 +247,16 @@ namespace CookingCurator.Controllers
                 return View(newItem);
             }
 
+            if (m.IsUsernameSpace(newItem.title) == false || m.IsUsernameSpace(newItem.country) == false || m.IsUsernameSpace(newItem.mealTimeType) == false)
+            {
+                ModelState.AddModelError("", "No Special Characters Allowed");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
+
             try
             {
 
@@ -228,13 +268,13 @@ namespace CookingCurator.Controllers
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
                         //None apply cannot be selected with anything else
-                        if (newItem.selectedDietsId[i] == "10")
+                        if (newItem.selectedDietsId[i] == "10" && newItem.selectedDietsId.Length > 1)
                         {
                             compatDiet = false;
                         }
 
                         //Vegan and Vegetarian shouldn't have meat
-                        if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
+                        else if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
                         {
                             for (int j = 0; j < newItem.selectedDietsId.Length; j++)
                             {
@@ -319,6 +359,14 @@ namespace CookingCurator.Controllers
                 return View(newItem);
             }
 
+            if (m.IsUsernameSpace(newItem.title) == false || m.IsUsernameSpace(newItem.country) == false || m.IsUsernameSpace(newItem.mealTimeType) == false) {
+                ModelState.AddModelError("", "No Special Characters Allowed");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
 
             try
             {
@@ -330,13 +378,13 @@ namespace CookingCurator.Controllers
                     for (int i = 0; i < newItem.selectedDietsId.Length; i++)
                     {
                         //None apply cannot be selected with anything else
-                        if (newItem.selectedDietsId[i] == "10")
+                        if (newItem.selectedDietsId[i] == "10" && newItem.selectedDietsId.Length > 1)
                         {
                             compatDiet = false;
                         }
 
                         //Vegan and Vegetarian shouldn't have meat
-                        if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
+                        else if (newItem.selectedDietsId[i] == "8" || newItem.selectedDietsId[i] == "5")
                         {
                             for (int j = 0; j < newItem.selectedDietsId.Length; j++)
                             {
@@ -462,6 +510,12 @@ namespace CookingCurator.Controllers
             recipe.diets = diets;
             recipe.selectedDietsId = selectedDiets;
 
+            if (m.IsUsernameSpace(recipes.title) == false || m.IsUsernameSpace(recipes.country) == false || m.IsUsernameSpace(recipes.mealTimeType) == false)
+            {
+                ModelState.AddModelError("", "No Special Characters Allowed");
+                return View(recipe);
+            }
+
             if (recipe == null)
             {
                 return HttpNotFound();
@@ -488,9 +542,20 @@ namespace CookingCurator.Controllers
                 {
                     for (int i = 0; i < recipes.selectedDietsId.Length; i++)
                     {
-                        if (recipes.selectedDietsId[i] == "10")
+                        if (recipes.selectedDietsId[i] == "10" && recipes.selectedDietsId.Length > 1)
                         {
                             compatDiet = false;
+                        }
+
+                        else if (recipes.selectedDietsId[i] == "8" || recipes.selectedDietsId[i] == "5")
+                        {
+                            for (int j = 0; j < recipes.selectedDietsId.Length; j++)
+                            {
+                                if (recipes.selectedDietsId[j] != "6" && recipes.selectedDietsId[j] != "5" && recipes.selectedDietsId[j] != "8")
+                                {
+                                    compatDiet = false;
+                                }
+                            }
                         }
                     }
 
@@ -603,13 +668,11 @@ namespace CookingCurator.Controllers
             var error = m.BookMarkRecipe(ID.GetValueOrDefault());
             if(error == 0)
             {
-                ViewBag.MyString = 0;
-                return View();
+                return RedirectToAction("Details", new { id = ID, bookmark = "0" });
             }
             else
             {
-                ViewBag.MyString = 1;
-                return View();
+                return RedirectToAction("Details", new { id = ID, bookmark = "1" });
             }
         }
 

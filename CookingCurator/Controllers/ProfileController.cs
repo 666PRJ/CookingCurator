@@ -95,20 +95,20 @@ namespace CookingCurator.Controllers
 
             if (!m.IsUsernameSpace(newUsername.userName))
             {
-                newUsername.ErrorMessage = "No spaces in username";
+                ModelState.AddModelError("", "No spaces/special characters in username");
                 return View(newUsername);
             }
 
             bool isDup = m.IsDupUserName(newUsername);
 
             if (isDup == false) {
-                newUsername.ErrorMessage = "Username taken";
+                ModelState.AddModelError("", "Username taken");
                 return View(newUsername);
             }
 
             bool error = m.ChangeUsername(newUsername);
             if (error == false) {
-                newUsername.ErrorMessage = "Error with username";
+                ModelState.AddModelError("", "Error with username");
                 return View(newUsername);
             }
             else {
@@ -126,7 +126,7 @@ namespace CookingCurator.Controllers
 
             bool error = m.ChangePassword(newPassword);
             if (error == false) {
-                newPassword.ErrorMessage = "Error with Password";
+                ModelState.AddModelError("", "Error with Password");
                 return View(newPassword);
             }
             else {
@@ -138,7 +138,6 @@ namespace CookingCurator.Controllers
         public ActionResult ChangePassword()
         {
             ChangePasswordViewModel model = new ChangePasswordViewModel();
-            model.ErrorMessage = "";
 
             return View(model);
         }
@@ -157,7 +156,8 @@ namespace CookingCurator.Controllers
             }
             else
             {
-                return RedirectToAction("UserDashboard");
+                ViewBag.success = "An email is sent to the administrator. Thanks for contacting us, we will get back to you!";
+                return View();
             }
 
         }
@@ -236,6 +236,44 @@ namespace CookingCurator.Controllers
             updateAllergies.allAllergies = m.AllergyGetAll();
             updateAllergies.chosenAllergies = m.AllergiesForUserProfile(idNum);
             return View(updateAllergies);
+        }
+
+        // GET: Profile/ChangeRestrictions
+        [Authorize]
+        public ActionResult ChangeRestrictions()
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            IEnumerable<IngredientBaseViewModel> restrictions = m.IngredsForUserProfile(idNum);
+            String[] selectedRestrictions = m.IngredsForUser(idNum).ToArray();
+
+            ChangeRestrictionsViewModel resChange = new ChangeRestrictionsViewModel();
+
+            resChange.allIngredients = m.IngredGetAll();
+            resChange.chosenIngredients = restrictions;
+            resChange.selectedIngredientsId = selectedRestrictions;
+
+            return View(resChange);
+        }
+
+        // POST: Profile/ChangeRestrictions
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeRestrictions(ChangeRestrictionsViewModel updateRes)
+        {
+            string userCheck = m.GetCurrentUsername();
+            int idNum = m.FetchUserId(userCheck);
+
+            m.DeleteIngredsForUser(idNum);
+            if (updateRes.selectedIngredientsId != null)
+            {
+                m.UpdateIngredsForUser(idNum, updateRes.selectedIngredientsId);
+            }
+
+            updateRes.allIngredients = m.IngredGetAll();
+            updateRes.chosenIngredients = m.IngredsForUserProfile(idNum);
+            return View(updateRes);
         }
     }
 }

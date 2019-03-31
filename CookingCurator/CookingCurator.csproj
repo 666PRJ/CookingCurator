@@ -168,6 +168,12 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
@@ -385,6 +391,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="EntityModels\BookmarkViewModel.cs" />
     <Compile Include="EntityModels\ChangeAllergiesViewModel.cs" />
+    <Compile Include="EntityModels\ChangeRestrictionsViewModel.cs" />
     <Compile Include="EntityModels\ChangePasswordViewModel.cs" />
     <Compile Include="EntityModels\ChangeDietsViewModel.cs" />
     <Compile Include="EntityModels\ChangeUsernameViewModel.cs" />
@@ -420,9 +427,6 @@
     </Compile>
     <Compile Include="Models\DataContext.cs" />
     <Compile Include="Models\DIET.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DIET_INGREDS.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DIET_RECIPES.cs">
@@ -467,6 +471,9 @@
     <Compile Include="Models\USER_DIETS.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\USER_INGREDS.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -474,11 +481,13 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\avocado.jpg" />
     <Content Include="Content\Images\CookingCuratorLogo.jpg" />
     <Content Include="Content\Images\down-arrow.png" />
     <Content Include="Content\Images\up-arrow.png" />
     <Content Include="Content\MultiSelect\chosen-sprite.png" />
     <Content Include="Content\MultiSelect\chosen.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -572,6 +581,7 @@
     <Content Include="Views\Profile\ChangeAllergies.cshtml" />
     <Content Include="Views\Shared\_AcceptWaiver.cshtml" />
     <Content Include="Views\Profile\DeleteAccount.cshtml" />
+    <Content Include="Views\Profile\ChangeRestrictions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

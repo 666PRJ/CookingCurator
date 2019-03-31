@@ -22,31 +22,37 @@
         <th>
             @Html.DisplayNameFor(model => model.banUser)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email_Verified)
+        </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.userName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.userEmail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.banUser)
-        </td>
-        <td>
-            <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) | -->
-            @Html.ActionLink("Ban User", "BanUser", new { id = item.user_ID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.user_ID }) 
-            <!--| @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.user_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.userName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.userEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.banUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email_Verified)
+            </td>
+            <td>
+                @Html.ActionLink("Ban User", "BanUser", new { id = item.user_ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.user_ID })
+            </td>
+        </tr>
+    }
 
 </table>
+
+@Html.ActionLink("Admin Dashboard", "Dashboard", "Profile", null,null)

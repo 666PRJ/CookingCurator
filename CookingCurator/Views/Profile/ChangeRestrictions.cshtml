@@ -1,0 +1,69 @@
+﻿@model CookingCurator.EntityModels.ChangeRestrictionsViewModel
+
+@{
+    ViewBag.Title = "Change Restrictions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool checkEmpty = Model.chosenIngredients.Any();
+}
+
+<h2>Change Restrictions</h2>
+
+<p>Choose any ingredient you wish to place a restriction on, hiding any recipes that contain it on the recipe listing page.</p>
+<p>You can select multiple ingredients.</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <dt>
+        Your Restricted Ingredients:
+    </dt>
+
+    <dd class="col">
+        @if (checkEmpty)
+        {
+            <ul class="list-group" style="margin-top:10px">
+
+                @foreach (var i in Model.chosenIngredients)
+                {
+                    <li class="list-group-item" style="background-color:#E8E8E8">@i.ingred_Name</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>You have selected no restrictions!</p>
+        }
+
+    </dd>
+    <br />
+    <dt>
+
+    </dt>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.selectedIngredientsId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(model => model.selectedIngredientsId, new MultiSelectList(Model.allIngredients, "ingred_ID", "ingred_Name"), new { id = "multiSelect", multiple = "multiple" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Change Restrictions" class="btn btn-default" style="margin-top:10px" />
+        </div>
+    </div>
+}
+
+<br />
+<div>
+    @Html.ActionLink("Back to User Dashboard", "UserDashboard")
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $("#multiSelect").chosen({
+                width: "100%"
+            });
+        })
+    </script>
+}

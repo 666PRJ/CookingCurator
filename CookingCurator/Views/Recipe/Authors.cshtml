@@ -68,7 +68,7 @@ else
                     @Html.DisplayFor(modelItem => item.verified)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.source_Link)
+                    <a href="@Html.DisplayFor(modelItem => item.source_Link)" target="_blank">@Html.DisplayFor(modelItem => item.source_Link)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.country)

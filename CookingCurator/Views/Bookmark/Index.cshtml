@@ -21,22 +21,42 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Recipe.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Recipe.rating)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Recipe.mealTimeType)
-        </td>
-        <td>
-            @Html.ActionLink("View Recipe", "Details", new {  id=item.recipe_ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.recipe_ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recipe.title)
+            </td>
+            <td>
+                @if (item.Recipe.rating > 0)
+                {
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                }
+                else if (item.Recipe.rating < 0)
+                {
+                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-hand-right"></span>
+                }
+                @Html.DisplayFor(modelItem => item.Recipe.rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recipe.mealTimeType)
+            </td>
+            <td>
+                @Html.ActionLink("View Recipe", "Details", new { id = item.recipe_ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.recipe_ID })
+            </td>
+        </tr>
+    }
 
 </table>
+
+<div>
+    @Html.ActionLink("Back to Recipe Listing", "Index", "Recipe", null, null)
+</div>
+<div>
+    @Html.ActionLink("Back to User Dashboard", "UserDashboard", "Profile", null, null)
+</div>

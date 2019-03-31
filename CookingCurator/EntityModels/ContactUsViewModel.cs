@@ -10,7 +10,7 @@ namespace CookingCurator.EntityModels
     public class ContactUsViewModel
     {
         [DisplayName(("Email Address"))]
-        [Required]
+        [Editable(false)]
         public string emailAddress { get; set; }
 
         [DisplayName(("Feed Back"))]
