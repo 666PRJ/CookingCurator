@@ -11,7 +11,8 @@ namespace CookingCurator.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class USER
     {
         public int user_ID { get; set; }
@@ -21,6 +22,7 @@ namespace CookingCurator.Models
         public Nullable<int> admin_ID { get; set; }
         public string userEmail { get; set; }
         public bool email_Verified { get; set; }
+        [StringLength(128)]
         public string password { get; set; }
         public string salt { get; set; }
         public string GUID { get; set; }

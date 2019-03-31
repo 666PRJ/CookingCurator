@@ -290,6 +290,16 @@ namespace CookingCurator.Controllers
                 return false;
             }
 
+            var pass = HashPasswordLogin(newUsername.Password, user.salt);
+            if (user.password != pass)
+            {
+                return false;
+            }
+
+            if (newUsername.Password.Length > 30) {
+                return false;
+            }
+
             var userRecipe = ds.Recipes.Where(e => e.author == user.userName);
 
             foreach (var item in userRecipe) {
@@ -300,8 +310,28 @@ namespace CookingCurator.Controllers
 
             user.userName = newUsername.userName;
             ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
+            try
+            {
+                ds.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception exception = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
 
-            ds.SaveChanges();
+                        //create a new exception inserting the current one
+                        //as the InnerException
+                        exception = new InvalidOperationException(message, exception);
+                    }
+                }
+                throw exception;
+            }
 
             FormsAuthentication.SignOut();
             FormsAuthentication.SetAuthCookie(newUsername.userName, false);
