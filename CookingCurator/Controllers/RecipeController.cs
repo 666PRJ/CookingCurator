@@ -246,6 +246,16 @@ namespace CookingCurator.Controllers
                 return View(newItem);
             }
 
+            if (m.IsUsernameSpace(newItem.title) == false || m.IsUsernameSpace(newItem.country) == false || m.IsUsernameSpace(newItem.mealTimeType) == false)
+            {
+                ModelState.AddModelError("", "No Special Characters Allowed");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
+
             try
             {
 
