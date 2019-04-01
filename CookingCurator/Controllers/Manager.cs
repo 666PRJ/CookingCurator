@@ -250,6 +250,20 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool IsNoSpecial(string username)
+        {
+            if (String.IsNullOrWhiteSpace(username))
+            {
+                return false;
+            }
+            Regex r = new Regex("^[a-zA-Z0-9_ ]*$");
+            if (!r.IsMatch(username))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool IsUsernameDup(string username)
         {
             var duplicateFound = ds.Users.Where(f => f.userName == username);
