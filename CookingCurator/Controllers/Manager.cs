@@ -605,6 +605,10 @@ namespace CookingCurator.Controllers
             deleteIngredients(id);
             deleteDiets(id);
             var recipe = ds.Recipes.Find(id);
+
+            //delete recipes
+            ds.Database.ExecuteSqlCommand("delete from RECIPE_USERS where recipe_ID = " + recipe.recipe_ID);
+
             ds.Recipes.Remove(recipe);
             ds.SaveChanges();
         }
