@@ -1626,6 +1626,12 @@ namespace CookingCurator.Controllers
                     case "sourceId":
                         Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
                         break;
+                    case "lastUpdated_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.lastUpdated));
+                        break;
+                    case "lastUpdated":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.lastUpdated));
+                        break;
                     case "country_desc":
                         Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
                         break;
@@ -1667,6 +1673,12 @@ namespace CookingCurator.Controllers
                         break;
                     case "sourceId":
                         Sortedrecipes = recipes.OrderBy(r => r.source_ID);
+                        break;
+                    case "lastUpdated_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.lastUpdated);
+                        break;
+                    case "lastUpdated":
+                        Sortedrecipes = recipes.OrderBy(r => r.lastUpdated);
                         break;
                     case "country_desc":
                         Sortedrecipes = recipes.OrderByDescending(r => r.country);
