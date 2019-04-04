@@ -1,12 +1,19 @@
 ﻿@model IEnumerable<CookingCurator.EntityModels.BookmarkViewModel>
 
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+                /**/
+
+                ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Bookmarked Recipes</h2>
+<h4>@Html.ActionLink("Delete all Bookmarks", "DeleteAll")</h4>
 
+@if (!String.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger"><span>@ViewBag.error</span></div>
+}
 <table class="table">
     <tr>
         <th>

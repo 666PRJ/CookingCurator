@@ -10,9 +10,13 @@ namespace CookingCurator.Controllers
     {
         private Manager m = new Manager();
         // GET: Bookmark
-        public ActionResult Index()
+        public ActionResult Index(string error)
         {
             m.isUserBanned();
+            if (!String.IsNullOrEmpty(error))
+            {
+                ViewBag.error = error;
+            }
             return View(m.GetAllBookmarks());
         }
 
@@ -30,14 +34,26 @@ namespace CookingCurator.Controllers
                 return RedirectToAction("Index");
             }
             bool error =  m.DeleteBookmark(id.GetValueOrDefault());
-            if (error)
+            if (!error)
             {
                 return RedirectToAction("Index");
             }
             else
             {
-                ModelState.AddModelError("", "Error Deleting Bookmark");
+                return RedirectToAction("Index", new { error = "Error deleting a bookmark" });
+            }
+        }
+
+        public ActionResult DeleteAll()
+        {
+            bool error = m.DeleteAllBookmarks();
+            if (!error)
+            {
                 return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index", new { error = "Error deleting all bookmarks" });
             }
         }
     }

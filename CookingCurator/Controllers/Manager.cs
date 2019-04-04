@@ -1558,9 +1558,28 @@ namespace CookingCurator.Controllers
                 String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + bookmark.user_ID + "&& recipe_ID = " + bookmark.recipe_ID;
                 ds.Database.ExecuteSqlCommand(query);
                 ds.SaveChanges();
-                return false ;
+                return false;
             }
             catch{
+                return true;
+            }
+
+        }
+
+        public bool DeleteAllBookmarks()
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            var user = ds.Users.Where(u => u.userName == userName).FirstOrDefault();
+            try
+            {
+                String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + user.user_ID;
+                ds.Database.ExecuteSqlCommand(query);
+               
+                ds.SaveChanges();
+                return false;
+            }
+            catch
+            {
                 return true;
             }
 
