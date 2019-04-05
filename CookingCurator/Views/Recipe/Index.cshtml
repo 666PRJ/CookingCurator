@@ -183,7 +183,7 @@ else
 
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
-                    @if (ViewBag.Admin == true || ViewBag.Username == item.author)
+                    @if (ViewBag.Admin == true || (ViewBag.Username == item.author && !item.verified))
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
                         @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })
