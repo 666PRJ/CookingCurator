@@ -19,7 +19,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", @placeholder = "/ ; * Not Allowed" } })
             @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -43,7 +43,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.country, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control", @placeholder = "/ ; * Not Allowed" } } })
             @Html.ValidationMessageFor(model => model.country, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -51,7 +51,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.mealTimeType, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.mealTimeType, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.mealTimeType, new { htmlAttributes = new { @class = "form-control", @placeholder = "/ ; * Not Allowed" } } })
             @Html.ValidationMessageFor(model => model.mealTimeType, "", new { @class = "text-danger" })
         </div>
     </div>

@@ -250,7 +250,7 @@ namespace CookingCurator.Controllers
 
             if (m.IsNoSpecial(newItem.title) == false || m.IsNoSpecial(newItem.country) == false || m.IsNoSpecial(newItem.mealTimeType) == false)
             {
-                ModelState.AddModelError("", "No Special Characters Allowed");
+                ModelState.AddModelError("", "No / ; *  Allowed");
                 newItem.ingredients = m.IngredientGetAll();
                 newItem.selectedIngredsId = new string[0];
                 newItem.diets = m.DietGetAll();
@@ -361,7 +361,7 @@ namespace CookingCurator.Controllers
             }
 
             if (m.IsNoSpecial(newItem.title) == false || m.IsNoSpecial(newItem.country) == false || m.IsNoSpecial(newItem.mealTimeType) == false) {
-                ModelState.AddModelError("", "No Special Characters Allowed");
+                ModelState.AddModelError("", "No / ; *  Allowed");
                 newItem.ingredients = m.IngredientGetAll();
                 newItem.selectedIngredsId = new string[0];
                 newItem.diets = m.DietGetAll();
@@ -513,7 +513,7 @@ namespace CookingCurator.Controllers
 
             if (m.IsNoSpecial(recipes.title) == false || m.IsNoSpecial(recipes.country) == false || m.IsNoSpecial(recipes.mealTimeType) == false)
             {
-                ModelState.AddModelError("", "No Special Characters Allowed");
+                ModelState.AddModelError("", "No / ; *  Allowed");
                 return View(recipe);
             }
 

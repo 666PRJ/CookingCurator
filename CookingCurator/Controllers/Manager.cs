@@ -256,7 +256,7 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
-            Regex r = new Regex("^[a-zA-Z0-9_ ]*$");
+            Regex r = new Regex("^[^/;*]*$");
             if (!r.IsMatch(username))
             {
                 return false;
