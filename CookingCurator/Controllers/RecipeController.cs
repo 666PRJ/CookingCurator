@@ -105,6 +105,10 @@ namespace CookingCurator.Controllers
             ViewBag.countrySort = sortOrder == "country" ? "country_desc" : "country";
             ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
             recipes = m.SortRecipes(sortOrder, recipes);
+            if(ViewBag.Admin == false)
+            {
+                recipes = recipes.Where(r => (r.verified == true || r.author == ViewBag.Username));
+            }
             return View(recipes.ToList().ToPagedList(pageNo ?? 1, 10));
         }
 
