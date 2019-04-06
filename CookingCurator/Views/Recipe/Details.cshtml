@@ -24,11 +24,29 @@
             <p> Click here to view all @Html.ActionLink("Recipes", "Index", "Recipe") </p>
         </div>
     }
-    else if(ViewBag.bookmark == "1")
+    else if (ViewBag.bookmark == "1")
     {
         <div class="alert alert-danger">
             <p> <b>Error!</b> This recipe is already bookmarked. All bookmarked recipe can be viewed from Dashboard page.</p>
             <p> Click here to view all your @Html.ActionLink("Bookmarks", "Index", "Bookmark") </p>
+        </div>
+    }
+    else if (ViewBag.bookmark == "Y")
+    {
+        <div class="alert alert-success">
+            <p> <b>Success!</b> Voting complete.</p>
+        </div>
+    }
+    else if (ViewBag.bookmark == "P")
+    {
+        <div class="alert alert-danger">
+            <p> <b>Error!</b> You have already given this recipe a positive vote!</p>
+        </div>
+    }
+    else if (ViewBag.bookmark == "N")
+    {
+        <div class="alert alert-danger">
+            <p> <b>Error!</b> You have already given this recipe a negative vote!</p>
         </div>
     }
     <hr />

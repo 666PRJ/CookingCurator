@@ -108,6 +108,7 @@ namespace CookingCurator.Controllers
             return View(recipes.ToList().ToPagedList(pageNo ?? 1, 10));
         }
 
+        // Get recipe details with bookmark variables (bookmark can also store vote status)
         // GET: Recipe/Details/5
         [Authorize]
         public ActionResult Details(int? id, string bookMarkError, string bookmark)
@@ -157,7 +158,7 @@ namespace CookingCurator.Controllers
                 return HttpNotFound();
             }
 
-            bool voteMade = m.CheckForVote(recipe.recipe_Id);
+            bool voteMade = m.CheckForVoteUp(recipe.recipe_Id);
 
             if (!voteMade)
             {
@@ -165,10 +166,11 @@ namespace CookingCurator.Controllers
             }
             else
             {
-                return View("AlreadyVoted");
+                //Uses the bookmark variable to store vote status, as another function for vote variables cannot be created (avoids ambiguous function call error)
+                return RedirectToAction("Details", new { id = recipe.recipe_Id, bookmark = "P" });
             }
 
-            return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
+            return RedirectToAction("Details", new { id = recipe.recipe_Id, bookmark = "Y" });
         }
 
         // GET: Recipe/VoteDown/5
@@ -182,20 +184,20 @@ namespace CookingCurator.Controllers
                 return HttpNotFound();
             }
 
-            bool voteMade = m.CheckForVote(recipe.recipe_Id);
+            bool voteMade = m.CheckForVoteDown(recipe.recipe_Id);
 
             if (!voteMade)
             {
                 m.AlterRating(recipe.recipe_Id, -1);
             }
             else
-            {             
-                return View("AlreadyVoted");
+            {
+                //Uses the bookmark variable to store vote status, as another function for vote variables cannot be created (avoids ambiguous function call error)
+                return RedirectToAction("Details", new { id = recipe.recipe_Id, bookmark = "N" });
             }
 
-            return RedirectToAction("Details", "Recipe", new { id = recipe.recipe_Id });
+            return RedirectToAction("Details", new { id = recipe.recipe_Id, bookmark = "Y" });
         }
-
 
         // GET: Recipe/Create
         [Authorize]
