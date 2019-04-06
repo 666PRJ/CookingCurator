@@ -640,6 +640,8 @@ namespace CookingCurator.Controllers
             {
                 return RedirectToAction("AcceptWaiver", "Home", new { Id = m.GetCurrentUserId().ToString(), error = "Please accept the waiver to view recipes and its related features" });
             }
+
+            ViewBag.authorName = authorName;
             var r = m.RecipesByAuthor(authorName);
             return View(r);
         }
