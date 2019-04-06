@@ -103,6 +103,7 @@ namespace CookingCurator.Controllers
             ViewBag.authorSort = sortOrder == "author" ? "author_desc" : "author";
             ViewBag.sourceIdSort = sortOrder == "sourceId" ? "sourceId_desc" : "sourceId";
             ViewBag.countrySort = sortOrder == "country" ? "country_desc" : "country";
+            ViewBag.dateSort = sortOrder == "lastUpdated" ? "lastUpdated_desc" : "lastUpdated";
             ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
             recipes = m.SortRecipes(sortOrder, recipes);
             return View(recipes.ToList().ToPagedList(pageNo ?? 1, 10));

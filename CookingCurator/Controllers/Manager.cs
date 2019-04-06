@@ -1579,9 +1579,28 @@ namespace CookingCurator.Controllers
                 String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + bookmark.user_ID + "&& recipe_ID = " + bookmark.recipe_ID;
                 ds.Database.ExecuteSqlCommand(query);
                 ds.SaveChanges();
-                return false ;
+                return false;
             }
             catch{
+                return true;
+            }
+
+        }
+
+        public bool DeleteAllBookmarks()
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            var user = ds.Users.Where(u => u.userName == userName).FirstOrDefault();
+            try
+            {
+                String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + user.user_ID;
+                ds.Database.ExecuteSqlCommand(query);
+               
+                ds.SaveChanges();
+                return false;
+            }
+            catch
+            {
                 return true;
             }
 
@@ -1631,6 +1650,12 @@ namespace CookingCurator.Controllers
                     case "sourceId":
                         Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
                         break;
+                    case "lastUpdated_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.lastUpdated));
+                        break;
+                    case "lastUpdated":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.lastUpdated));
+                        break;
                     case "country_desc":
                         Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
                         break;
@@ -1672,6 +1697,12 @@ namespace CookingCurator.Controllers
                         break;
                     case "sourceId":
                         Sortedrecipes = recipes.OrderBy(r => r.source_ID);
+                        break;
+                    case "lastUpdated_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.lastUpdated);
+                        break;
+                    case "lastUpdated":
+                        Sortedrecipes = recipes.OrderBy(r => r.lastUpdated);
                         break;
                     case "country_desc":
                         Sortedrecipes = recipes.OrderByDescending(r => r.country);
