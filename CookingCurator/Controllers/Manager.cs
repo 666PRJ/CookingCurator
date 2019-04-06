@@ -516,6 +516,12 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)
         {
+            recipe.title = recipe.title.TrimStart();
+            recipe.title = recipe.title.TrimEnd();
+            recipe.country = recipe.country.TrimStart();
+            recipe.country = recipe.country.TrimEnd();
+            recipe.mealTimeType = recipe.mealTimeType.TrimStart();
+            recipe.mealTimeType = recipe.mealTimeType.TrimEnd();
 
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
 
@@ -557,6 +563,12 @@ namespace CookingCurator.Controllers
             {
                 return null;
             }
+            recipeIng.title = recipeIng.title.TrimStart();
+            recipeIng.title = recipeIng.title.TrimEnd();
+            recipeIng.country = recipeIng.country.TrimStart();
+            recipeIng.country = recipeIng.country.TrimEnd();
+            recipeIng.mealTimeType = recipeIng.mealTimeType.TrimStart();
+            recipeIng.mealTimeType = recipeIng.mealTimeType.TrimEnd();
             recipeUpdate.title = recipeIng.title;
             recipeUpdate.instructions = recipeIng.instructions;
             recipeUpdate.lastUpdated = DateTime.Now;
