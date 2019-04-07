@@ -11,9 +11,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.diet_ID)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.dietName)
         </th>
         <th>
@@ -25,9 +22,6 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.diet_ID)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.dietName) --
                 @Html.ActionLink("Recipes", "Diet", "Recipe", new { dietName = item.dietName }, null)
