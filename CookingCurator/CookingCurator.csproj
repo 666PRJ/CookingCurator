@@ -484,10 +484,8 @@
     <Content Include="Content\Images\avocado.jpg" />
     <Content Include="Content\Images\CookingCuratorLogo.jpg" />
     <Content Include="Content\Images\CookingCuratorLogoV2.jpg" />
-    <Content Include="Content\Images\down-arrow.png" />
     <Content Include="Content\Images\food-background.jpg" />
     <Content Include="Content\Images\recipe-book.jpg" />
-    <Content Include="Content\Images\up-arrow.png" />
     <Content Include="Content\MultiSelect\chosen-sprite.png" />
     <Content Include="Content\MultiSelect\chosen.min.css" />
     <Content Include="Content\PagedList.css" />
