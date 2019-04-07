@@ -3,6 +3,13 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     int counting = Model.Count();
+    bool ownPage = false;
+
+    if (ViewBag.authorName == HttpContext.Current.User.Identity.Name)
+    {
+        ownPage = true;
+    }
+
     if (counting != 0)
     {
         string authorName = Model.First().author;
@@ -13,24 +20,25 @@
 
 @if (counting == 0)
 {
-    <h1>This author has added zero recipes to this application!</h1>
-    <h2>Please try a different name.</h2>
+    if (ownPage)
+    {
+        <h2>You haven't added any recipes to the application!</h2>
+        <h2>You start adding one by clicking @Html.ActionLink("here", "Create", "Recipe")</h2>
+    }
+    else
+    {
+        <h2>This author has added zero recipes to this application!</h2>
+        <h2>Please try a different name.</h2>
+
+    }
     <h3>@Html.ActionLink("Click here to return to the recipe index", "Index")</h3>
+    <h3>@Html.ActionLink("Click here to return to the home page", "Index", "Home")</h3>
 
 }
 else
 {
 
     <h2>@ViewBag.Title</h2>
-
-    <!--   if (@ViewBag.Title == "Dairy Farmers of Canada's Recipes:")
-        {
-            <br/>
-            <h5>More informatio about the Dairy Farmers of Canada can be found at: <u>https://dairyfarmersofcanada.ca/en/dairy-in-canada</u> </h5>
-            <h5>More recipes from them can be found at <u>https://www.dairygoodness.ca/</u> </h5>
-            <br/>
-        }
-    -->
 
     <table class="table">
         <tr>

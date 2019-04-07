@@ -1432,7 +1432,7 @@ namespace CookingCurator.Controllers
 
         }
 
-        public bool CheckForVote(int recipeId)
+        public bool CheckForVoteUp(int recipeId)
         {
             var username = HttpContext.Current.User.Identity.Name;
 
@@ -1443,9 +1443,30 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
-            else if(checkVote.voting != 1 && checkVote.voting != -1)
+            else if (checkVote.voting != 1)
             {
-               return false;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool CheckForVoteDown(int recipeId)
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var votingUser = ds.Users.SingleOrDefault(u => u.userName == username);
+            var checkVote = ds.Recipe_Users.SingleOrDefault(v => v.recipe_ID == recipeId && v.user_ID == votingUser.user_ID);
+
+            if (checkVote == null)
+            {
+                return false;
+            }
+            else if (checkVote.voting != -1)
+            {
+                return false;
             }
             else
             {

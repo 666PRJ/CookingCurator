@@ -483,6 +483,11 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\avocado.jpg" />
     <Content Include="Content\Images\CookingCuratorLogo.jpg" />
+    <Content Include="Content\Images\CookingCuratorLogoV2.jpg" />
+    <Content Include="Content\Images\down-arrow.png" />
+    <Content Include="Content\Images\food-background.jpg" />
+    <Content Include="Content\Images\recipe-book.jpg" />
+    <Content Include="Content\Images\up-arrow.png" />
     <Content Include="Content\MultiSelect\chosen-sprite.png" />
     <Content Include="Content\MultiSelect\chosen.min.css" />
     <Content Include="Content\PagedList.css" />
@@ -564,7 +569,6 @@
     <Content Include="Views\Home\Reset.cshtml" />
     <Content Include="Views\Profile\ChangePassword.cshtml" />
     <Content Include="Views\Profile\ChangeUsername.cshtml" />
-    <Content Include="Views\Recipe\AlreadyVoted.cshtml" />
     <Content Include="Views\Recipe\BookmarkRecipe.cshtml" />
     <Content Include="Views\Bookmark\Index.cshtml" />
     <Content Include="Views\Allergy\Index.cshtml" />
