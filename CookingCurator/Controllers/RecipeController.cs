@@ -106,13 +106,17 @@ namespace CookingCurator.Controllers
             ViewBag.dateSort = sortOrder == "lastUpdated" ? "lastUpdated_desc" : "lastUpdated";
             ViewBag.mealTimeTypeSort = sortOrder == "mealTimeType" ? "mealTimeType_desc" : "mealTimeType";
             recipes = m.SortRecipes(sortOrder, recipes);
+            if(ViewBag.Admin == false)
+            {
+                recipes = recipes.Where(r => (r.verified == true || r.author == ViewBag.Username));
+            }
             return View(recipes.ToList().ToPagedList(pageNo ?? 1, 10));
         }
 
         // Get recipe details with bookmark variables (bookmark can also store vote status)
         // GET: Recipe/Details/5
         [Authorize]
-        public ActionResult Details(int? id, string bookMarkError, string bookmark)
+        public ActionResult Details(int? id, string bookMarkError, string bookmark, string success)
         {
             if (!m.waiverAccepted())
             {
@@ -142,7 +146,11 @@ namespace CookingCurator.Controllers
                 if (!String.IsNullOrEmpty(bookmark))
                 {
                     ViewBag.bookMark = bookmark;
-                }   
+                }
+                if (!String.IsNullOrEmpty(success))
+                {
+                    ViewBag.success = success;
+                }
                 return View(recipe);
             }
                 
@@ -729,6 +737,30 @@ namespace CookingCurator.Controllers
             {
                 ViewBag.MyString = 0;
                 return View();
+            }
+        }
+
+        public ActionResult ApproveRecipe(int? id)
+        {
+            var r = m.RecipeGetById(id.GetValueOrDefault());
+            if(r == null)
+            {
+                return HttpNotFound();
+            }
+            if (r.verified)
+            {
+                //Cannot approve verified recipes
+                return RedirectToAction("Index");
+            }
+
+            bool error = m.ApproveRecipe(r.recipe_Id);
+            if (!error)
+            {
+                return RedirectToAction("Details", new { id = r.recipe_Id, success = "Recipe has been verified. An email is sent to the author of the recipe" });
+            }
+            else
+            {
+                return RedirectToAction("Details", new { id = r.recipe_Id, bookMarkError = "An error while approving this recipe" });
             }
         }
     }

@@ -928,7 +928,7 @@ namespace CookingCurator.Controllers
                     return false;
                 }
 
-                if (recipe.author == username)
+                if (recipe.author == username && !recipe.verified)
                 {
                     return true;
                 }
@@ -1796,8 +1796,11 @@ namespace CookingCurator.Controllers
             {
                 string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
                 string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+
                 client.EnableSsl = true;
+
                 client.Timeout = 100000;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
@@ -1818,6 +1821,56 @@ namespace CookingCurator.Controllers
             catch (Exception)
             {
                 return false;
+            }
+
+        }
+
+        public bool ApproveRecipe(int id)
+        {
+            var recipe = ds.Recipes.Find(id);
+            if (recipe.verified)
+            {
+                return true;
+            }
+            var username = HttpContext.Current.User.Identity.Name;
+            var currentUser = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            if (String.IsNullOrEmpty(currentUser.admin_ID.ToString()))
+            {
+                return true;
+            }
+            try
+            {
+                string query = "UPDATE RECIPES SET verified= 1 WHERE recipe_ID = " + recipe.recipe_ID;
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+
+                var user = ds.Users.Where(u => u.userName == recipe.author).FirstOrDefault();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+
+                client.EnableSsl = true;
+
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Approved Recipe - Cooking Curator";
+                String Body = "<br/><br/>Your recipe was approved by our administrators, " + recipe.title + " ."
+                    + "<br/> As your recipe is verified, you will no longer be able to edit or delete this recipe."
+                    + "<br/>Thanks for sharing your recipes";
+
+                MailMessage mailMessage = new MailMessage(adminEmail, user.userEmail, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return false;
+            }
+            catch
+            {
+                return true;
             }
 
         }

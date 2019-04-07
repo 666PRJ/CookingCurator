@@ -17,6 +17,12 @@
         <div class="alert alert-danger"><span>@ViewBag.error</span></div>
 
     }
+    @if (!String.IsNullOrEmpty(ViewBag.success))
+    {
+        <div class="alert alert-success">
+            <p> <b>Success!</b> @ViewBag.success</p>
+        </div>
+    }
     @if (ViewBag.bookmark == "0")
     {
         <div class="alert alert-success">
@@ -225,10 +231,14 @@
 <footer>
    
         <p>
-            @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
+            @if (ViewBag.Admin == true || (ViewBag.Username == Model.author && !Model.verified))
             {
                 @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
                 @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
+            }
+            @if(ViewBag.Admin == true && !Model.verified)
+            {
+                @Html.ActionLink("Approve this recipe", "ApproveRecipe", new { id = Model.recipe_Id }) <span> | </span>
             }
             @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
         </p>
