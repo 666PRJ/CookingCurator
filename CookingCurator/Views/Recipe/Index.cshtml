@@ -72,7 +72,15 @@ else
                 }
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().lastUpdated)
+                @Html.ActionLink("Last Updated", "Index", new { sortOrder = ViewBag.dateSort })
+                @if (ViewBag.dateSort == "lastUpdated")
+                {
+                    <i class="glyphicon glyphicon-triangle-top"></i>
+                }
+                else if (ViewBag.dateSort == "lastUpdated_desc")
+                {
+                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                }
             </th>
             <th>
                 @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.authorSort })
@@ -183,7 +191,7 @@ else
 
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.recipe_Id }) <br />
-                    @if (ViewBag.Admin == true || ViewBag.Username == item.author)
+                    @if (ViewBag.Admin == true || (ViewBag.Username == item.author && !item.verified))
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = item.recipe_Id }) <br />
                         @Html.ActionLink("Delete", "Delete", new { id = item.recipe_Id })

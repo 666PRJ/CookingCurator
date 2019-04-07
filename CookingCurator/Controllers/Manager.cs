@@ -256,7 +256,7 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
-            Regex r = new Regex("^[a-zA-Z0-9_ ]*$");
+            Regex r = new Regex("^[^/;*]*$");
             if (!r.IsMatch(username))
             {
                 return false;
@@ -324,28 +324,8 @@ namespace CookingCurator.Controllers
 
             user.userName = newUsername.userName;
             ds.Entry(user).State = System.Data.Entity.EntityState.Modified;
-            try
-            {
-                ds.SaveChanges();
-            }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
-            {
-                Exception exception = dbEx;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        string message = string.Format("{0}:{1}",
-                            validationErrors.Entry.Entity.ToString(),
-                            validationError.ErrorMessage);
 
-                        //create a new exception inserting the current one
-                        //as the InnerException
-                        exception = new InvalidOperationException(message, exception);
-                    }
-                }
-                throw exception;
-            }
+            ds.SaveChanges();
 
             FormsAuthentication.SignOut();
             FormsAuthentication.SetAuthCookie(newUsername.userName, false);
@@ -499,6 +479,12 @@ namespace CookingCurator.Controllers
         public RecipeBaseViewModel RecipeAdd(RecipeAddViewForm recipe)
         {
             recipe.author = HttpContext.Current.User.Identity.Name;
+            recipe.title = recipe.title.TrimStart();
+            recipe.title = recipe.title.TrimEnd();
+            recipe.country = recipe.country.TrimStart();
+            recipe.country = recipe.country.TrimEnd();
+            recipe.mealTimeType = recipe.mealTimeType.TrimStart();
+            recipe.mealTimeType = recipe.mealTimeType.TrimEnd();
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeAddViewForm, RECIPE>(recipe));
 
             //Ingredient management
@@ -530,6 +516,12 @@ namespace CookingCurator.Controllers
 
         public RecipeBaseViewModel RecipeVerifiedAdd(RecipeVerifiedAddViewModel recipe)
         {
+            recipe.title = recipe.title.TrimStart();
+            recipe.title = recipe.title.TrimEnd();
+            recipe.country = recipe.country.TrimStart();
+            recipe.country = recipe.country.TrimEnd();
+            recipe.mealTimeType = recipe.mealTimeType.TrimStart();
+            recipe.mealTimeType = recipe.mealTimeType.TrimEnd();
 
             var addedItem = ds.Recipes.Add(mapper.Map<RecipeVerifiedAddViewModel, RECIPE>(recipe));
 
@@ -571,6 +563,12 @@ namespace CookingCurator.Controllers
             {
                 return null;
             }
+            recipeIng.title = recipeIng.title.TrimStart();
+            recipeIng.title = recipeIng.title.TrimEnd();
+            recipeIng.country = recipeIng.country.TrimStart();
+            recipeIng.country = recipeIng.country.TrimEnd();
+            recipeIng.mealTimeType = recipeIng.mealTimeType.TrimStart();
+            recipeIng.mealTimeType = recipeIng.mealTimeType.TrimEnd();
             recipeUpdate.title = recipeIng.title;
             recipeUpdate.instructions = recipeIng.instructions;
             recipeUpdate.lastUpdated = DateTime.Now;
@@ -605,6 +603,10 @@ namespace CookingCurator.Controllers
             deleteIngredients(id);
             deleteDiets(id);
             var recipe = ds.Recipes.Find(id);
+
+            //delete recipes
+            ds.Database.ExecuteSqlCommand("delete from RECIPE_USERS where recipe_ID = " + recipe.recipe_ID);
+
             ds.Recipes.Remove(recipe);
             ds.SaveChanges();
         }
@@ -615,7 +617,8 @@ namespace CookingCurator.Controllers
         }
 
         public SearchViewModel searchByTitle(SearchViewModel search){
-            var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
+            var user = HttpContext.Current.User.Identity.Name;
+            var items = ds.Recipes.Where(e => (e.title.Contains(search.searchString ) && ( e.verified == true || e.author == user ) ));
             var listItems = items.ToList();
             search.recipeList = mapper.Map<List<RECIPE>, List<RecipeWithMatchedIngred>>(listItems);
             return search;
@@ -623,6 +626,7 @@ namespace CookingCurator.Controllers
 
         public SearchViewModel searchForRecipe(SearchViewModel search)
         {
+            var user = HttpContext.Current.User.Identity.Name;
             List<INGRED> ingreds = new List<INGRED>();
             //split ingred
             List<String> selectedIngreds = search.searchString.Split(',').ToList();
@@ -660,6 +664,9 @@ namespace CookingCurator.Controllers
                 IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
                 recipes.AddRange(derp);
             }
+            var enumRecipes =recipes.Where(e => e.verified == true || e.author == user);
+
+            recipes = enumRecipes.ToList();
 
             recipes = recipes.Distinct().ToList();
             
@@ -926,7 +933,7 @@ namespace CookingCurator.Controllers
                     return false;
                 }
 
-                if (recipe.author == username)
+                if (recipe.author == username && !recipe.verified)
                 {
                     return true;
                 }
@@ -1430,7 +1437,7 @@ namespace CookingCurator.Controllers
 
         }
 
-        public bool CheckForVote(int recipeId)
+        public bool CheckForVoteUp(int recipeId)
         {
             var username = HttpContext.Current.User.Identity.Name;
 
@@ -1441,9 +1448,30 @@ namespace CookingCurator.Controllers
             {
                 return false;
             }
-            else if(checkVote.voting != 1 && checkVote.voting != -1)
+            else if (checkVote.voting != 1)
             {
-               return false;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool CheckForVoteDown(int recipeId)
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+
+            var votingUser = ds.Users.SingleOrDefault(u => u.userName == username);
+            var checkVote = ds.Recipe_Users.SingleOrDefault(v => v.recipe_ID == recipeId && v.user_ID == votingUser.user_ID);
+
+            if (checkVote == null)
+            {
+                return false;
+            }
+            else if (checkVote.voting != -1)
+            {
+                return false;
             }
             else
             {
@@ -1574,9 +1602,28 @@ namespace CookingCurator.Controllers
                 String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + bookmark.user_ID + "&& recipe_ID = " + bookmark.recipe_ID;
                 ds.Database.ExecuteSqlCommand(query);
                 ds.SaveChanges();
-                return false ;
+                return false;
             }
             catch{
+                return true;
+            }
+
+        }
+
+        public bool DeleteAllBookmarks()
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            var user = ds.Users.Where(u => u.userName == userName).FirstOrDefault();
+            try
+            {
+                String query = "UPDATE RECIPE_USERS SET bookmarked=0 WHERE user_ID = " + user.user_ID;
+                ds.Database.ExecuteSqlCommand(query);
+               
+                ds.SaveChanges();
+                return false;
+            }
+            catch
+            {
                 return true;
             }
 
@@ -1626,6 +1673,12 @@ namespace CookingCurator.Controllers
                     case "sourceId":
                         Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.source_ID));
                         break;
+                    case "lastUpdated_desc":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.lastUpdated));
+                        break;
+                    case "lastUpdated":
+                        Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderBy(r => r.lastUpdated));
+                        break;
                     case "country_desc":
                         Sortedrecipes = mapper.Map<IEnumerable<RECIPE>, IEnumerable<RecipeWithImagesViewModel>>(ds.Recipes.OrderByDescending(r => r.country));
                         break;
@@ -1667,6 +1720,12 @@ namespace CookingCurator.Controllers
                         break;
                     case "sourceId":
                         Sortedrecipes = recipes.OrderBy(r => r.source_ID);
+                        break;
+                    case "lastUpdated_desc":
+                        Sortedrecipes = recipes.OrderByDescending(r => r.lastUpdated);
+                        break;
+                    case "lastUpdated":
+                        Sortedrecipes = recipes.OrderBy(r => r.lastUpdated);
                         break;
                     case "country_desc":
                         Sortedrecipes = recipes.OrderByDescending(r => r.country);
@@ -1742,8 +1801,11 @@ namespace CookingCurator.Controllers
             {
                 string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
                 string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+
                 client.EnableSsl = true;
+
                 client.Timeout = 100000;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
@@ -1764,6 +1826,56 @@ namespace CookingCurator.Controllers
             catch (Exception)
             {
                 return false;
+            }
+
+        }
+
+        public bool ApproveRecipe(int id)
+        {
+            var recipe = ds.Recipes.Find(id);
+            if (recipe.verified)
+            {
+                return true;
+            }
+            var username = HttpContext.Current.User.Identity.Name;
+            var currentUser = ds.Users.Where(u => u.userName == username).FirstOrDefault();
+            if (String.IsNullOrEmpty(currentUser.admin_ID.ToString()))
+            {
+                return true;
+            }
+            try
+            {
+                string query = "UPDATE RECIPES SET verified= 1 WHERE recipe_ID = " + recipe.recipe_ID;
+                ds.Database.ExecuteSqlCommand(query);
+                ds.SaveChanges();
+
+                string adminEmail = System.Configuration.ConfigurationManager.AppSettings["AdminEmail"].ToString();
+                string adminPassword = System.Configuration.ConfigurationManager.AppSettings["AdminPassword"].ToString();
+
+                var user = ds.Users.Where(u => u.userName == recipe.author).FirstOrDefault();
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+
+                client.EnableSsl = true;
+
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(adminEmail, adminPassword);
+
+                String Subject = "Approved Recipe - Cooking Curator";
+                String Body = "<br/><br/>Your recipe was approved by our administrators, " + recipe.title + " ."
+                    + "<br/> As your recipe is verified, you will no longer be able to edit or delete this recipe."
+                    + "<br/>Thanks for sharing your recipes";
+
+                MailMessage mailMessage = new MailMessage(adminEmail, user.userEmail, Subject, Body);
+                mailMessage.IsBodyHtml = true;
+                client.Send(mailMessage);
+
+                return false;
+            }
+            catch
+            {
+                return true;
             }
 
         }

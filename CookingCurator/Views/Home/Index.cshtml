@@ -13,76 +13,87 @@
                 <p class="lead">
                 <p>Welcome! You are logged in as: @(User.Identity.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Guest")</p>
 
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <p>Use these links to learn more about this app and the terminology used:</p>
+                        <div class="col-md-4 text-left" style="width:33%">@Html.ActionLink("About this application", "About", "Home", null, new { @class = "btn btn-default" })</div>
+                        <div class="col-md-4 text-center" style="width:33%">@Html.ActionLink("Frequently Asked Questions", "UserDoc", "Profile", null, new { @class = "btn btn-default" })</div>
+                        <div class="col-md-4 text-right" style="padding-bottom:30px; width:32%">@Html.ActionLink("References", "Index", "References", null, new { @class = "btn btn-default" })</div>
+                        <br />
+                        <br />
+                        <p>Get started using the links below: </p>
+                        <div class="col-md-4 text-left" style="width:33%">@Html.ActionLink("Create a Recipe", "Create", "Recipe", null, new { @class = "btn btn-default" })</div>
+                        <div class="col-md-4 text-center" style="width:33%">@Html.ActionLink("View All Recipes", "Index", "Recipe", null, new { @class = "btn btn-default" })</div>
+                        <div class="col-md-4 text-right" style="padding-bottom:30px; width:33%">@Html.ActionLink("Search for Recipes", "Search", "Search", null, new { @class = "btn btn-default" })</div>
+                        <br />
+                        <br />
+
+                        <p>Check up on recipes: </p>
+                        <div class="col-md-4 text-left" style="width:33%">@Html.ActionLink("View your own recipes", "Authors", "Recipe", new { authorName = HttpContext.Current.User.Identity.Name }, new { @class = "btn btn-default" })</div>
+                        <div class="col-md-4 text-center" style="width:33%">@Html.ActionLink("View your bookmarks", "Index", "Bookmark", null, new { @class = "btn btn-default" })</div>
+                        <div class="col-md-4 text-right" style="padding-bottom:60px; width:33%"></div>
+                        <br />
+                        <br />
+
+                        @if (this.User.IsInRole("Admin"))
+                        {
+                            <p>Admin Tools:</p>
+                            <div class="col-md-4 text-left" style="width:33%">@Html.ActionLink("Search for a user", "Search", "User", null, new { @class = "btn btn-default" })</div>
+                            <div class="col-md-4 text-center" style="padding-bottom:30px; width:33%">@Html.ActionLink("Admin Documentation", "AdminDoc", "Profile", null, new { @class = "btn btn-default" })</div>
+                            <div class="col-md-4 text-right" style="padding-bottom:30px; width:33%"></div>
+                        }
+
+                        <div class="col-md-12">
+                            <img src="~/Content/images/CookingCuratorLogoV2.jpg" style="width:100%; height:30%" />
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="col-md-4">
+                <img src="~/Content/images/recipe-book.jpg" style="width:100%; height:30%" />
             </div>
             <div class="col-md-4">
-                <img src="~/Content/images/CookingCuratorLogo.jpg" />
+                <img src="~/Content/images/food-background.jpg" style="width:100%; height:30%" />
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <p>@Html.ActionLink("About this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
-            <p>@Html.ActionLink("User Doc", "UserDoc", "Profile", null, new { @class = "btn btn-default" })</p>
-            <h2>Recipes</h2>
-            <p>Getting started creating recipes using the links below: </p>
-            <p>@Html.ActionLink("Add User Recipe", "Create", "Recipe", null, new { @class = "btn btn-default" })</p>
-            @if (this.User.IsInRole("Admin"))
-            {
-                <p>@Html.ActionLink("Add Verified Recipe", "CreateVerified", "Recipe", null, new { @class = "btn btn-default" })</p>
-            }
-            <p>@Html.ActionLink("References", "Index", "References", null, new { @class = "btn btn-default" })</p>
-            <p>@Html.ActionLink("Search for Recipe", "Search", "Search", null, new { @class = "btn btn-default" })</p>
-
-        </div>
-        @if (this.User.IsInRole("Admin"))
-        {
-            <div class="col-md-6">
-                <h2>Users</h2>
-                <p>Search through the list of users in the application:</p>
-                <p>@Html.ActionLink("Search for a user", "Search", "User", null, new { @class = "btn btn-default" })</p>
-                <p>@Html.ActionLink("Admin Doc", "AdminDoc", "Profile", null, new { @class = "btn btn-default" })</p>
-            </div>
-        }
-    </div>
 }
 else
 {
-    <div class="jumbotron">
-        <h2>Welcome to the Cooking Curator Website!</h2>
-        <p class="lead">
+        <div class="jumbotron">
+            <h2>Welcome to the Cooking Curator Website!</h2>
+            <p class="lead">
 
-            <div class="row">
-                <div class="col-md-8">
-        <p>This website is a recipe storage application and is free to use.</p>
-        <ul>
-            <li>Search through recipes from our catalogue.</li>
-            <li>Find recipes by title, author, or ingredients!</li>
-            <li>Bookmark your favourites for easy access!</li>
-            <li>Upload your own recipes to share with other users!</li>
-            <li>And more!</li>
-        </ul>
-        <br />
-        <p>@Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
+                <div class="row">
+                    <div class="col-md-8">
+            <p>This website is a recipe storage application and is free to use.</p>
+            <ul>
+                <li>Search through recipes from our catalogue.</li>
+                <li>Find recipes by title, author, or ingredients!</li>
+                <li>Bookmark your favourites for easy access!</li>
+                <li>Upload your own recipes to share with other users!</li>
+                <li>And more!</li>
+            </ul>
+            <br />
+            <p>@Html.ActionLink("Learn more about this application", "About", "Home", null, new { @class = "btn btn-default" })</p>
 
-    </div>
-    <div class="col-md-4">
-        <img src="~/Content/images/CookingCuratorLogo.jpg" />
-    </div>
-    </div>
-
-
-
-    </div>
-    <div class="row">
-        <div class="col-md-4" style="width:33.33%;">
-            <img src="~/Content/Images/avocado.jpg" style="width:100%; height:50%"/>
         </div>
-        <div class="col-md-4" style="width:33.33%" >
-            <img src="~/Content/Images/winter-salad.jpg" style="width:100%; height:50%"/>
+        <div class="col-md-4">
+            <img src="~/Content/images/CookingCuratorLogo.jpg" />
         </div>
-        <div class="col-md-4" style="width:33.33%">
-            <img src="~/Content/Images/herbs.jpg"style="width:100%; height:50%" />
         </div>
     </div>
 }
+    <div class="row" style="align-content:center">
+        <div style="align-content:center">
+            <img src="~/Content/Images/avocado.jpg" style="width:33%; height:50%; align-content:center"/>
+            <img src="~/Content/Images/winter-salad.jpg" style="width:32%; height:50%; align-content:center"/>
+            <img src="~/Content/Images/herbs.jpg"style="width:33%; height:50%; align-content:center" />
+        </div>
+    </div>

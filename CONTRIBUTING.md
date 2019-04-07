@@ -14,12 +14,12 @@ You need approval from our team members to get your pull request merged into the
 
 ## Code of Conduct
 
-Acceptable behaviour:
+What is accepted:
 
 * Being helpful and supportive to every team member
 * Using appropriate and welcome language
 
-Unacceptable behaviour:
+What is unaccepted:
 
 * Derogatory, personal and insulting comments
 * Other inappropriate conduct

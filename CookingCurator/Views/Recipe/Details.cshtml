@@ -17,6 +17,12 @@
         <div class="alert alert-danger"><span>@ViewBag.error</span></div>
 
     }
+    @if (!String.IsNullOrEmpty(ViewBag.success))
+    {
+        <div class="alert alert-success">
+            <p> <b>Success!</b> @ViewBag.success</p>
+        </div>
+    }
     @if (ViewBag.bookmark == "0")
     {
         <div class="alert alert-success">
@@ -24,11 +30,29 @@
             <p> Click here to view all @Html.ActionLink("Recipes", "Index", "Recipe") </p>
         </div>
     }
-    else if(ViewBag.bookmark == "1")
+    else if (ViewBag.bookmark == "1")
     {
         <div class="alert alert-danger">
             <p> <b>Error!</b> This recipe is already bookmarked. All bookmarked recipe can be viewed from Dashboard page.</p>
             <p> Click here to view all your @Html.ActionLink("Bookmarks", "Index", "Bookmark") </p>
+        </div>
+    }
+    else if (ViewBag.bookmark == "Y")
+    {
+        <div class="alert alert-success">
+            <p> <b>Success!</b> Voting complete.</p>
+        </div>
+    }
+    else if (ViewBag.bookmark == "P")
+    {
+        <div class="alert alert-danger">
+            <p> <b>Error!</b> You have already given this recipe a positive vote!</p>
+        </div>
+    }
+    else if (ViewBag.bookmark == "N")
+    {
+        <div class="alert alert-danger">
+            <p> <b>Error!</b> You have already given this recipe a negative vote!</p>
         </div>
     }
     <hr />
@@ -207,10 +231,14 @@
 <footer>
    
         <p>
-            @if (ViewBag.Admin == true || ViewBag.Username == Model.author)
+            @if (ViewBag.Admin == true || (ViewBag.Username == Model.author && !Model.verified))
             {
                 @Html.ActionLink("Edit", "Edit", new { id = Model.recipe_Id }) <span> | </span>
                 @Html.ActionLink("Delete", "Delete", new { id = Model.recipe_Id }) <span> | </span>
+            }
+            @if(ViewBag.Admin == true && !Model.verified)
+            {
+                @Html.ActionLink("Approve this recipe", "ApproveRecipe", new { id = Model.recipe_Id }) <span> | </span>
             }
             @Html.ActionLink("Report This Recipe", "ReportRecipe", new { id = Model.recipe_Id }) | @Html.ActionLink("Back to Recipe List", "Index")
         </p>
