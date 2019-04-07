@@ -617,7 +617,8 @@ namespace CookingCurator.Controllers
         }
 
         public SearchViewModel searchByTitle(SearchViewModel search){
-            var items = ds.Recipes.Where(e => e.title.Contains(search.searchString));
+            var user = HttpContext.Current.User.Identity.Name;
+            var items = ds.Recipes.Where(e => (e.title.Contains(search.searchString ) && ( e.verified == true || e.author == user ) ));
             var listItems = items.ToList();
             search.recipeList = mapper.Map<List<RECIPE>, List<RecipeWithMatchedIngred>>(listItems);
             return search;
@@ -625,6 +626,7 @@ namespace CookingCurator.Controllers
 
         public SearchViewModel searchForRecipe(SearchViewModel search)
         {
+            var user = HttpContext.Current.User.Identity.Name;
             List<INGRED> ingreds = new List<INGRED>();
             //split ingred
             List<String> selectedIngreds = search.searchString.Split(',').ToList();
@@ -662,6 +664,9 @@ namespace CookingCurator.Controllers
                 IEnumerable<RECIPE> derp = ds.Recipes.Where(e => e.recipe_ID == item.recipe_ID);
                 recipes.AddRange(derp);
             }
+            var enumRecipes =recipes.Where(e => e.verified == true || e.author == user);
+
+            recipes = enumRecipes.ToList();
 
             recipes = recipes.Distinct().ToList();
             
