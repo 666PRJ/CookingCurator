@@ -14,7 +14,6 @@ namespace CookingCurator.EntityModels
         public int recipeId { get; set; }
 
         [DisplayName(("User Name"))]
-        [Required]
         [ReadOnly(true)]
         public string userName { get; set; }
 
