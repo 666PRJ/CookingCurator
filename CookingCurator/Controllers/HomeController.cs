@@ -34,6 +34,11 @@ namespace CookingCurator.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (registerModel.password != registerModel.confirmPassword) {
+                    ModelState.AddModelError("", "Passwords do not match");
+                    return View();
+                }
+
                 if (!m.IsUsernameDup(registerModel.userName)) {
                     ModelState.AddModelError("", "Username in Use");
                     return View();
@@ -47,7 +52,7 @@ namespace CookingCurator.Controllers
 
                 if (!m.IsUsernameSpace(registerModel.userName))
                 {
-                    ModelState.AddModelError("", "No spaces in Username");
+                    ModelState.AddModelError("", "No spaces/special characters in Username");
                     return View();
                 }
 
