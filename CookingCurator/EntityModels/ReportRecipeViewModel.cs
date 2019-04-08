@@ -23,7 +23,7 @@ namespace CookingCurator.EntityModels
         public string recipeTitle { get; set; }
 
         [DisplayName(("Feed Back"))]
-        [Required]
+        [Required(ErrorMessage =  "Feedback is required")]
         public string feedBack { get; set; }
     }
 }

@@ -709,6 +709,14 @@ namespace CookingCurator.Controllers
         [HttpPost]
         public ActionResult ReportRecipe(ReportRecipeViewModel reportRecipe)
         {
+            RecipeBaseViewModel recipe = m.RecipeGetById(reportRecipe.recipeId);
+            reportRecipe.recipeTitle = recipe.title;
+            reportRecipe.userName = m.GetCurrentUsername();
+            string username = m.GetCurrentUsername();
+            if (!ModelState.IsValid)
+            {
+                return View(reportRecipe);
+            }
             int error = m.ReportRecipe(reportRecipe);
             if (error == 1)
             {
@@ -721,7 +729,7 @@ namespace CookingCurator.Controllers
             else
             {
                 ModelState.AddModelError("", "An error occurred while sending an email. Please try again!");
-                return View();
+                return View(reportRecipe);
             }
         }
 
