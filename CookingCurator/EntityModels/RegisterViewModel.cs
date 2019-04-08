@@ -10,6 +10,7 @@ namespace CookingCurator.EntityModels
     public class RegisterViewModel
     {
         [StringLength(30)]
+        [Required]
         [DisplayName(("Username"))]
         public string userName { get; set; }
 
