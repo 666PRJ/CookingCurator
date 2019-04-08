@@ -248,6 +248,16 @@ namespace CookingCurator.Controllers
         [ValidateInput(false)]
         public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem, HttpPostedFileBase file)
         {
+            if (newItem.selectedIngredsId == null)
+            {
+                ModelState.AddModelError("", "Please add a ingredient");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
+
             // Validate the input
             if (!ModelState.IsValid)
             {
@@ -360,6 +370,16 @@ namespace CookingCurator.Controllers
         [ValidateInput(false)]
         public ActionResult Create(RecipeAddViewForm newItem, HttpPostedFileBase file)
         {
+            if (newItem.selectedIngredsId == null)
+            {
+                ModelState.AddModelError("", "Please add a ingredient");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
+
             // Validate the input
             if (!ModelState.IsValid)
             {
@@ -520,6 +540,13 @@ namespace CookingCurator.Controllers
             recipe.selectedIngredsId = selectedIngreds;
             recipe.diets = diets;
             recipe.selectedDietsId = selectedDiets;
+
+            if (recipes.selectedIngredsId == null)
+            {
+                ModelState.AddModelError("", "Please add a ingredient");
+
+                return View(recipe);
+            }
 
             if (m.IsNoSpecial(recipes.title) == false || m.IsNoSpecial(recipes.country) == false || m.IsNoSpecial(recipes.mealTimeType) == false)
             {
@@ -709,6 +736,14 @@ namespace CookingCurator.Controllers
         [HttpPost]
         public ActionResult ReportRecipe(ReportRecipeViewModel reportRecipe)
         {
+            RecipeBaseViewModel recipe = m.RecipeGetById(reportRecipe.recipeId);
+            reportRecipe.recipeTitle = recipe.title;
+            reportRecipe.userName = m.GetCurrentUsername();
+            string username = m.GetCurrentUsername();
+            if (!ModelState.IsValid)
+            {
+                return View(reportRecipe);
+            }
             int error = m.ReportRecipe(reportRecipe);
             if (error == 1)
             {
@@ -721,7 +756,7 @@ namespace CookingCurator.Controllers
             else
             {
                 ModelState.AddModelError("", "An error occurred while sending an email. Please try again!");
-                return View();
+                return View(reportRecipe);
             }
         }
 

@@ -238,6 +238,23 @@ namespace CookingCurator.Controllers
             return true;
         }
 
+        public bool IsPasswordPrev(string newPassword)
+        {
+            var user = ds.Users.SingleOrDefault(e => e.userName == HttpContext.Current.User.Identity.Name);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var hashedPw = HashPasswordLogin(newPassword, user.salt);
+            if (hashedPw == user.password)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool IsUsernameSpace(string username) {
             if (String.IsNullOrWhiteSpace(username)) {
                 return false;

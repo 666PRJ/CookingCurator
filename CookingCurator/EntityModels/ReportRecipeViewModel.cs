@@ -14,7 +14,6 @@ namespace CookingCurator.EntityModels
         public int recipeId { get; set; }
 
         [DisplayName(("User Name"))]
-        [Required]
         [ReadOnly(true)]
         public string userName { get; set; }
 
@@ -23,7 +22,7 @@ namespace CookingCurator.EntityModels
         public string recipeTitle { get; set; }
 
         [DisplayName(("Feed Back"))]
-        [Required]
+        [Required(ErrorMessage =  "Feedback is required")]
         public string feedBack { get; set; }
     }
 }
