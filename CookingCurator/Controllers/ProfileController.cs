@@ -38,6 +38,13 @@ namespace CookingCurator.Controllers
             {
                 return View(user);
             }
+
+            if (user.password != user.ConfirmPassword)
+            {
+                ModelState.AddModelError("", "Passwords do not match");
+                return View(user);
+            }
+
             var result = m.AccountDelete(user);
             if (result)
             {
@@ -93,6 +100,12 @@ namespace CookingCurator.Controllers
                 return View(newUsername);
             }
 
+            if (newUsername.Password != newUsername.ConfirmPassword)
+            {
+                ModelState.AddModelError("", "Passwords do not match");
+                return View(newUsername);
+            }
+
             if (!m.IsUsernameSpace(newUsername.userName))
             {
                 ModelState.AddModelError("", "No spaces/special characters in username");
@@ -121,6 +134,23 @@ namespace CookingCurator.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(newPassword);
+            }
+
+            if (newPassword.password != newPassword.confirmPassword)
+            {
+                ModelState.AddModelError("", "Passwords do not match");
+                return View(newPassword);
+            }
+
+            if (!m.IsUsernameSpace(newPassword.password)) {
+                ModelState.AddModelError("", "No spaces/special characters in username");
+                return View(newPassword);
+            }
+
+            if (!m.IsPasswordPrev(newPassword.password))
+            {
+                ModelState.AddModelError("", "Please Choose Another Password");
                 return View(newPassword);
             }
 
