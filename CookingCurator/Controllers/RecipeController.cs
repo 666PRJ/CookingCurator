@@ -248,6 +248,16 @@ namespace CookingCurator.Controllers
         [ValidateInput(false)]
         public ActionResult CreateVerified(RecipeVerifiedAddViewModel newItem, HttpPostedFileBase file)
         {
+            if (newItem.selectedIngredsId == null)
+            {
+                ModelState.AddModelError("", "Please add a ingredient");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
+
             // Validate the input
             if (!ModelState.IsValid)
             {
@@ -360,6 +370,16 @@ namespace CookingCurator.Controllers
         [ValidateInput(false)]
         public ActionResult Create(RecipeAddViewForm newItem, HttpPostedFileBase file)
         {
+            if (newItem.selectedIngredsId == null)
+            {
+                ModelState.AddModelError("", "Please add a ingredient");
+                newItem.ingredients = m.IngredientGetAll();
+                newItem.selectedIngredsId = new string[0];
+                newItem.diets = m.DietGetAll();
+                newItem.selectedDietsId = new string[0];
+                return View(newItem);
+            }
+
             // Validate the input
             if (!ModelState.IsValid)
             {
@@ -520,6 +540,13 @@ namespace CookingCurator.Controllers
             recipe.selectedIngredsId = selectedIngreds;
             recipe.diets = diets;
             recipe.selectedDietsId = selectedDiets;
+
+            if (recipes.selectedIngredsId == null)
+            {
+                ModelState.AddModelError("", "Please add a ingredient");
+
+                return View(recipe);
+            }
 
             if (m.IsNoSpecial(recipes.title) == false || m.IsNoSpecial(recipes.country) == false || m.IsNoSpecial(recipes.mealTimeType) == false)
             {
