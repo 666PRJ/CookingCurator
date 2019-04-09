@@ -5,14 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Register</h2>
+<h2>Registration Form</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>Registration Form</h4>
+    <h4>Fill out the following form to register as a new user.</h4>
     <p>Valid Email is needed to register</p>
     <p>Your username must be unique</p>
     <p>Username must have no spaces</p>
