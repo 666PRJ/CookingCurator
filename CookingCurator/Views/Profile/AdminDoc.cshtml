@@ -4,11 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Admin Doc</h2>
+<h2>Admin Documentation</h2>
 
 <h3>Dealing with Reported Recipes</h3>
 
-<p>When users report a recipe, an email will be sent to the admin account. Please take a look in order to decide whether a recipe should be removed or not.</p>
+<p>When users report a recipe, an email will be sent to the admin account. Please take a close look in order to decide whether a recipe should be removed or not.</p>
 
 <h3>Admin Created Recipes</h3>
 
@@ -21,3 +21,19 @@
 <p>Admins have the option of banning users by clicking on "Ban User" in the User Index.</p>
 
 <p>Banned users do not have the ability to log into there accounts.</p>
+
+<p>Administrators can not be banned using the application, though a database administrator would be able to do so in case of emergency.</p>
+
+<h3>Administrator Status</h3>
+
+<p>An account can only be given administrator status through the database.  Contact your database administrator to grant this status.</p>
+
+<h3>Ingredients in application</h3>
+
+<p>Any new ingredients must be added through the database, using the INGRED table, and given allergen status by using the ALLERGY_INGREDS table, with the correct allergy ID from the ALLERGY table.</p>
+
+<p>Ingredients must also be removed through the database.  Any INGRED table using the unique ingredient ID should also be updated accordingly.</p>
+
+<h3>Authors of Verified Recipes Who Are Not Users</h3>
+
+<p>When adding an author of a verified recipe, make sure to use the author's full name with a space in between first and last name to avoid conflicts with usernames.</p>
