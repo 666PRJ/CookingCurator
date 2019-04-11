@@ -10,17 +10,25 @@
 
 <p>When users report a recipe, an email will be sent to the admin account. Please take a close look in order to decide whether a recipe should be removed or not.</p>
 
+<h3>Admin Features</h3>
+
+<p>Admin have access to all features that users have access to.</p>
+
+<p>Additionally, admin can edit or delete ANY recipe in the application.</p>
+
+<p>Admin can also search through and ban users, and create verified recipes.</p>
+
 <h3>Admin Created Recipes</h3>
 
-<p>Admin created recipes will have a verified checkbox next to them.</p>
+<p>Admin created/approved recipes will have a verified checkbox next to them.</p>
 
-<p>Also, admins need to fill in every field in order to create a recipe.</p>
+<p>Admins need to fill in every field except for diet types and image in order to create a verified recipe.</p>
 
 <h3>Banning Users</h3>
 
 <p>Admins have the option of banning users by clicking on "Ban User" in the User Index.</p>
 
-<p>Banned users do not have the ability to log into there accounts.</p>
+<p>Banned users do not have the ability to log into their accounts.</p>
 
 <p>Administrators can not be banned using the application, though a database administrator would be able to do so in case of emergency.</p>
 
@@ -30,7 +38,9 @@
 
 <h3>Ingredients in application</h3>
 
-<p>Any new ingredients must be added through the database, using the INGRED table, and given allergen status by using the ALLERGY_INGREDS table, with the correct allergy ID from the ALLERGY table.</p>
+<p>Any new ingredients must be added through the database.</p>
+    
+<p>Use the INGRED table, and give an allergen status from the ALLERGY_INGREDS table, with the correct allergy ID from the ALLERGY table.</p>
 
 <p>Ingredients must also be removed through the database.  Any INGRED table using the unique ingredient ID should also be updated accordingly.</p>
 
